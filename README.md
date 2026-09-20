@@ -6,6 +6,7 @@ A Baldur's Gate 3 mod: one bag in your inventory that holds every other bag.
 
 Items dropped into Bagception are filed into the right internal container
 automatically. The internal containers are permanent and cannot leave the master bag.
+The bags themselves weigh nothing; what you store in them weighs what it always did.
 
 Built with Larian's official Toolkit and Osiris scripting, for release through mod.io
 and the in-game mod manager. **No Script Extender and no third-party mod dependencies.**
@@ -15,10 +16,10 @@ and the in-game mod manager. **No Script Extender and no third-party mod depende
 Scaffold only. The repository holds an identity-complete module with no content and no
 behaviour yet. See [`docs/tracking/progress.md`](docs/tracking/progress.md).
 
-One core requirement is unresolved: the original design called for weightless storage,
-which the draft specification assumed the Script Extender would provide. Whether the
-native system can do this at all is under research and may change what the mod is. See
-[`docs/tracking/open-questions.md`](docs/tracking/open-questions.md).
+Bagception organizes; it does not reduce weight. The original draft called for
+weightless storage, which is not achievable without the Script Extender. That
+requirement was dropped to keep this a standard Larian mod. See
+[`docs/research/native-capabilities.md`](docs/research/native-capabilities.md).
 
 ## Design
 

@@ -86,3 +86,20 @@ Findings recorded in [`../research/native-capabilities.md`](../research/native-c
 
 Still to decide: whether to ship the carrying-capacity approximation or drop the
 weight goal. See open questions.
+
+## 2026-09-20: Weightless storage dropped
+
+The user dropped the weightless requirement to keep Bagception a standard Larian mod.
+
+- **Bagception is an organizer, not a Bag of Holding.** Spec sections 2.3 and 31, the
+  "weightless contents" scope line in 3.1, and acceptance criterion AC-11 are removed.
+  23 acceptance criteria remain.
+- **The bags themselves are still authored at zero weight**, as vanilla does for the
+  camp supply sack. Contents weigh what they weigh.
+- **The carrying-capacity approximation is deferred, not rejected.**
+  `StatusInInventory` granting a `CarryCapacityMultiplier` boost is plain native data
+  and would not have introduced a dependency, so it remains available if the user
+  later wants it. It is not in 1.0.
+
+This simplifies the project considerably. Phase 2 disappears, the product is easier to
+describe, and nothing in the mod now competes with the engine's own accounting.

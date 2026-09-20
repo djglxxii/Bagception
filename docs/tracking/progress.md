@@ -12,8 +12,9 @@
 
 - [ ] Create the `Bagception` project in the official Toolkit.
 - [ ] Reconcile the Toolkit-generated identity with the provisional UUIDs.
-- [ ] Author the master bag and one sub-bag, inheriting vanilla container templates.
-- [ ] Tag the sub-bag with a vanilla auto-collect tag.
+- [ ] Author the master bag and one sub-bag, inheriting vanilla container templates,
+      both at zero weight.
+- [ ] Give the sub-bag a `ContainerContentFilterCondition`.
 - [ ] Measure in game: which Osiris event reports container ingress, and whether it
       distinguishes root from sub-bag.
 - [ ] Measure in game: how much vanilla auto-collect handles unaided.
@@ -23,8 +24,8 @@
 ## Research
 
 - [x] Can the native system make container contents weightless, or approximate it?
-      Answered: no. See `docs/research/native-capabilities.md`. A carrying-capacity
-      approximation exists; the product decision is open.
+      Answered: no. See `docs/research/native-capabilities.md`. The requirement was
+      dropped; Bagception is an organizer.
 
 Later phases are in [`../implementation-plan.md`](../implementation-plan.md).
 Acceptance criteria AC-01 to AC-24 become a checklist here once Phase 1 lands.

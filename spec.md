@@ -10,7 +10,9 @@
 > | Section | Status |
 > | --- | --- |
 > | Header, "Primary Runtime Dependency" | Superseded. No runtime dependency. |
-> | 2.3, 31 — weightless storage | **At risk.** Both strategies were Script Extender techniques. Whether the native system can do this at all is an open question; the feature may be approximated, or dropped. |
+> | 2.3, 31 — weightless storage | **Removed.** Not achievable natively; confirmed in `docs/research/native-capabilities.md`. The user dropped the requirement on 2026-09-20 to keep Bagception a standard Larian mod. Bagception is an organizer, not a Bag of Holding. |
+> | 43, AC-11 — weight acceptance test | **Removed**, with 2.3. |
+> | 3.1 — "weightless contents" in scope | **Removed**, with 2.3. |
 > | 9 — sorting event | Reframed. `TemplateAddedTo` is to be used as an Osiris event, confirmed by an in-game probe before anything is built on it. |
 > | 11, 12, 14 — classifier | Reduced. BG3's native auto-collect containers do the bulk of classification; Osiris covers only the gaps. Precedence still applies to what Osiris handles. |
 > | 36 — MCM configuration | Removed. MCM is itself a Script Extender framework. |
@@ -19,8 +21,11 @@
 >
 > Everything else — the categories in section 6, the story-item safety rules in
 > section 7, the pipeline shape in section 8, the protection invariants in sections
-> 15 to 17, recovery, and the acceptance criteria in section 43 — still stands,
-> subject to the weightless question above, which AC-11 depends on.
+> 15 to 17, recovery, and the remaining acceptance criteria in section 43 — still
+> stands.
+>
+> The product is now: **one bag in your inventory, every other bag inside it,
+> everything filed where it belongs.** The weight of what you store is unchanged.
 >
 > Current decisions live in `docs/tracking/decision-log.md`; open items in
 > `docs/tracking/open-questions.md`.

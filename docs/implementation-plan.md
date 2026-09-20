@@ -35,7 +35,8 @@ written, and one build answers both.
 1. Create the Toolkit project and reconcile identities.
 2. Author two containers, both inheriting vanilla container templates: the Bagception
    master bag and one sub-bag. No custom art.
-3. Give the sub-bag a vanilla auto-collect tag.
+3. Give the sub-bag a `ContainerContentFilterCondition`, and author both bags at
+   zero weight.
 4. Measure, in game:
    - Which Osiris event reports an item entering a container, and whether it
      distinguishes the Bagception root from a sub-bag.
@@ -43,11 +44,18 @@ written, and one build answers both.
      weapon. This sizes the gap Osiris has to cover and validates the hybrid.
 5. Record both answers in the handbook, then write the routing goal.
 
-## Phase 2 — Weightless storage (at risk)
+## Phase 2 — Weightless storage (dropped)
 
-Blocked on research. Both strategies in spec section 31 were Script Extender
-techniques. The options are a native mechanism if one exists, an approximation via a
-carrying-capacity boost, or dropping the goal. AC-11 depends on the outcome.
+Not achievable natively, and the requirement was dropped on 2026-09-20. The slot is
+kept so the numbering still matches spec section 44.
+
+One piece survives and belongs in Phase 1: author Bagception and every internal
+container at zero weight, as vanilla does for the camp supply sack. The bags
+themselves then cost nothing to carry.
+
+A carrying-capacity approximation remains available if ever wanted, and is plain
+native data rather than a dependency. See
+[`research/native-capabilities.md`](research/native-capabilities.md).
 
 ## Phase 3 — Full classification
 
@@ -84,5 +92,6 @@ tooltips, manual Sort, Reorganize, and Prepare for Uninstall.
 
 ## Acceptance
 
-Spec section 43 lists AC-01 through AC-24. AC-11 is contingent on Phase 2. Track them
-as a checklist in `docs/tracking/progress.md` once Phase 1 lands.
+Spec section 43 lists AC-01 through AC-24. AC-11, the weight test, is removed with
+the weight goal. Track the remaining 23 as a checklist in `docs/tracking/progress.md`
+once Phase 1 lands.

@@ -48,3 +48,12 @@
 - Confirmed `TemplateAddedTo`, `MoveItemTo`, and `GetItemByTagInInventory` exist and
   are sufficient for the sorting pipeline.
 - Extractions were written to ignored `tmp/`; nothing extracted is tracked.
+
+### Weight requirement dropped
+
+- The user chose to drop weightless storage rather than approximate it, to keep
+  Bagception a standard Larian mod.
+- Removed the requirement from the spec preamble, README, implementation plan, and
+  open questions; recorded the decision and the deferred carrying-capacity option in
+  the decision log. Phase 2 is now an empty slot kept only to preserve numbering
+  against spec section 44.
