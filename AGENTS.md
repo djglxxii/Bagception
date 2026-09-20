@@ -16,6 +16,12 @@ manager.
   release workflow.** This mod uses Larian's native mod system and Osiris scripting
   only. If a feature appears to require the Script Extender, stop and raise it with the
   user rather than adding the dependency.
+  - A **separate** Script Extender companion adding weightless storage is under
+    consideration as its own future package. See
+    [`docs/script-extender-edition.md`](docs/script-extender-edition.md). That does not
+    relax this rule for the base mod, and it places two constraints on work here:
+    container tags are a published contract, and container template UUIDs are never
+    reissued after release.
 - Anything BG3's native auto-collect containers can do, they should do. Osiris covers
   only what the native system cannot.
 - Keep the Toolkit project name and mod folder name `Bagception`.

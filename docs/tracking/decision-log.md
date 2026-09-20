@@ -103,3 +103,23 @@ The user dropped the weightless requirement to keep Bagception a standard Larian
 
 This simplifies the project considerably. Phase 2 disappears, the product is easier to
 describe, and nothing in the mod now competes with the engine's own accounting.
+
+## 2026-09-20: Script Extender companion kept under consideration
+
+Dropping weightlessness from the base mod does not close the door on it. The user
+wants to keep open a **separate Script Extender package** that adds weightless storage,
+shipped alongside the native mod rather than replacing it. Recorded in
+[`../script-extender-edition.md`](../script-extender-edition.md).
+
+- The base mod stays native-only and must never require, detect-or-fail on, or degrade
+  without the companion. The no-Script-Extender rule in `AGENTS.md` is unchanged for
+  work in this repository.
+- Preferred shape is an add-on that depends on the base rather than a duplicated
+  standalone edition, so there is one source of truth for templates and categories.
+- Two constraints on 1.0 follow, both cheap now and expensive to retrofit: **container
+  tags become a published contract** once released, and **container template UUIDs are
+  never reissued**. A companion locates Bagception's containers through those.
+- The companion would ship on Nexus, since mod.io does not carry Script Extender mods.
+  That does not pull the base mod's release path away from mod.io.
+
+Not scheduled, not scoped, no mod identity reserved.

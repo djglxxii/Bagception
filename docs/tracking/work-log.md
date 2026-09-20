@@ -57,3 +57,12 @@
   open questions; recorded the decision and the deferred carrying-capacity option in
   the decision log. Phase 2 is now an empty slot kept only to preserve numbering
   against spec section 44.
+
+### Script Extender companion recorded as a future option
+
+- The user asked to keep open the option of a separate Script Extender package adding
+  weightless storage. Wrote `docs/script-extender-edition.md` covering why it is a
+  separate package, the two possible shapes and which is preferred, the constraints it
+  places on 1.0, and the questions to answer if it is picked up.
+- Cross-referenced it from `AGENTS.md`, `CLAUDE.md`, `README.md`, the decision log, and
+  open questions, in each case reaffirming that the base mod stays native-only.

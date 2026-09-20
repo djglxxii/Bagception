@@ -27,3 +27,7 @@ on them can be trusted. Move each one to the decision log or the handbook once s
 5. **Player-facing configuration**, if ever wanted, has no MCM route under the
    native-only constraint. Spec section 36's settings would need an in-game mechanism
    or optional add-on paks. Not needed for 1.0.
+6. **A Script Extender companion adding weightless storage** is under consideration as
+   a separate future package. Its shape, and the questions it raises, are recorded in
+   [`../script-extender-edition.md`](../script-extender-edition.md). Nothing is
+   decided; revisit after 1.0.

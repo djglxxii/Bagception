@@ -21,6 +21,10 @@ weightless storage, which is not achievable without the Script Extender. That
 requirement was dropped to keep this a standard Larian mod. See
 [`docs/research/native-capabilities.md`](docs/research/native-capabilities.md).
 
+A separate Script Extender companion that would add weightless storage is under
+consideration as a future package. The base mod will never require it. See
+[`docs/script-extender-edition.md`](docs/script-extender-edition.md).
+
 ## Design
 
 - [`spec.md`](spec.md) is the design specification. **Read its preamble first:** it was

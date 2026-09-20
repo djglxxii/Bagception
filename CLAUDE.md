@@ -9,7 +9,9 @@ otherwise have to be rediscovered.
 
 - **No Script Extender, no third-party mod dependencies, no Nexus release workflow.**
   Native Larian mod system and Osiris only. If something seems to need the Script
-  Extender, raise it; do not add it.
+  Extender, raise it; do not add it. A separate Script Extender companion is under
+  consideration as a future package, which does not change this rule for the base mod:
+  see `docs/script-extender-edition.md`.
 - Never destroy or delete a player item to resolve a sorting problem.
 - Never sort anything outside Bagception's own hierarchy.
 - Never copy code verbatim from the reference mods; study them.
