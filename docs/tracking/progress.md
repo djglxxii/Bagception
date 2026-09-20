@@ -2,21 +2,27 @@
 
 ## Phase 0 — Scaffold
 
-- [x] Create the repository layout, modelled on the sibling BG3 mod projects in `C:\src`.
-- [x] Author module identity with a freshly generated UUID at version 1.0.0.0.
-- [x] Add the Script Extender manifest and a server bootstrap load probe.
-- [x] Add build, package, deploy, and validation tooling under `tools/`.
-- [x] Verify the toolchain: paths validate, Lua compiles, `Build-Pak.ps1` produces a package with the expected contents.
-- [ ] Deploy the scaffold once and confirm the extender prints the load line in game.
+- [x] Create the repository layout following `C:\src\MoreHirelings`.
+- [x] Author provisional module identity and Toolkit project registration at 1.0.0.0.
+- [x] Add Toolkit sync, offline packaging, and deployment tooling under `tools/`.
+- [x] Record the native-only constraint in `AGENTS.md`, `CLAUDE.md`, and the spec preamble.
+- [x] Verify the offline packager produces a package with the expected contents.
 
-## Phase 1 — Proof of concept
+## Phase 1 — Probe and proof of concept
 
-- [ ] Confirm which Script Extender event reliably reports an item entering a specific container.
-- [ ] Author the master bag and three container root templates.
-- [ ] Author the `BAGCEPTION_MASTER` and `BAGCEPTION_INTERNAL` tags.
-- [ ] Implement ingress handling, classification, routing, and the re-entrancy guard.
-- [ ] Verify longsword, potion, and unknown item routing in game.
+- [ ] Create the `Bagception` project in the official Toolkit.
+- [ ] Reconcile the Toolkit-generated identity with the provisional UUIDs.
+- [ ] Author the master bag and one sub-bag, inheriting vanilla container templates.
+- [ ] Tag the sub-bag with a vanilla auto-collect tag.
+- [ ] Measure in game: which Osiris event reports container ingress, and whether it
+      distinguishes root from sub-bag.
+- [ ] Measure in game: how much vanilla auto-collect handles unaided.
+- [ ] Record both results in the developer handbook.
+- [ ] Write and verify the routing goal.
 
-Later phases are listed in [`../implementation-plan.md`](../implementation-plan.md).
-Acceptance criteria AC-01 through AC-24 from `spec.md` section 43 become a checklist
-here once Phase 1 lands.
+## Research
+
+- [ ] Can the native system make container contents weightless, or approximate it?
+
+Later phases are in [`../implementation-plan.md`](../implementation-plan.md).
+Acceptance criteria AC-01 to AC-24 become a checklist here once Phase 1 lands.

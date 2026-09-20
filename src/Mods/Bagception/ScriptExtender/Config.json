@@ -1,5 +1,0 @@
-{
-  "RequiredVersion": 31,
-  "ModTable": "Bagception",
-  "FeatureFlags": ["Lua"]
-}

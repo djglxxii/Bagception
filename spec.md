@@ -1,3 +1,32 @@
+> ## Superseded premise — read before implementing
+>
+> This document was drafted assuming Norbyte's Script Extender. On 2026-09-20 the
+> user set the opposite constraint: **Bagception targets Larian's native mod system
+> and Osiris scripting only, published through the official Toolkit to mod.io. No
+> Script Extender, no third-party mod dependencies.**
+>
+> What this changes:
+>
+> | Section | Status |
+> | --- | --- |
+> | Header, "Primary Runtime Dependency" | Superseded. No runtime dependency. |
+> | 2.3, 31 — weightless storage | **At risk.** Both strategies were Script Extender techniques. Whether the native system can do this at all is an open question; the feature may be approximated, or dropped. |
+> | 9 — sorting event | Reframed. `TemplateAddedTo` is to be used as an Osiris event, confirmed by an in-game probe before anything is built on it. |
+> | 11, 12, 14 — classifier | Reduced. BG3's native auto-collect containers do the bulk of classification; Osiris covers only the gaps. Precedence still applies to what Osiris handles. |
+> | 36 — MCM configuration | Removed. MCM is itself a Script Extender framework. |
+> | 37 — project structure | Superseded by the Toolkit layout in `AGENTS.md`. |
+> | 5 — hierarchy | Decided: flat, all containers at one level. |
+>
+> Everything else — the categories in section 6, the story-item safety rules in
+> section 7, the pipeline shape in section 8, the protection invariants in sections
+> 15 to 17, recovery, and the acceptance criteria in section 43 — still stands,
+> subject to the weightless question above, which AC-11 depends on.
+>
+> Current decisions live in `docs/tracking/decision-log.md`; open items in
+> `docs/tracking/open-questions.md`.
+
+---
+
 # Bagception
 
 ## Weightless Nested Auto-Sorting Inventory System for Baldur's Gate 3

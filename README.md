@@ -1,64 +1,75 @@
 # Bagception
 
-A Baldur's Gate 3 mod: one weightless Bag of Holding that contains every other bag.
+A Baldur's Gate 3 mod: one bag in your inventory that holds every other bag.
 
 > **One bag in your inventory. Every other bag inside it. Everything where it belongs.**
 
-Items dropped into Bagception are classified and filed into the right internal
-container automatically. The internal containers are permanent and cannot leave the
-master bag. Everything stored inside contributes zero carried weight.
+Items dropped into Bagception are filed into the right internal container
+automatically. The internal containers are permanent and cannot leave the master bag.
+
+Built with Larian's official Toolkit and Osiris scripting, for release through mod.io
+and the in-game mod manager. **No Script Extender and no third-party mod dependencies.**
 
 ## Status
 
-Scaffold only. The repository builds and packages an empty, identity-complete module;
-no gameplay behaviour has been implemented yet. See
-[`docs/tracking/progress.md`](docs/tracking/progress.md).
+Scaffold only. The repository holds an identity-complete module with no content and no
+behaviour yet. See [`docs/tracking/progress.md`](docs/tracking/progress.md).
 
-## Requirements
-
-- Baldur's Gate 3, PC.
-- [Norbyte's BG3 Script Extender](https://github.com/Norbyte/bg3se). Classification,
-  routing, weightless storage, and container protection all run in Script Extender Lua,
-  so this mod cannot ship through the in-game mod manager's Toolkit-only path. The
-  intended release channel is Nexus Mods.
+One core requirement is unresolved: the original design called for weightless storage,
+which the draft specification assumed the Script Extender would provide. Whether the
+native system can do this at all is under research and may change what the mod is. See
+[`docs/tracking/open-questions.md`](docs/tracking/open-questions.md).
 
 ## Design
 
-- [`spec.md`](spec.md) is the authoritative design specification, including the
-  category list, sorting pipeline, safety rules, and the 24 acceptance criteria.
-- [`mod-references.md`](mod-references.md) records which existing mods to study for
-  which problem.
-- [`docs/implementation-plan.md`](docs/implementation-plan.md) maps the spec's eight
-  phases onto this repository.
+- [`spec.md`](spec.md) is the design specification. **Read its preamble first:** it was
+  drafted against a Script Extender implementation, and the sections resting on that
+  assumption are superseded.
+- [`mod-references.md`](mod-references.md) records which existing mods to study.
+- [`docs/implementation-plan.md`](docs/implementation-plan.md) maps the phases onto
+  this repository.
 - [`docs/developer-handbook.md`](docs/developer-handbook.md) holds durable local
-  knowledge: tool paths, Divine invocations, BG3SE pitfalls.
+  knowledge: tool paths, Divine invocations, Toolkit and Osiris pitfalls.
 
 ## Project layout
 
-| Path | Purpose |
+`src/` mirrors the five folders a Larian Toolkit project uses under the game's `Data/`
+directory:
+
+| Repository path | Toolkit purpose |
 | --- | --- |
-| `src/Mods/Bagception/` | `meta.lsx` and the Script Extender manifest and Lua |
-| `src/Public/Bagception/` | Root templates, stats, tags |
-| `src/Localization/English/` | Localization source, compiled to `.loca` at package time |
-| `tools/` | Local build, package, deploy, and validation scripts |
-| `docs/` | Handbook, implementation plan, research, and tracking |
-| `dist/`, `tmp/` | Generated output and scratch data; both ignored |
+| `src/Projects/Bagception/` | Project registration and settings |
+| `src/Editor/Mods/Bagception/` | Editor-only source data |
+| `src/Mods/Bagception/` | Packed mod data, metadata, and Osiris story |
+| `src/Public/Bagception/` | Root templates, tags, stats |
+| `src/Generated/Public/Bagception/` | Generated public assets, if needed |
+
+Plus `src/Localization/English/` for localization, `tools/` for helper scripts, and
+`docs/` for the handbook, plan, research, and tracking. `dist/` and `tmp/` are ignored.
+
+The empty folders contain `.gitkeep` files until the Toolkit creates real content. They
+do not form a valid mod by themselves.
 
 ## Getting started
 
-1. Install the Script Extender if it is not already present.
-2. Copy `dirs.example.txt` to `dirs.txt` and set `game_dir` and `mod_dir` for your
+1. Open the official Baldur's Gate 3 Toolkit on the development machine.
+2. Open or create the `Bagception` project. The module UUID in `meta.lsx` is
+   provisional; reconcile the Toolkit-generated identity with it before publishing or
+   creating long-term saves.
+3. Copy `dirs.example.txt` to `dirs.txt` and set `game_dir` and `mod_dir` for your
    machine. `dirs.txt` is ignored by git.
-3. Run `.\tools\Install-ExportTool.ps1` to fetch Norbyte's LSLib ExportTool into
-   ignored `tools/external/`, unless it is already there.
-4. Validate the setup with `.\tools\Test-LocalPaths.ps1`.
-5. Build and deploy:
+4. Run `.\tools\Sync-ToolkitProject.ps1 -Direction FromGame` to capture Toolkit-created
+   files under `src/`. Review the diff before committing.
+5. Make content changes in the Toolkit, then sync again after each editing session.
 
-   ```powershell
-   .\tools\Test-Lua.ps1
-   .\tools\Build-Pak.ps1
-   .\tools\Deploy-Pak.ps1 -PakPath .\dist\Bagception.pak
-   ```
+Use **Project Settings -> Publish Local** in the Toolkit to build a test `.pak`, and
+the Toolkit's mod.io publishing action only once the mod has been implemented and
+tested. Publishing publicly is a separate decision.
 
-   Close BG3 first; a running game locks the installed package. Enable the mod in
-   BG3 Mod Manager, then launch.
+`.\tools\Build-Pak.ps1` and `.\tools\Deploy-Pak.ps1` build and install a quick offline
+test package. They are a convenience for iteration, not the release path.
+
+## References
+
+- [Larian: Creating a New Mod](https://docs.baldursgate3.game/Getting_Started:_Creating_a_New_Mod)
+- [Larian: Publishing a Mod](https://docs.baldursgate3.game/Getting_Started:_Publishing_a_Mod)

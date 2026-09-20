@@ -7,7 +7,14 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ### Added
 
-- Repository scaffold: BG3 source layout, module identity at 1.0.0.0, Script Extender
-  manifest, local build and deploy tooling, and project documentation.
+- Repository scaffold following the MoreHirelings project: Toolkit-shaped source
+  layout, provisional module identity at 1.0.0.0, Toolkit sync and offline packaging
+  tooling, and project documentation.
+
+### Changed
+
+- Set the project direction to Larian's native mod system and Osiris only, released
+  through the official Toolkit to mod.io. An earlier scaffold assumed the Script
+  Extender and has been reworked.
 
 No gameplay behaviour has shipped yet.

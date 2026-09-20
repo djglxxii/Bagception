@@ -1,72 +1,88 @@
 # Implementation plan
 
-This maps the eight phases in [`../spec.md`](../spec.md) section 44 onto concrete
-repository artifacts. It is a routing document, not a restatement of the spec: read
-the spec for behaviour, read this for where the work lands.
+Where the work lands in this repository. Read [`../spec.md`](../spec.md) for behaviour,
+starting with its preamble: the document was drafted against a Script Extender
+implementation and several sections are superseded.
 
-Nothing below has been started. The repository currently holds a scaffold that builds
-a valid but empty module.
+The architecture under the native-only constraint is:
+
+```text
+Item enters Bagception root
+        |
+        +-- BG3 native auto-collect files most items by itself
+        |
+        +-- Osiris covers only the gaps:
+              categories vanilla lacks
+              protected / story items
+              container protection and integrity
+              manual Sort / Reorganize
+```
+
+Nothing past Phase 0 has been started.
 
 ## Phase 0 — Scaffold (done)
 
-- Module identity in `src/Mods/Bagception/meta.lsx`, UUID
-  `f2470481-03f2-4439-83d5-68f2e26ae076`, version 1.0.0.0.
-- Script Extender manifest in `src/Mods/Bagception/ScriptExtender/Config.json`.
-- Build, package, deploy, and validation scripts under `tools/`.
-- Verified: `Build-Pak.ps1` produces a loadable package layout.
+- Toolkit-shaped `src/` with the five Toolkit-owned paths plus localization.
+- Provisional module identity, version 1.0.0.0, to be reconciled with the
+  Toolkit-generated identity when the project is created.
+- `Sync-ToolkitProject.ps1` plus an offline Divine packager for quick iteration.
 
-## Phase 1 — Proof of concept
+## Phase 1 — Probe and proof of concept
 
-Prove `Longsword -> Weapons`, `Potion -> Potions`, unknown -> `Miscellaneous` through
-a nested hierarchy with three containers.
+The probe comes first because two assumptions have to be tested before any pipeline is
+written, and one build answers both.
 
-- `src/Public/Bagception/RootTemplates/` master bag and three container templates.
-- `src/Public/Bagception/Tags/` the `BAGCEPTION_MASTER` and `BAGCEPTION_INTERNAL` tags.
-- `Lua/Server/Bagception/Constants.lua`, `Containers.lua`, `Classifier.lua`,
-  `Sorter.lua`, `Logging.lua`.
-- `Lua/BootstrapServer.lua` replaces the scaffold load probe with the real requires.
-- Ingress event and re-entrancy guard (spec sections 9 and 10).
+1. Create the Toolkit project and reconcile identities.
+2. Author two containers, both inheriting vanilla container templates: the Bagception
+   master bag and one sub-bag. No custom art.
+3. Give the sub-bag a vanilla auto-collect tag.
+4. Measure, in game:
+   - Which Osiris event reports an item entering a container, and whether it
+     distinguishes the Bagception root from a sub-bag.
+   - How much vanilla auto-collect does unaided: potion, elixir, coating, modded
+     weapon. This sizes the gap Osiris has to cover and validates the hybrid.
+5. Record both answers in the handbook, then write the routing goal.
 
-Open question first: confirm which event fires for a player drag into a container and
-whether it reports the destination container reliably. Record the answer in the
-handbook before building on it.
+## Phase 2 — Weightless storage (at risk)
 
-## Phase 2 — Weightless storage
-
-Validate spec section 31 Strategy A, then B if nesting breaks weight accounting.
-Test: 100+ lb stored, carried weight unchanged.
+Blocked on research. Both strategies in spec section 31 were Script Extender
+techniques. The options are a native mechanism if one exists, an approximation via a
+carrying-capacity boost, or dropping the goal. AC-11 depends on the outcome.
 
 ## Phase 3 — Full classification
 
-All categories from spec section 6, with the precedence order in section 12.
-Category tables live in `Lua/Server/Data/Categories.lua`; per-template exceptions in
-`Overrides.lua`.
+The remaining containers from spec section 6, flat at one level, each with the right
+vanilla auto-collect tag. Osiris rules only for categories vanilla does not
+distinguish, following the precedence in spec section 12.
 
 ## Phase 4 — Container protection
 
-Removal, Send to Camp, party transfer, vendor, and barter protection plus the
-integrity invariant in spec sections 15 to 17. `IntegrityManager.lua`.
+Removal, Send to Camp, party transfer, and vendor protection, plus the invariant in
+spec sections 15 to 17. Osiris detects a departed container and restores it.
 
 ## Phase 5 — Story safety
 
-Protected-item detection and denylist, `Data/ProtectedItems.lua`. Unknown items with
-story-like properties stay at the root.
+Protected-item detection and denylist. Unknown items with story-like properties stay
+at the root.
 
 ## Phase 6 — Persistence and recovery
 
 Existing-save installation, one bag per save, save/load validation, Recover Bagception,
-duplicate consolidation. `Recovery.lua`.
+duplicate consolidation. Note the Osiris `INITSECTION` behaviour recorded in the
+handbook before designing registration.
 
 ## Phase 7 — Compatibility
 
-Test against vanilla autosort bags, Containers Extended, Bag of Holding Reforged,
-Automatic Inventory Manager, and common equipment and consumable mods.
+Vanilla autosort bags and common equipment and consumable mods. The Script Extender
+reference mods are worth testing against as neighbours, but this mod must also work
+with the extender absent entirely.
 
 ## Phase 8 — Polish
 
-Icons, names, tooltips, logging levels, manual Sort, Reorganize, Prepare for Uninstall.
+**Custom art for every container**, which the user has asked for. Plus names,
+tooltips, manual Sort, Reorganize, and Prepare for Uninstall.
 
 ## Acceptance
 
-Spec section 43 lists AC-01 through AC-24. Track them as a checklist in
-`docs/tracking/progress.md` once Phase 1 lands.
+Spec section 43 lists AC-01 through AC-24. AC-11 is contingent on Phase 2. Track them
+as a checklist in `docs/tracking/progress.md` once Phase 1 lands.
