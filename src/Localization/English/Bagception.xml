@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contentList>
+  <!--
+    Localized strings for Bagception. Each entry needs a unique handle
+    (h + 32 hex characters, e.g. h1a2b3c4d5e6f47281234567890abcdef) that is
+    referenced from the root templates and stats. tools/Package-Mod.ps1
+    compiles this file to Bagception.loca at package time.
+  -->
+</contentList>

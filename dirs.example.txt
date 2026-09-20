@@ -1,0 +1,6 @@
+<game_dir>
+C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3
+</game_dir>
+<mod_dir>
+C:\Users\<you>\AppData\Local\Larian Studios\Baldur's Gate 3\Mods
+</mod_dir>
