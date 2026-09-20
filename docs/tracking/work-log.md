@@ -33,3 +33,18 @@
 - Verified the offline packager still builds a correct package.
 - Not done: the Toolkit project has not been created, no content or behaviour exists,
   and nothing has been loaded in game.
+
+### Native capability research
+
+- Surveyed what the native mod system can do, by extracting and reading vanilla data:
+  the complete Osiris API header, `Object.txt` stats, every root template in Shared,
+  Gustav, and GustavX, and all 544 vanilla tag definitions. Findings in
+  `docs/research/native-capabilities.md`.
+- Concluded that true weightlessness is not achievable natively, confirmed across all
+  three surfaces independently, and that per-item weight reduction cannot substitute.
+- Found the native auto-collect mechanism, `ContainerAutoAddOnPickup` plus
+  `ContainerContentFilterCondition`, and mapped vanilla tag coverage against the
+  seventeen categories: ten expressible as data, six needing Osiris, one partial.
+- Confirmed `TemplateAddedTo`, `MoveItemTo`, and `GetItemByTagInInventory` exist and
+  are sufficient for the sorting pipeline.
+- Extractions were written to ignored `tmp/`; nothing extracted is tracked.

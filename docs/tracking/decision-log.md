@@ -61,3 +61,28 @@ resolved unilaterally and recorded as settled. This rework reverses it.
   artifact.
 - Keep `spec.md` and `mod-references.md` at the repository root, as the sibling
   projects keep their design documents.
+
+## 2026-09-20: Native capability survey
+
+Findings recorded in [`../research/native-capabilities.md`](../research/native-capabilities.md).
+
+- **True weightlessness is not achievable natively.** No root-template attribute, no
+  `Object.txt` field, no Osiris function. Spec section 31 is dead, and the user's
+  "make things weigh very little" alternative does not substitute: weight belongs to
+  each item's own stats entry, so it can only be set on items this mod defines, never
+  on the arbitrary loot a player stores.
+- **Bagception's own containers should still be authored at zero weight**, as vanilla
+  does for the camp supply sack. Free, and worth doing regardless of the decision above.
+- **The native auto-collect mechanism is confirmed and richer than expected.**
+  `ContainerAutoAddOnPickup` plus `ContainerContentFilterCondition`, a boolean
+  expression language over `Tagged('X')` and `IsSupply()`. Ten of the seventeen
+  categories are expressible as pure data, including the potion/elixir split that was
+  assumed to need code. Weapons, armour, shields, jewelry, dyes, and valuables have no
+  vanilla tag and will need Osiris.
+- **The Osiris inventory surface is sufficient** for the sorting pipeline:
+  `TemplateAddedTo` for ingress, `MoveItemTo` for routing,
+  `GetItemByTagInInventory` for locating internal containers by tag rather than by
+  tracked UUID, and `MoveAllItemsTo` for uninstall and duplicate consolidation.
+
+Still to decide: whether to ship the carrying-capacity approximation or drop the
+weight goal. See open questions.

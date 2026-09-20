@@ -22,7 +22,9 @@
 
 ## Research
 
-- [ ] Can the native system make container contents weightless, or approximate it?
+- [x] Can the native system make container contents weightless, or approximate it?
+      Answered: no. See `docs/research/native-capabilities.md`. A carrying-capacity
+      approximation exists; the product decision is open.
 
 Later phases are in [`../implementation-plan.md`](../implementation-plan.md).
 Acceptance criteria AC-01 to AC-24 become a checklist here once Phase 1 lands.
