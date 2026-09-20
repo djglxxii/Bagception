@@ -1,0 +1,16 @@
+// Bagception containers. Weight 0 so the bags themselves cost nothing to carry;
+// their contents weigh what they weigh. See docs/research/native-capabilities.md.
+
+new entry "OBJ_Bagception_Master"
+type "Object"
+using "_Container"
+data "RootTemplate" "856bd140-6963-4de1-9471-25440149e87d"
+data "Weight" "0"
+data "Vitality" "-1"
+
+new entry "OBJ_Bagception_PotionCase"
+type "Object"
+using "_Container"
+data "RootTemplate" "8bf1ed2d-3655-415e-868e-fe3138760337"
+data "Weight" "0"
+data "Vitality" "-1"

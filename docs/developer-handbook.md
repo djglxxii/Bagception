@@ -66,9 +66,31 @@ absent or disabled before release.
   A goal added after distribution does initialize on load in an existing save, but an
   existing goal's `INITSECTION` does not re-run. Plan roster or registration changes
   around that: new facts need a new goal, not an edit to an old one.
-- `TemplateAddedTo` appears to be an Osiris event, which is why Script Extender mods
-  reach it through the Osiris binding. This is unconfirmed here and is the subject of
-  the Phase 1 probe. Do not build the pipeline on it until the probe reports.
+- `TemplateAddedTo((ROOT)_ObjectTemplate, (GUIDSTRING)_Object, (GUIDSTRING)_InventoryHolder, (STRING)_AddType)`
+  is confirmed present, as is the simpler `AddedTo`. What `_InventoryHolder` refers to
+  is not yet known; the Phase 1 probe answers it.
+- **The `AddType` strings are not enumerated anywhere in `story_header.div`.** Do not
+  match them against guessed literals. The probe prints whatever the engine passes;
+  record the observed values here.
+- Useful calls confirmed for the sorter: `ToInventory` and `MoveItemTo` to move,
+  `GetItemByTagInInventory` to locate a container by tag, `IsContainer`, `IsTagged`,
+  `IsCharacter`, `IsItem`, `GetHostCharacter`, `ShowNotification` and `DebugText` for
+  diagnostics, and the `Concatenate*` family for building message strings.
+- `MagicPockets*` is a whole Larian bag subsystem visible in the API
+  (`MagicPocketsMoveToByTag`, `IsInMagicPockets`, and more). Unexplored, and possibly
+  relevant to Bagception. Worth a look before building the sorter.
+
+### Authored container templates
+
+- Both probe containers inherit `CONT_Bag_A`,
+  `3e6aac21-333b-4812-a554-376c2d157ba9`, from **Gustav.pak**: `InventoryType 11`,
+  `Stats OBJ_GenericLootItem`, with icon, visual, physics and bounds. Inheriting it
+  means not setting those, which is why the templates are short.
+- Do not invent icon names. `Item_CONT_GEN_Bag_A` was assumed during authoring and
+  does not exist; the real icon on `CONT_Bag_A` is `Item_LOOT_Bag_Blackpowder`.
+  Inherit rather than name one.
+- Localization handles are `h` + a GUID with `g` in place of each `-`. They must match
+  between the template and `Bagception.xml`, version attribute included.
 
 ## LSLib and Divine
 

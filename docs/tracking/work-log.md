@@ -66,3 +66,17 @@
   places on 1.0, and the questions to answer if it is picked up.
 - Cross-referenced it from `AGENTS.md`, `CLAUDE.md`, `README.md`, the decision log, and
   open questions, in each case reaffirming that the base mod stays native-only.
+
+### Phase 1 probe files prepared
+
+- Studied real vanilla data before authoring: the alchemy pouch and keyring templates,
+  their shared parent `CONT_Bag_A` in Gustav.pak, a vanilla tag resource, and the
+  MoreHirelings goal file for Osiris syntax.
+- Authored the two probe containers, the two mod-owned tags, zero-weight stats
+  entries, four localization strings, and the diagnostic Osiris goal.
+- Caught two errors before they shipped: an invented icon name that does not exist in
+  the game, now inherited instead, and a guessed `AddType` literal, now removed
+  because those strings are not enumerated anywhere in `story_header.div`.
+- Verified every `.lsx` converts to `.lsf` and the whole set packages.
+- Wrote `docs/phase1-probe.md` with the Toolkit steps, the in-game drag sequence, and
+  what each outcome means for the design.

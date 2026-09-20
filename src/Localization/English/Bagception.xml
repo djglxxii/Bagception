@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <contentList>
-  <!--
-    Localized strings for Bagception. Each entry needs a unique handle
-    (h + 32 hex characters, e.g. h1a2b3c4d5e6f47281234567890abcdef) that is
-    referenced from the root templates and stats. tools/Package-Mod.ps1
-    compiles this file to Bagception.loca at package time.
-  -->
+  <content contentuid="ha86b2ccag9495g083fgad32g4bc47d3bc676" version="1">Bagception</content>
+  <content contentuid="h271db971g9d0dgea47g01a5gd3c2ade18566" version="1">It's bags all the way down.</content>
+  <content contentuid="h99b68a19g753cg6b16g30e4g2da2c0daac42" version="1">Potion Case</content>
+  <content contentuid="h2bc86cc7g38afg9ffbg9fbdgedd510514cd8" version="1">A padded case for potions. It lives inside Bagception.</content>
 </contentList>

@@ -1,0 +1,76 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+// Phase 1 diagnostic goal. This goal sorts nothing and moves nothing. It exists
+// only to answer two questions in docs/tracking/open-questions.md:
+//
+//   1. Does TemplateAddedTo's _InventoryHolder report the CONTAINER an item was
+//      dropped into, or the owning CHARACTER? Everything about the root-versus-
+//      sub-bag rule in spec sections 26 and 27 depends on this.
+//   2. Does ContainerAutoAddOnPickup fire for a container nested inside another
+//      container, and on a manual drag rather than only on world pickup?
+//
+// Remove this goal before release.
+
+KBSECTION
+
+// Every ingress, whatever the destination. Reports what _InventoryHolder actually
+// is, so question 1 is answered by reading the screen rather than by assumption.
+IF
+TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+AND
+GetHostCharacter(_Host)
+AND
+IsCharacter(_InventoryHolder, 1)
+THEN
+ConcatenateGUID("[Bagception] ingress -> CHARACTER holder: ", _InventoryHolder, _Line);
+Concatenate(_Line, " addType: ", _Line2);
+Concatenate(_Line2, _AddType, _Line3);
+ShowNotification(_Host, _Line3);
+DebugText(_Object, _Line3);
+
+IF
+TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+AND
+GetHostCharacter(_Host)
+AND
+IsItem(_InventoryHolder, 1)
+THEN
+ConcatenateGUID("[Bagception] ingress -> ITEM holder: ", _InventoryHolder, _Line);
+Concatenate(_Line, " addType: ", _Line2);
+Concatenate(_Line2, _AddType, _Line3);
+ShowNotification(_Host, _Line3);
+DebugText(_Object, _Line3);
+
+// The two cases that matter, named explicitly so the answer is unambiguous on
+// screen even if the GUID text is hard to read.
+IF
+TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+AND
+GetHostCharacter(_Host)
+AND
+IsTagged(_InventoryHolder, "BAGCEPTION_MASTER", 1)
+THEN
+ShowNotification(_Host, "[Bagception] ROOT ingress: holder is the master bag");
+
+IF
+TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+AND
+GetHostCharacter(_Host)
+AND
+IsTagged(_InventoryHolder, "BAGCEPTION_INTERNAL", 1)
+THEN
+ShowNotification(_Host, "[Bagception] SUB-BAG ingress: holder is the potion case");
+
+// Question 2 needs no extra rule. This goal never moves anything, so if the
+// SUB-BAG notification above ever fires for a potion the player dropped into the
+// master bag, native auto-collect did it, nested, and the answer is yes. If only
+// the ROOT notification fires and the potion stays put, the answer is no.
+//
+// Note: the AddType strings are not enumerated anywhere in story_header.div, so
+// they are not matched against literals here. The two reporting rules above print
+// whatever the engine passes, which is how we learn the vocabulary.
+
+EXITSECTION
+ENDEXITSECTION
