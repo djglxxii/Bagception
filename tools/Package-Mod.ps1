@@ -130,6 +130,26 @@ then rebuild the story in the Toolkit, then package again.
 "@
   }
 
+  # Every authored goal must appear in the compiled story as a registered goal. The
+  # Story Editor compiles only goals it knows about, and a .txt dropped into
+  # RawFiles/Goals is not one: the build reports 0 errors and omits it. A goal that
+  # declares no DB_/PROC_/QRY_ identifier is invisible to the check above, so the
+  # goal titles are verified separately.
+  $missingGoals = @(Get-ChildItem -LiteralPath $authoredGoals -Recurse -File -Filter "*.txt" |
+    Where-Object { $compiled -notmatch "Goal\(\d+\)\.Title\(""$([regex]::Escape($_.BaseName))""\)" } |
+    ForEach-Object { $_.BaseName })
+
+  if ($missingGoals.Count -gt 0) {
+    throw @"
+These goals were authored but are not registered in the compiled story:
+
+  $($missingGoals -join "`n  ")
+
+The Story Editor compiles only goals it has registered. Create the goal in the
+editor, or move its rules into a goal that is already registered, then rebuild.
+"@
+  }
+
   Write-Host "Story freshness verified: $($declared.Count) module identifier(s) present in the compiled story"
 }
 
