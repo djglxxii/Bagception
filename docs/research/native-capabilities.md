@@ -1,5 +1,15 @@
 # Native capability survey
 
+> **Correction, 2026-09-20.** The weightlessness verdict below is wrong and is kept
+> only as a record of how it was reached. `Weight()` is a real boost function —
+> vanilla uses `Weight(100)` on the `EnlargeWeightLarge` passive — so weight is
+> reachable through the boost and status system. This survey searched root-template
+> attributes, `Object.txt` keys and the Osiris API, and never the boost vocabulary.
+> See the correction in [`../tracking/decision-log.md`](../tracking/decision-log.md)
+> and the probe's question 3 in [`../phase1-probe.md`](../phase1-probe.md). Every
+> other finding here, on auto-collect and the Osiris inventory surface, still holds.
+
+
 What Bagception can and cannot do without the Script Extender. Researched 2026-09-20
 against the installed game build, by extracting and reading vanilla data.
 

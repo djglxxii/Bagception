@@ -2,7 +2,7 @@
 
 The files are prepared. This is what to do with them, and what each outcome means.
 
-The probe sorts nothing and moves nothing. It exists to answer two questions from
+The probe sorts nothing and moves nothing. It exists to answer four questions from
 [`tracking/open-questions.md`](tracking/open-questions.md) that the whole design rests
 on, and to learn the `AddType` vocabulary, which is not documented anywhere in
 `story_header.div`.
@@ -38,14 +38,66 @@ The Potion Case carries `ContainerContentFilterCondition` =
 7. In game, spawn or grant the two containers, put the Potion Case inside the master
    bag, and put the master bag in a character's inventory.
 
+## Getting the bags
+
+The goal grants both containers to the host character the first time it initializes:
+once on `LevelGameplayStarted`, with `SavegameLoaded` as a fallback for a save loaded
+without a level transition, guarded by a `DB_Bagception_NeedsGrant` marker that is
+retracted on the first grant so it cannot fire twice.
+
+Two 10 kg **probe weights** come with them, a diamond and a ruby, for the weight
+test below.
+
+They arrive **loose in your inventory, not nested**. That is deliberate — dragging the
+Potion Case into the master bag by hand is part of what the probe measures. Do that
+first, before the drag sequence below.
+
+The grant announces itself first: **"grant rule fired; 4 items requested"**. That
+notification is the fork in the road.
+
+- No notification and no items: the goal never ran. Check the Story Editor error
+  list, and that the mod is enabled.
+- Notification but no items: the rule ran and the templates it named do not exist.
+  The usual cause is resources shipped as `.lsx` only — the game reads `.lsf`, and
+  fails silently when it is absent. This is what went wrong on the first build; see
+  the handbook. Confirm with `divine -a list-package` that `Public/` contains `.lsf`.
+
+(The notification needs one Story Editor rebuild after the fix; a package built
+before that grants the items without announcing it.)
+
+## Reading the result: marker items
+
+Every diagnostic drops a **named marker item** into the player's inventory as well as
+showing a message. The messages carry the `addType` string and nothing else can, but
+they are gone the moment they are dismissed; two runs produced answers that could not
+be read afterwards. The markers are still there when the drag is over, and each one
+states its result in its own name:
+
+| Marker in inventory | Means |
+| --- | --- |
+| `PROBE RESULT: holder is the CHARACTER` | `_InventoryHolder` is the owning character |
+| `PROBE RESULT: holder is the CONTAINER` | `_InventoryHolder` is the container — question 1 answered the good way |
+| `PROBE RESULT: ROOT ingress fired` | the tag test matched the master bag |
+| `PROBE RESULT: SUB-BAG ingress fired` | something landed in the potion case |
+
+They weigh nothing, so they never disturb a weight reading. Check the inventory after
+the drags rather than trying to read anything mid-drag.
+
+**If no marker appears at all**, the rule did not fire, and that is itself the
+answer: for question 1 it means neither `IsCharacter` nor `IsItem` matched the
+holder, which would be a genuinely surprising result worth stopping on.
+
 ## What to do in game
 
 Watch the on-screen notifications. Drag, in this order:
 
+0. The **Potion Case** into the **master bag**, so the nesting exists at all.
 1. A potion into the **master bag**.
 2. A potion directly into the **Potion Case**.
 3. A potion **out** of the Potion Case.
 4. Any non-potion, a longsword say, into the **master bag**.
+5. **Note your carried weight.** Then drag **Probe Weight A** into the master bag,
+   note it again, drag **Probe Weight B** in, and note it a third time.
 
 ## Reading the result
 
@@ -67,6 +119,44 @@ Watch the on-screen notifications. Drag, in this order:
 - Only `ROOT ingress`, with the potion sitting in the master bag, means auto-collect
   does not fire nested, or does not fire on manual drag. Osiris has to route
   everything, Phase 3 grows considerably, and the hybrid decision needs revisiting.
+
+**Question 2b — do magic pockets see into a nested container?**
+
+Free to ask in the same session, and it decides how the sorter is written rather than
+whether it can be. `MagicPocketsMoveToByTag` is a bulk "move everything tagged X into
+container Y" call, which would replace a rule-per-item sorter for the ten
+tag-expressible categories — but only if the party pool sees items that sit inside a
+bag.
+
+- `magic pockets DO see an item nested in the potion case` means the bulk call is
+  worth trying in Phase 3.
+- `do NOT see` means route items individually with `ToInventory` or `MoveItemTo`,
+  as originally planned. No loss either way.
+
+Note that these two rules fire only when something lands in the Potion Case, so they
+depend on step 1 or step 2 producing a `SUB-BAG ingress` in the first place.
+
+### First run, 2026-09-20
+
+Both gems went into the master bag. The bag read **10.4 kg**: 10 kg of gem plus four
+potions at 0.1 each. Ten of the twenty kilograms of gem are gone, so **`Weight()`
+does reach items** — the mechanism is real and native.
+
+Hovering each gem settled which: **A read 10, B read 0.** Both statuses applied,
+`Weight(0)` did nothing and `Weight(-10)` took ten kilograms off. **`Weight()` is
+additive** — a delta, not an assignment.
+
+### Second run, 2026-09-20: weight answered
+
+Both gems read 10 loose, **0** inside Bagception, and **10 again** once taken out.
+
+- Gem A carried `Weight(-1000)` against 10 kg and read 0, not -1000: **weight clamps
+  at zero.** One boost bigger than anything in the game zeroes any item.
+- Gem B, the `Weight(-10)` control, behaved as before.
+- Both restored on egress, so `RemoveStatus` undoes it cleanly.
+
+Native weightless storage is achievable. See the decision log for what it costs and
+why it is still not in 1.0.
 
 **Vocabulary.** Note the `addType:` value printed in each notification. Those strings
 are the undocumented `AddType` enum; record them in the handbook. The difference
