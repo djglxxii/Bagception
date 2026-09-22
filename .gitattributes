@@ -1,0 +1,6 @@
+# Osiris goal files must keep LF endings. The story compiler reads "Version 1" as the
+# first line of a goal; with CRLF it sees "Version 1\r", fails the header parse, and
+# omits the goal from the build entirely — reporting zero errors and zero warnings.
+# The goal simply is not there afterwards, which is invisible until something that
+# should have fired does not.
+src/Mods/*/Story/RawFiles/Goals/*.txt text eol=lf

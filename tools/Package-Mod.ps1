@@ -85,5 +85,53 @@ if (Test-Path -LiteralPath $stagedPublic) {
   }
 }
 
+# A Toolkit story build reads Data\Mods\<module>\, not src\. Editing a goal under
+# src\ and rebuilding compiles the previous goal instead, cleanly and with no error,
+# and the resulting package ships a story missing whatever was just written. That
+# failure is invisible at every later step, so it is caught here.
+#
+# The check is deliberately identifier-based rather than a timestamp comparison: a
+# rebuild always refreshes the timestamp, including the rebuild that compiled the
+# wrong file. Every DB_ and PROC_ name declared in the authored goals must appear in
+# the compiled story. Names shared with vanilla are useless for this, which is why
+# only the module's own prefixed identifiers are used.
+$stagedStory = Join-Path $moduleStage "Mods\$moduleName\Story\goals.raw"
+$authoredGoals = Join-Path $sourceRoot "Mods\$moduleName\Story\RawFiles\Goals"
+
+if ((Test-Path -LiteralPath $authoredGoals) -and (Test-Path -LiteralPath $stagedStory)) {
+  $compiled = Get-Content -LiteralPath $stagedStory -Raw
+  $declared = [System.Collections.Generic.HashSet[string]]::new()
+
+  foreach ($goal in Get-ChildItem -LiteralPath $authoredGoals -Recurse -File -Filter "*.txt") {
+    # Strip // comments first. Prose in a comment routinely names an identifier that
+    # was deliberately removed, and harvesting those would demand the compiled story
+    # contain something no rule declares.
+    $goalText = [regex]::Replace((Get-Content -LiteralPath $goal.FullName -Raw), '(?m)//.*$', '')
+    foreach ($match in [regex]::Matches($goalText, '\b(?:DB|PROC|QRY)_\w+')) {
+      [void]$declared.Add($match.Value)
+    }
+  }
+
+  $missing = @($declared | Where-Object { $compiled -notmatch "\b$([regex]::Escape($_))\b" } | Sort-Object)
+
+  if ($missing.Count -gt 0) {
+    throw @"
+The compiled story is stale. These identifiers are in the authored goals but not in
+the story the Toolkit built:
+
+  $($missing -join "`n  ")
+
+The Toolkit builds from the game data directory, so source edits reach it only after
+a sync. Run:
+
+  .\tools\Sync-ToolkitProject.ps1 -Direction ToGame
+
+then rebuild the story in the Toolkit, then package again.
+"@
+  }
+
+  Write-Host "Story freshness verified: $($declared.Count) module identifier(s) present in the compiled story"
+}
+
 Write-Host "Prepared unpacked package stage at $moduleStage"
 Write-Host "Run tools\Build-Pak.ps1 to create dist\$moduleName.pak."
