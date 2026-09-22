@@ -621,3 +621,71 @@ authored file:
 ```
 grep -c 'Goal([0-9]*).Title("<GoalName>")' <Story>/goals.raw
 ```
+
+## Event parameter types, and where a cast is needed
+
+`TemplateAddedTo` binds its item as a `GUIDSTRING`, not an `ITEM`:
+
+```
+event TemplateAddedTo((ROOT)_ObjectTemplate, (GUIDSTRING)_Object, (GUIDSTRING)_InventoryHolder, (STRING)_AddType)
+```
+
+GUIDSTRING does not narrow to ITEM on its own, so any query taking an `[in](ITEM)`
+needs an explicit `(ITEM)` cast when fed from this event. The compiler reports
+`parameter 1 type mismatch: got (GUIDSTRING), expected (ITEM)` and **skips the rule**
+— the same silent-skip class as the earlier TAG mismatch, though this one at least
+appears in the error list.
+
+Which queries need the cast, for the sorter's six untagged categories:
+
+| Query | First parameter | Cast needed from `TemplateAddedTo` |
+|---|---|---|
+| `IsTagged` | `(GUIDSTRING)_Target` | no |
+| `GetItemByTemplateInInventory` | `(ITEMROOT)`, `(GUIDSTRING)` holder | no |
+| `IsWeapon` | `(ITEM)_Item` | **yes** |
+| `GetEquipmentSlotForItem` | `(ITEM)_Item` | **yes** |
+| `ItemGetGoldValue` | `(ITEM)_Item` | **yes** |
+| `IsStoryItem` | `(ITEM)_Item` | **yes** |
+| `GetStatString` | `(GUIDSTRING)_Object` | no |
+
+So the ten tag-expressible categories route without a cast, and every one of the six
+that needs real classification requires it. That asymmetry is why the potion rule
+compiled and the shield rule did not.
+
+An `EQUIPMENTSLOT` constant is accepted in the out-parameter position, the same way an
+integer is: `GetEquipmentSlotForItem((ITEM)_Item, EQUIPMENTSLOT.MeleeOffHand)` asserts
+the slot rather than binding it. Vanilla always binds and joins a database instead, so
+this has no precedent in the goals, but the compiler accepts it.
+
+## Treasure tables: one subtable per guaranteed item
+
+A subtable picks *from* its entries according to the counts in its header. This does
+not give a bag two containers — it gives it one of the two, chosen at random:
+
+```
+new treasuretable "BAGCEPTION_MasterContents"
+new subtable "1,1"
+object category "I_OBJ_Bagception_PotionCase",1,0,0,0,0,0,0,0
+object category "I_OBJ_Bagception_ShieldRack",1,0,0,0,0,0,0,0
+```
+
+Each guaranteed item needs its own subtable, and subtables roll independently:
+
+```
+new treasuretable "BAGCEPTION_MasterContents"
+new subtable "1,1"
+object category "I_OBJ_Bagception_PotionCase",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_ShieldRack",1,0,0,0,0,0,0,0
+```
+
+Vanilla `ST_MagicItems_Unique` is the first shape, a pick-one list of four uniques.
+`GOB_Goblin_Generic` is the second, rolling a loot category and gold separately.
+
+The subtable header is a list of `count,weight` pairs: `"1,1"` always drops one entry,
+`"0,1; 1,3; 2,3"` drops none, one or two at 1:3:3 odds. The number after an object
+category is that entry's weight within its subtable, not a count.
+
+The failure is quiet — a bag simply arrives holding fewer containers than intended,
+with nothing logged — so adding a container means adding a subtable *and* an object
+line, and verifying the bag's contents in a fresh game.

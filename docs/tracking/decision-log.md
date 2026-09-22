@@ -510,15 +510,31 @@ between rules with identical condition prefixes was suppressing the rule, and th
 `GetItemByTemplateInInventory` was broken at runtime. Neither was true. The rule
 containing it had simply never been loaded.
 
-**Verified in game, fresh save, more than one party member.** Potions dropped into the
-master bag file themselves into the Potion Case. A potion placed directly into the
-Potion Case stays put, so routing does not re-trigger on its own move. A non-potion
-stays loose in the master bag. Potions in a character's own inventory are untouched,
-which is the containment guarantee holding. A stack moves whole, confirming `-1` as
-the amount idiom.
+**Correction.** The paragraph this replaces claimed the sorter was verified on
+potions. It was not. The pak under test contained no routing rule and no sorter goal
+at all — the Story Editor had silently declined to compile an unregistered goal — and
+the potions were filed by **native auto-collect**: the Potion Case carries
+`ContainerAutoAddOnPickup` with `Tagged('ALCH_SOLUTION_POTION')`, and the engine did
+the work. All four negative cases are equally explained by the native filter. The
+lesson is that a passing test proves nothing unless the mechanism under test is
+confirmed present in the build.
 
-This is the rule shape the remaining fifteen categories copy, so it was worth
-confirming the negative cases and not just the happy path.
+This also overturns the Phase 1 finding that nested containers do not auto-collect.
+They do.
+
+**Verified in game, fresh game.** Shields dropped into the master bag file themselves
+into the Shield Rack, and an off-hand dagger does not, so `IsWeapon` separates shields
+from off-hand weapons as intended. This is the first confirmed Osiris routing, and it
+is unambiguous: the Shield Rack has no `ContainerContentFilterCondition` and no
+auto-collect, because "shield" cannot be written as a tag expression. Nothing but the
+rule could have moved it.
+
+That result carries the riskiest classification in the spec. The same shape now covers
+weapons, armour and jewelry, which are simpler — a direct `IsWeapon` and slot tests.
+
+Both containers arrive in the bag together, after a treasure-table fix: a subtable
+picks from its entries, so two object lines under one `new subtable "1,1"` dropped one
+of the two at random. Each guaranteed container needs its own subtable.
 
 **Still unverified.** Whether a brand-new goal merges into a save that has never seen
 it. Everything so far was tested in a fresh game, which sidesteps the question.

@@ -32,12 +32,17 @@
 
 - [x] Choose the routing mechanism. Per-item on `TemplateAddedTo`, not bulk
       `MagicPocketsMoveToByTag`; reasoning in the decision log.
-- [x] Establish the rule shape on one category. Potions into the Potion Case,
-      verified in a fresh game on more than one party member, including the three
-      negative cases and stack handling.
+- [x] Establish the rule shape on one category. Shields into the Shield Rack,
+      verified in a fresh game: shields route, an off-hand dagger does not. First
+      confirmed Osiris routing — the Potion Case result was native auto-collect.
+- [x] Confirm the discriminator for the hardest category. Shields share MeleeOffHand
+      with off-hand weapons and are separated by `IsWeapon`.
 - [x] Confirm all sixteen categories are classifiable. The six with no vanilla tag
       resolve through `IsWeapon`, `GetEquipmentSlotForItem`, `GetStatString` +
       `Substring`, and `ItemGetGoldValue`.
+- [ ] Settle whether native auto-collect covers the ten tag-expressible categories
+      on its own. Build the next tagged container with a filter and no Osiris rule;
+      if it sorts, those ten are data-only and need no rules.
 - [ ] Author the remaining fifteen containers: root templates, Object entries,
       localization, and treasure-table contents.
 - [ ] Write the routing rule for each, copying the verified shape.
