@@ -488,3 +488,136 @@ Divine is a convenience for offline test packages only. Releases go through the 
   (was `a1b4cb49-e5c2-44a0-92bd-5d90378e7723`).
 - `Version64` packs as `major << 55 | minor << 47 | revision << 31 | build`.
   1.0.0.0 is `36028797018963968`. Update it in both `ModuleInfo` and `PublishVersion`.
+
+## Reading a container's contents
+
+Three calls walk an inventory, and all three are used by vanilla:
+
+```
+call IterateInventory((GUIDSTRING)_InventoryHolder, (STRING)_Event, (STRING)_CompletionEvent)
+call IterateInventoryByTag((GUIDSTRING)_InventoryHolder, (STRING)_Tags, (STRING)_Event, (STRING)_CompletionEvent)
+call IterateInventoryByTemplate((GUIDSTRING)_InventoryHolder, (GUIDSTRING)_Template, (STRING)_Event, (STRING)_CompletionEvent)
+```
+
+Each raises `_Event` once per item and `_CompletionEvent` when the walk finishes, so
+a sweep is written as two rules rather than a loop. Anything that needs to reason
+about what is already in a bag — a re-sort pass, a repair sweep, a count — goes
+through these.
+
+Resolving a single known item is cheaper and needs no event round-trip:
+
+```
+query GetItemByTemplateInInventory([in](ITEMROOT)_ItemTemplate, [in](GUIDSTRING)_InventoryHolder, [out](ITEM)_Item)
+query GetItemByTagInInventory([in](STRING)_Tags, [in](GUIDSTRING)_InventoryHolder, [out](ITEM)_Item)
+query GetDirectInventoryOwner([in](GUIDSTRING)_Object, [out](GUIDSTRING)_DirectInventoryHolder)
+```
+
+`GetItemByTemplateInInventory` is what lets the sorter find a sub-container inside a
+particular Bagception without storing an instance map: the template is fixed and
+known, the bag instance comes from the event, and the lookup is done on demand. A
+stored map would have to be built in the right order and kept in sync; this cannot
+drift.
+
+`GetDirectInventoryOwner` returns the immediate holder, as against
+`GetInventoryOwner`, which returns the top-level one. An earlier note in this
+handbook claimed only the top-level holder was reachable. That was wrong.
+
+## Moving an item into a container
+
+```
+call ToInventory((GUIDSTRING)_Object, (GUIDSTRING)_TargetObject, (INTEGER)_Amount, (INTEGER)_ShowNotification, (INTEGER)_ClearOriginalOwner)
+```
+
+The target is a `GUIDSTRING`, so it can be a container and not just a character.
+Vanilla conventions worth copying: `_Amount` of `-1` moves the whole stack,
+`_ShowNotification` of `0` keeps a bulk operation silent, and `_ClearOriginalOwner`
+of `0` preserves ownership — passing `1` would launder a stolen item.
+
+
+## Which direction the sync goes, and why a build can lie
+
+The Toolkit builds the story from the game data directory
+(`<game>\Data\Mods\<module>\`), not from `src\`. `src\` is the repository's copy, and
+the two are joined only by `tools\Sync-ToolkitProject.ps1`:
+
+| Direction  | Copies              | Run it when                                  |
+|------------|---------------------|----------------------------------------------|
+| `ToGame`   | `src\` → game data  | after editing a goal, **before** rebuilding   |
+| `FromGame` | game data → `src\`  | after a Toolkit build, to capture its output  |
+
+Both directions fail silently when run in the wrong order, and the two failures
+compound:
+
+- Editing a goal under `src\` and rebuilding without `ToGame` compiles the *previous*
+  goal. The build succeeds and reports no errors, because the file it compiled is
+  valid — it simply is not the file that was edited.
+- Running `FromGame` while `src\` holds uncommitted edits overwrites them with the
+  older Toolkit copy. Git shows a clean tree, which looks like success.
+
+Done in that order, an edit is compiled away and then deleted, and every signal along
+the way — clean build, no errors, clean `git status` — reads as normal.
+
+`tools\Package-Mod.ps1` now refuses to package when this has happened. It collects
+every `DB_`, `PROC_` and `QRY_` identifier from the authored goals and checks each one
+appears in the compiled `goals.raw`, failing with the list of missing names and the
+sync command to run. The check is identifier-based on purpose: a timestamp comparison
+cannot catch it, because the rebuild that compiled the wrong file still refreshes the
+timestamp. Only the module's own prefixed identifiers are usable — matching on a name
+vanilla also defines proves nothing, as vanilla's copy is always present.
+
+
+## The savegame carries its own copy of the story
+
+BG3 serialises the compiled story into every savegame as `StorySave.bin` — 55 MB in a
+mid-game save — and restores the story from there on load. It does not re-read the
+story from the mod. A story change therefore does not reach a save that already
+contains that goal, no matter how many times the mod is rebuilt, repackaged and
+redeployed.
+
+This failure has no error message and every check on disk passes. The mod is enabled,
+the pak is correct, the compiled story in the pak contains the new rule, and the game
+runs the old one.
+
+**The one signal that reports it** is in the Script Extender log, at every launch:
+
+```
+ScriptExtender::OnAfterOsirisLoad: 151484 nodes
+```
+
+Compare that number across launches. Adding or removing a rule must move it. If it is
+identical after a story change, the running story is the savegame's copy and any test
+result is meaningless. This was measured across three launches that spanned the
+deletion of five rules and roughly 190 lines: the count did not move by one.
+
+**Testing a story change therefore means starting a new game**, which compiles the
+story fresh from the paks. A save made before the mod had any story also works, and is
+what made the very first grant test succeed.
+
+A goal the savegame has never seen appears to be merged in from the mod, which is why
+the sorter lives in its own goal rather than beside the grant rules. That is inferred
+from the first grant test rather than measured directly, and is still unverified.
+
+## Goal files must use LF line endings
+
+The story compiler reads `Version 1` as a goal's first line. With CRLF it sees
+`Version 1\r`, fails the header parse, and **omits the goal from the build entirely
+while reporting `0 error(s), 0 warning(s)`**. The file still ships inside the pak, so
+every check short of reading the compiled story passes.
+
+The symptom is indistinguishable from the savegame problem above: a rule that should
+fire does not, and nothing anywhere reports a reason. The two can stack, and did.
+
+`.gitattributes` pins `src/Mods/*/Story/RawFiles/Goals/*.txt` to `eol=lf`. When adding
+a goal, match the byte-level convention of an existing one rather than assuming the
+platform default:
+
+```
+head -c 20 <goal>.txt | xxd -p     # 0a between tokens, never 0d0a
+```
+
+Confirming a goal actually compiled is a grep against the built story, not the
+authored file:
+
+```
+grep -c 'Goal([0-9]*).Title("<GoalName>")' <Story>/goals.raw
+```

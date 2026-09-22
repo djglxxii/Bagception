@@ -25,7 +25,24 @@
 - [x] Measure in game: how much vanilla auto-collect handles unaided. **None of it
       while nested; Osiris must route everything.**
 - [x] Record both results in the developer handbook.
-- [ ] Write and verify the routing goal.
+- [x] Write and verify the routing goal. `Bagception_Sorter.txt`, per-item routing on
+      `TemplateAddedTo`.
+
+## Phase 3 — The sorter
+
+- [x] Choose the routing mechanism. Per-item on `TemplateAddedTo`, not bulk
+      `MagicPocketsMoveToByTag`; reasoning in the decision log.
+- [x] Establish the rule shape on one category. Potions into the Potion Case,
+      verified in a fresh game on more than one party member, including the three
+      negative cases and stack handling.
+- [x] Confirm all sixteen categories are classifiable. The six with no vanilla tag
+      resolve through `IsWeapon`, `GetEquipmentSlotForItem`, `GetStatString` +
+      `Substring`, and `ItemGetGoldValue`.
+- [ ] Author the remaining fifteen containers: root templates, Object entries,
+      localization, and treasure-table contents.
+- [ ] Write the routing rule for each, copying the verified shape.
+- [ ] Settle the shield discriminator and the gold threshold for valuables.
+- [ ] Verify whether a new goal merges into a save that has never seen it.
 
 ## Shipping content so far
 

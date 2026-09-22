@@ -333,6 +333,22 @@ entirely on never missing an egress event — and a miss permanently alters an i
 the mod does not own. That sits badly with the rule in `CLAUDE.md` against altering
 a player's items to solve a sorting problem.
 
+**Correction, 2026-09-22.** The premise of the paragraph above is wrong. Osiris
+*can* enumerate a container's contents: `IterateInventory`,
+`IterateInventoryByTag` and `IterateInventoryByTemplate` walk a holder and raise a
+per-item event plus a completion event, and vanilla uses all three.
+`GetDirectInventoryOwner` also returns the immediate holder, so the top-level-only
+limitation attributed to `GetInventoryOwner` was never binding either. A repair
+sweep for a per-item weight status is therefore writable, and the stated reason for
+rejecting weightlessness does not hold.
+
+This does not reverse the decision. `CarryCapacityMultiplier` is implemented,
+tested and accepted, and it still carries no per-item state. But if weightlessness
+is ever revisited, the blocker recorded here is not a real one, and the reason to
+prefer the carry boost is that it owns no bookkeeping, not that the alternative was
+impossible.
+
+
 The carry boost has none of that exposure: no per-item state, nothing to clean up,
 nothing stranded on uninstall. The engine owns the effect and the mod owns no
 bookkeeping at all.
@@ -451,3 +467,58 @@ driven by Osiris, but it does mean a misfiled item cannot be filed by hand eithe
 - It also removes the drop-and-reload bag duplication raised against the
   self-healing grant. A bag that cannot be dropped cannot be farmed, so the
   self-healing behaviour keeps its upside and loses its main downside.
+
+## 2026-09-22: Per-item routing, and the sorter's first category
+
+The sorter routes on `TemplateAddedTo` one item at a time, rather than sweeping in bulk
+with `MagicPocketsMoveToByTag`. Verified working in a fresh game: potions dropped into
+the master bag file themselves into the Potion Case, on more than one party member.
+
+**Why not bulk.** `MagicPocketsMoveToByTag` matches only tags, so it cannot reach the
+six categories that have no vanilla tag — per-item logic is required regardless, and
+bulk would be a second mechanism to maintain rather than a replacement. Its `_Source`
+is the party inventory pool, so sweeping by tag would pull items out of a character's
+own inventory and into Bagception, which is sorting outside our hierarchy. And it takes
+an `_Amount`, which we would have to know in advance.
+
+**The holder test is a tag check.** The master bag's root template carries
+`BAGCEPTION_MASTER`, so `IsTagged` answers "is this a Bagception" directly. An earlier
+version kept a `DB_Bagception_Master` registry with a repair rule on `SavegameLoaded`;
+it was replaced because it was unnecessary, not because it failed — it was never
+actually running (see below). The tag check needs no bookkeeping, no repair path, and
+works the moment the mod loads.
+
+The tag is also the containment guarantee: routing requires the holder to **be** a
+master bag, never merely to contain one, so a character's own inventory is never swept.
+
+**What this cost to find.** Four test rounds reported the sorter not working, and the
+first three diagnoses were wrong, because two independent silent failures were stacked:
+
+1. The goal file was written with CRLF line endings while every other goal uses LF. The
+   compiler failed the header parse and dropped the goal from the build, reporting zero
+   errors. The file still shipped inside the pak.
+2. Every test ran against an existing save, and BG3 restores the story from the
+   savegame's own `StorySave.bin` rather than from the mod.
+
+Either one alone produces "the rule does not fire, and nothing says why". Both were
+mine to avoid: the first by matching the existing convention, the second by testing in
+a fresh game from the start. Both are now in `docs/developer-handbook.md`, along with
+the Script Extender node count, which is the only signal that reports the second.
+
+Discarded along the way, and recorded so they are not re-derived: that node sharing
+between rules with identical condition prefixes was suppressing the rule, and that
+`GetItemByTemplateInInventory` was broken at runtime. Neither was true. The rule
+containing it had simply never been loaded.
+
+**Verified in game, fresh save, more than one party member.** Potions dropped into the
+master bag file themselves into the Potion Case. A potion placed directly into the
+Potion Case stays put, so routing does not re-trigger on its own move. A non-potion
+stays loose in the master bag. Potions in a character's own inventory are untouched,
+which is the containment guarantee holding. A stack moves whole, confirming `-1` as
+the amount idiom.
+
+This is the rule shape the remaining fifteen categories copy, so it was worth
+confirming the negative cases and not just the happy path.
+
+**Still unverified.** Whether a brand-new goal merges into a save that has never seen
+it. Everything so far was tested in a fresh game, which sidesteps the question.
