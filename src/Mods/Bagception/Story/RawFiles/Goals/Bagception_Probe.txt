@@ -148,6 +148,152 @@ GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_PotionCase_8bf1ed2d-3655-
 THEN
 ToInventory(_Item, _PotionCase, -1, 0, 0);
 
+// Scrolls. Tag-expressible, so the same shape as potions.
+//
+// This container shipped first with a ContainerContentFilterCondition and no rule, to
+// test whether native auto-collect files items into a nested container. It does not:
+// scrolls dropped into the master bag stayed loose. The filter still earns its place —
+// it gates manual placement, refusing anything that is not a scroll — but the moving
+// is ours to do. Every category needs a rule.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)SCROLL_dd86c045-0370-4ec9-b7c5-b0b160706f09, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ScrollCase_acf14532-8d31-4d94-b467-72018dd2cde9, _InventoryHolder, _ScrollCase)
+THEN
+ToInventory(_Item, _ScrollCase, -1, 0, 0);
+
+// Arrows.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ARROW_fa8afea4-4742-4467-bdef-69851bd15878, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_Quiver_99206dbf-1477-4cf9-88f2-fccb83e55a1b, _InventoryHolder, _DestQuiver)
+THEN
+ToInventory(_Item, _DestQuiver, -1, 0, 0);
+
+// Elixirs. Kept apart from potions, which are the pair most easily confused in a full bag.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ALCH_SOLUTION_ELIXIR_71031c9c-eb3e-49b3-bf38-20ce078eff15, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ElixirRack_6e1e9bc8-699b-4a63-902f-1b6b11707ea3, _InventoryHolder, _DestElixirRack)
+THEN
+ToInventory(_Item, _DestElixirRack, -1, 0, 0);
+
+// Coatings, oils and poisons.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ALCH_SOLUTION_COATING_9a42f996-decf-4fcc-ad11-2ba6abada287, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_CoatingKit_936b3efd-ef6e-4626-8db1-71a8aac440c9, _InventoryHolder, _DestCoatingKit)
+THEN
+ToInventory(_Item, _DestCoatingKit, -1, 0, 0);
+
+// Throwables: grenades, bombs and explosive flasks.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ALCH_SOLUTION_GRENADE_f87b203d-75ad-4527-b717-137044bc2ea1, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8, _InventoryHolder, _DestGrenadeSatchel)
+THEN
+ToInventory(_Item, _DestGrenadeSatchel, -1, 0, 0);
+
+// Alchemical ingredients.
+//
+// ALCH_INGREDIENT alone is enough, and extracts need no rule. A player never picks an
+// extract up: reagents are the thing found in the world, and extracts are produced from
+// them through the in-game extraction option, which deposits the result directly. So an
+// extract does not arrive as a loose item that could be dragged into Bagception.
+//
+// This is why the six elemental ALCH_EXTRACT_* tags are not matched here, despite there
+// being no plain ALCH_EXTRACT tag for them to share.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ALCH_INGREDIENT_64b824e7-50c5-475a-98c2-52026e372d77, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ReagentPouch_27607d0b-a6c8-4690-b118-47f36a871b40, _InventoryHolder, _DestReagentPouch)
+THEN
+ToInventory(_Item, _DestReagentPouch, -1, 0, 0);
+
+// Books and notes.
+//
+// The SCROLL exclusion is load-bearing. A scroll carries BOOK as well, so without it a
+// scroll would match this rule and the Scroll Case rule both, and two rules would move
+// the same item on the same event. Vanilla writes its own book container filter the
+// same way: Tagged(BOOK) and not Tagged(SCROLL).
+//
+// This is the first place two categories overlap, and the pattern every later overlap
+// follows: exclude explicitly rather than relying on rule order, which Osiris does not
+// guarantee.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)BOOK_8a8e253a-c081-45a1-9fa2-91b6901dc568, 1)
+AND
+IsTagged(_Item, (TAG)SCROLL_dd86c045-0370-4ec9-b7c5-b0b160706f09, 0)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_BookSatchel_d3c867a8-1d54-4b13-a8a8-5299ccc10911, _InventoryHolder, _DestBookSatchel)
+THEN
+ToInventory(_Item, _DestBookSatchel, -1, 0, 0);
+
+// Keys.
+//
+// Spec section 6.14 allows deferring to BG3 native key handling instead of a container.
+// This is the simpler of the two and can be dropped if native storage proves safer.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)KEY_9851fa99-5538-432a-8e77-c90929a88974, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_KeyRing_a2ceacf9-b44d-4483-b112-dbdd82b790e1, _InventoryHolder, _DestKeyRing)
+THEN
+ToInventory(_Item, _DestKeyRing, -1, 0, 0);
+
+// Camp supplies.
+//
+// There is no supply tag. IsSupply() exists as a container filter predicate but not as
+// an Osiris query, so the rule uses ItemGetSupplyValue instead: anything that feeds the
+// camp has a supply value above zero. That covers food, drink and camp-supply packs
+// alike, where the FOOD tag would miss the packs.
+//
+// This container is therefore filterable but not tag-routable -- the only one in the
+// set where the filter and the rule use different mechanisms.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+ItemGetSupplyValue((ITEM)_Item, _SupplyValue)
+AND
+_SupplyValue > 0
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_LarderSack_5691a197-d3a9-46a3-be03-91cb09ec804e, _InventoryHolder, _DestLarderSack)
+THEN
+ToInventory(_Item, _DestLarderSack, -1, 0, 0);
+
 // Shields. The first category with no vanilla tag, and the test of whether the
 // classification strategy for the other five holds up.
 //
