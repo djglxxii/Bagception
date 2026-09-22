@@ -37,6 +37,11 @@ foreach ($folder in @("Mods", "Public", "Localization")) {
 Get-ChildItem -LiteralPath $moduleStage -Recurse -Force -Filter ".gitkeep" |
   Remove-Item -Force
 
+# The Story Editor drops its build log next to the compiled story. A Toolkit-built
+# package does not contain it, so neither should this one.
+Get-ChildItem -LiteralPath $moduleStage -Recurse -Force -Filter "log.txt" |
+  Remove-Item -Force
+
 # The game reads compiled .loca, not the authored .xml. Compile every staged
 # localization file in place and keep the .xml alongside it for reference.
 $stagedLocalization = Join-Path $moduleStage "Localization"
@@ -53,6 +58,30 @@ if (Test-Path -LiteralPath $stagedLocalization) {
         }
       }
     }
+  }
+}
+
+# The game reads .lsf, not the authored .lsx, for resources under Public. A package
+# carrying only .lsx loads nothing: no root templates, no tags, and no error either,
+# which is exactly how the first probe build failed silently. The Toolkit generates
+# the .lsf beside the .lsx; when a resource is hand-authored, as these are, nothing
+# has generated one, so compile them here. Both are kept, as a Toolkit-built package
+# keeps both.
+$stagedPublic = Join-Path $moduleStage "Public"
+if (Test-Path -LiteralPath $stagedPublic) {
+  $resourceFiles = @(Get-ChildItem -LiteralPath $stagedPublic -Recurse -File -Filter "*.lsx")
+  if ($resourceFiles.Count -gt 0) {
+    $divine = Get-DivinePath
+    foreach ($file in $resourceFiles) {
+      $target = [System.IO.Path]::ChangeExtension($file.FullName, ".lsf")
+      if ($PSCmdlet.ShouldProcess($target, "Compile resource to LSF")) {
+        & $divine -g bg3 -a convert-resource -s $file.FullName -d $target -o lsf
+        if ($LASTEXITCODE) {
+          throw "Resource compilation failed for $($file.FullName) with exit code $LASTEXITCODE."
+        }
+      }
+    }
+    Write-Host "Compiled $($resourceFiles.Count) resource file(s) under Public to .lsf"
   }
 }
 
