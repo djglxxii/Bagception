@@ -689,3 +689,41 @@ category is that entry's weight within its subtable, not a count.
 The failure is quiet — a bag simply arrives holding fewer containers than intended,
 with nothing logged — so adding a container means adding a subtable *and* an object
 line, and verifying the bag's contents in a fresh game.
+
+## What ContainerContentFilterCondition can express
+
+The whole game contains four of these, all in Shared, none in Gustav:
+
+```
+Tagged('KEY')
+Tagged('BOOK') and not Tagged('SCROLL')
+Tagged('ALCH_INGREDIENT') or Tagged('ALCH_EXTRACT')
+IsSupply()
+```
+
+So the vocabulary in evidence is `Tagged('<name>')`, the built-in `IsSupply()`, and the
+operators `and`, `or`, `not`. There is no predicate for equipment slot, item type or
+stat name, and no example of anything else. Candidates beyond this list are guesses,
+and a filter that fails to parse is a silent trap: the container either accepts
+everything or nothing, with no error.
+
+**A container can only be filtered if its category is tag-expressible.** That splits the
+set in two:
+
+- The ten tagged categories get a filter, which gates manual placement. A player cannot
+  put a gem in the Scroll Case by hand.
+- Shields, weapons, armour, jewelry, dyes and valuables cannot have one. Manual
+  placement into those containers is unrestricted — anything can be dropped in by hand,
+  not merely things that are nearly right. Auto-routing is unaffected, since Osiris does
+  that.
+
+Vanilla shields confirm why: `WPN_HUM_Shield_B_0` carries **no tags at all**, and its
+stats entry is `ARM_Shield` under a `WPN_` template name. Nothing about it is reachable
+from a tag expression, which is the same reason it needs the slot-and-not-a-weapon test
+in Osiris.
+
+Closing the manual-placement gap would mean an eject rule: catch `TemplateAddedTo` where
+the holder is an internal container, decide the item does not belong, and move it back
+to the master bag with `GetDirectInventoryOwner`. That is a second mechanism with its
+own failure modes — a misfiring eject fights the player — for a case where the player
+deliberately placed the item. Not built.

@@ -64,3 +64,16 @@ All three are written up in the decision log with the evidence.
    a separate future package. Its shape, and the questions it raises, are recorded in
    [`../script-extender-edition.md`](../script-extender-edition.md). Nothing is
    decided; revisit after 1.0.
+
+9. **The six untagged containers accept anything placed by hand.** Their categories
+   cannot be written as a tag expression, and `ContainerContentFilterCondition` only
+   understands `Tagged()`, `IsSupply()` and boolean operators, so no filter can be
+   written for them. Vanilla shields carry no tags at all. Auto-routing is unaffected;
+   this is only about deliberate manual placement, and it will apply equally to
+   weapons, armour, jewelry, dyes and valuables.
+
+   The fix is an eject rule: catch `TemplateAddedTo` where the holder is an internal
+   container, decide the item does not belong, and return it to the master bag via
+   `GetDirectInventoryOwner`. Roughly one rule per container. Deferred by agreement as
+   low priority — do it if it stays cheap. The risk to weigh is that a misfiring eject
+   fights the player, which the present gap does not.

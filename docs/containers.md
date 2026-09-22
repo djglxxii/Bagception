@@ -32,7 +32,7 @@ inside it and can never be removed from it.
 | 17 | Valuables | gems, ingots, items whose purpose is sale | Valuables Purse | not built |
 | 18 | Miscellaneous | recognised, safe, but matching nothing above | Odds Sack | not built |
 
-Eighteen pieces of art in total: seventeen internal containers plus Bagception itself.
+Nineteen pieces of art in total: eighteen internal containers plus Bagception itself.
 
 ## Not containers
 
@@ -52,6 +52,10 @@ Three things in the spec are policy rather than storage, and need no art:
   off-hand slot with weapons and are told apart by not being a weapon. Nothing about
   this affects the picture, but it is why Shields is an early build rather than a late
   one.
+- **Extracts need no handling.** A player never picks one up: reagents are what is
+  found in the world, and extracts are produced from them through the in-game
+  extraction option, which deposits the result directly. Only reagents can be dragged
+  into Bagception, so `ALCH_INGREDIENT` covers the Reagent Pouch on its own.
 - **Keys may not need a container at all.** The spec allows using BG3's native key
   handling instead if that proves safer in testing. Treat this one as provisional.
 - **Elixirs are separate from Potions** and the two want to be distinguishable at a

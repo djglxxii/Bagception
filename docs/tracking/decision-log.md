@@ -519,8 +519,10 @@ the work. All four negative cases are equally explained by the native filter. Th
 lesson is that a passing test proves nothing unless the mechanism under test is
 confirmed present in the build.
 
-This also overturns the Phase 1 finding that nested containers do not auto-collect.
-They do.
+I attributed the potion routing to native auto-collect, and wrote that this overturned
+the Phase 1 finding. That was wrong too, and the correction is recorded below rather
+than edited away, because the mistake was reasoning from a single observation to a
+mechanism without testing the mechanism.
 
 **Verified in game, fresh game.** Shields dropped into the master bag file themselves
 into the Shield Rack, and an off-hand dagger does not, so `IsWeapon` separates shields
@@ -538,3 +540,27 @@ of the two at random. Each guaranteed container needs its own subtable.
 
 **Still unverified.** Whether a brand-new goal merges into a save that has never seen
 it. Everything so far was tested in a fresh game, which sidesteps the question.
+
+## 2026-09-22: Native auto-collect does not reach a nested container
+
+Settled by building the Scroll Case with a `ContainerContentFilterCondition` and
+deliberately **no** Osiris rule. Scrolls dropped into the master bag stayed loose. The
+filter itself works — placing a gem into the Scroll Case by hand is refused — so the
+container is configured correctly and simply never collects on its own.
+
+This re-confirms the original Phase 1 measurement and retracts the correction above.
+**Every category needs an Osiris routing rule.** The ten tag-expressible categories are
+not data-only; they are the same rule shape as potions, with a different tag.
+
+`ContainerContentFilterCondition` still earns its place on every tag-expressible
+container, because it gates manual placement. The player cannot file a gem in the
+Scroll Case by hand. Categories with no tag expression — shields, weapons, armour,
+jewelry, dyes, valuables — cannot have one, so manual placement there is unrestricted.
+
+**What moved the potions is still not established.** Native auto-collect is now ruled
+out, since the identical configuration fails for scrolls. The leading explanation is
+that BG3 loads the Toolkit's loose files under `Data/Mods/<module>/` alongside the
+deployed pak, and the loose story at that moment contained the rule even though the pak
+did not. That is a hypothesis, not a measurement, and it matters for testing: verifying
+a pak's contents does not prove what the game will run. Until it is settled, confirm a
+change is present in **both** the pak and the loose story before trusting a test.
