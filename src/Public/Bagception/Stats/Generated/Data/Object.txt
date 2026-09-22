@@ -34,6 +34,18 @@ data "Weight" "0"
 data "Flags" "InventoryBound;Unstorable"
 data "Vitality" "-1"
 
+// Shields have no vanilla tag and no equipment slot of their own; they share
+// MeleeOffHand with weapons, so the sorter identifies them by slot AND not IsWeapon.
+// No ContainerContentFilterCondition, because that takes a tag expression and there
+// is no tag to write. Manual placement is therefore unrestricted here.
+new entry "OBJ_Bagception_ShieldRack"
+type "Object"
+using "_Container"
+data "RootTemplate" "feda4623-0e32-4d33-921a-fe62fdefde98"
+data "Weight" "0"
+data "Flags" "InventoryBound;Unstorable"
+data "Vitality" "-1"
+
 // Phase 1 weight probe. Ten kilograms each, heavy enough to read straight off the
 // inventory weight display. Both are deleted with the probe goal.
 new entry "OBJ_Bagception_TestWeightA"

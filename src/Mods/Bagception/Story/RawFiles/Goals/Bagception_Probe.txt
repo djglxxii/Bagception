@@ -100,6 +100,89 @@ NOT DB_Bagception_GrantPending(_InventoryHolder);
 // refreshed when something is put into it a moment later. Declaring the contents on
 // the template removes the second insertion entirely rather than trying to time it.
 
+
+// ---------------------------------------------------------------------------
+// SORTER
+// ---------------------------------------------------------------------------
+//
+// These rules belong in their own goal, and Bagception_Sorter.txt holds the same
+// text. They are duplicated here because the Story Editor compiles only goals it
+// has registered, and a .txt dropped into RawFiles/Goals is not: the build reports
+// 0 errors and silently omits it. Until the goal is created through the editor,
+// this is the only registered goal the rules can live in.
+//
+// Route items dropped into a master bag to the container that should hold them.
+//
+// Per-item routing on TemplateAddedTo, chosen over bulk MagicPocketsMoveToByTag
+// sweeps. Bulk can only match tags, so it cannot reach the six categories with no
+// vanilla tag; its _Source is the party inventory pool, so it would pull items out of
+// the character's own inventory and into Bagception, which is sorting outside our own
+// hierarchy; and it needs an _Amount.
+//
+// The holder test is a tag check. The master bag's root template carries
+// BAGCEPTION_MASTER, so IsTagged answers "is this a Bagception" directly, with no
+// registry to populate and no repair path to get wrong. It is also what keeps the
+// sorter inside our hierarchy: the holder must BE a master bag, never merely contain
+// one, so a character's own inventory is never swept.
+//
+// GetItemByTemplateInInventory resolves a container template to the instance inside
+// this particular bag, so the sub-container map is looked up rather than stored.
+// ToInventory takes a GUIDSTRING target, so it moves into a container.
+//
+// Recursion takes care of itself: routing an item fires TemplateAddedTo again with
+// the sub-container as holder, and sub-containers do not carry BAGCEPTION_MASTER.
+//
+// Amount -1 is the vanilla idiom for the whole stack. ShowNotification 0 keeps
+// sorting silent. ClearOriginalOwner 0 preserves ownership, so filing a stolen item
+// does not launder it.
+
+// Potions. The first category, and the shape the other fifteen will copy.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ALCH_SOLUTION_POTION_8798a644-4720-4487-bc1a-6a4bf8f3a126, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_PotionCase_8bf1ed2d-3655-415e-868e-fe3138760337, _InventoryHolder, _PotionCase)
+THEN
+ToInventory(_Item, _PotionCase, -1, 0, 0);
+
+// Shields. The first category with no vanilla tag, and the test of whether the
+// classification strategy for the other five holds up.
+//
+// There is no Shield equipment slot: the EQUIPMENTSLOT enum runs Helmet, Breast,
+// Cloak, MeleeMainHand, MeleeOffHand, RangedMainHand, RangedOffHand, Ring, Underwear,
+// Boots, Gloves, Amulet, Ring2, Wings, Horns, Overhead, MusicalInstrument, VanityBody,
+// VanityBoots, and shields share MeleeOffHand with off-hand weapons. The discriminator
+// is therefore the slot AND not being a weapon.
+//
+// IsWeapon(_Item, 0) rather than NOT IsWeapon(...): NOT applies to database facts, not
+// to queries, and a constant in an out-param position is the standard way to assert
+// what a query returned. The EQUIPMENTSLOT constant is accepted the same way.
+//
+// Both queries need an explicit (ITEM) cast. TemplateAddedTo binds its second
+// parameter as (GUIDSTRING)_Object, and GUIDSTRING does not narrow to ITEM by
+// itself: the compiler reports a parameter type mismatch and skips the rule.
+// IsTagged takes a GUIDSTRING, which is why the potion rule needs no cast and
+// every rule reaching an ITEM-typed query does.
+//
+// A DYE tag resource exists but no root template carries it, so the same kind of
+// reasoning will be needed for dyes. Weapons and jewelry are simpler, being a direct
+// IsWeapon and a slot test respectively.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+GetEquipmentSlotForItem((ITEM)_Item, EQUIPMENTSLOT.MeleeOffHand)
+AND
+IsWeapon((ITEM)_Item, 0)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ShieldRack_feda4623-0e32-4d33-921a-fe62fdefde98, _InventoryHolder, _ShieldRack)
+THEN
+ToInventory(_Item, _ShieldRack, -1, 0, 0);
+
 // The Phase 1 probe diagnostics were removed here. Every question they were built
 // to answer is recorded in docs/tracking/decision-log.md, and their rules shared a
 // condition prefix with the sorter, which made the runtime log hard to read.

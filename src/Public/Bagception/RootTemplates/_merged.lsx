@@ -54,6 +54,26 @@
 					</children>
 				</node>
 				<node id="GameObjects">
+					<attribute id="Description" type="TranslatedString" handle="h82c509f8g0af8g4764ga814gb42721fe8586" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="hcbce351cg5c48g43c5ga4f3gce2a518fe955" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="feda4623-0e32-4d33-921a-fe62fdefde98" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ShieldRack" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_ShieldRack" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged('ALCH_SOLUTION_POTION')" />
 					<attribute id="Description" type="TranslatedString" handle="h2bc86cc7g38afg9ffbg9fbdgedd510514cd8" version="1" />

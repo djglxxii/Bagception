@@ -9,8 +9,18 @@
 // The "I_" prefix names a stats entry, not a root template; "T_" would name another
 // treasure table. Vanilla shape copied from GEN_Seashell in Shared.
 //
-// Every future internal container is added as another line here.
+
+// One subtable per container, not one subtable listing them all. A subtable rolls
+// its own entries and picks according to the counts in its header, so
+// `new subtable "1,1"` with two object lines under it drops ONE of the two at
+// random — which is why a bag arrived holding only the Shield Rack. Separate
+// subtables roll independently and each guarantees its own line. Vanilla
+// GOB_Goblin_Generic uses the same shape.
+//
+// Every future internal container therefore adds two lines here, not one.
 
 new treasuretable "BAGCEPTION_MasterContents"
 new subtable "1,1"
 object category "I_OBJ_Bagception_PotionCase",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_ShieldRack",1,0,0,0,0,0,0,0
