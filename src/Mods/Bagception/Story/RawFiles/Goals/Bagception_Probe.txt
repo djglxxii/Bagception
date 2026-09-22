@@ -2,46 +2,143 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 
-// Phase 1 diagnostic goal. This goal sorts nothing and moves nothing. It exists
-// only to answer two questions in docs/tracking/open-questions.md:
+// Bagception, Phase 1.
 //
-//   1. Does TemplateAddedTo's _InventoryHolder report the CONTAINER an item was
-//      dropped into, or the owning CHARACTER? Everything about the root-versus-
-//      sub-bag rule in spec sections 26 and 27 depends on this.
-//   2. Does ContainerAutoAddOnPickup fire for a container nested inside another
-//      container, and on a manual drag rather than only on world pickup?
+// This goal now does two unrelated jobs, kept apart below:
 //
-// Remove this goal before release.
+//   SHIPPING     one Bagception per character, with its internal containers,
+//                granted and repaired idempotently.
+//   DIAGNOSTICS  the Phase 1 probe. Its questions are answered and recorded in
+//                docs/tracking/decision-log.md; these rules exist only until the
+//                sorter is written, and must not ship.
+//
+// DB_Bagception_GrantPending is declared here only to give the database a defined
+// shape; the NULL entry never matches a real character.
+//
+// GUIDSTRING, not CHARACTER. The grant rules bind a CHARACTER, but the rule that
+// clears the flag takes its holder from TemplateAddedTo, whose _InventoryHolder is a
+// GUIDSTRING. GUIDSTRING accepts a CHARACTER; the reverse is a type error.
+DB_Bagception_GrantPending((GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000);
+
+// INITSECTION no longer carries the grant flag. The grant used to hang off a DB flag asserted
+// here, which was consumed once and could never recover if the grant was missed.
+// The inventory-count guard below replaces it and is self-healing.
 
 KBSECTION
+
+// ---------------------------------------------------------------------------
+// SHIPPING: one Bagception per character
+// ---------------------------------------------------------------------------
+//
+// Follows the vanilla pattern for the camp supply pack in Gustav's _Gustav_Init:
+// react to CharacterJoinedParty, and guard with TemplateIsInInventory(..., 0) so a
+// character who already has one is skipped. Vanilla adds QRY_OnlyOnce because the
+// pack is one per party; Bagception is one per character, so that guard is dropped
+// and the inventory check does the work instead.
+//
+// The inventory check is what makes these rules idempotent and self-healing: they
+// can fire as often as they like and a character ends up with exactly one bag. That
+// is a better guard than the DB flag used earlier, which was consumed once and
+// could never recover if the grant was missed.
+
+// New arrivals: recruits, hirelings, anyone joining later.
+IF
+CharacterJoinedParty(_Character)
+AND
+TemplateIsInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, 0)
+AND
+NOT DB_Bagception_GrantPending(_Character)
+THEN
+DB_Bagception_GrantPending(_Character);
+TemplateAddTo((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, 1, 0);
+
+// Everyone already in the party. Covers installing into an existing save, where
+// CharacterJoinedParty has long since fired, and repairs any character who somehow
+// has none. DB_Players binds once per party member, so the rule fires per character.
+IF
+SavegameLoaded()
+AND
+DB_Players(_Character)
+AND
+TemplateIsInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, 0)
+AND
+NOT DB_Bagception_GrantPending(_Character)
+THEN
+DB_Bagception_GrantPending(_Character);
+TemplateAddTo((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, 1, 0);
+
+IF
+LevelGameplayStarted(_Level, 0)
+AND
+IsCharacterCreationLevel(_Level, 0)
+AND
+DB_Players(_Character)
+AND
+TemplateIsInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, 0)
+AND
+NOT DB_Bagception_GrantPending(_Character)
+THEN
+DB_Bagception_GrantPending(_Character);
+TemplateAddTo((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, 1, 0);
+
+// The bag has arrived, so the character is no longer pending. Clearing it here
+// rather than never is what preserves self-healing: if the bag is later destroyed,
+// a later sweep sees an empty inventory and no pending flag, and grants again.
+IF
+TemplateAddedTo((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Bag, _InventoryHolder, _AddType)
+AND
+IsCharacter(_InventoryHolder, 1)
+THEN
+NOT DB_Bagception_GrantPending(_InventoryHolder);
+
+// The internal containers are NOT added here. They come from the master bag's
+// InventoryList, which points at the BAGCEPTION_MasterContents treasure table, so
+// the engine creates the bag already holding them.
+//
+// Adding them with Osiris worked, but left the client drawing an empty bag until
+// the next reload: the container's UI is built when the bag arrives and is not
+// refreshed when something is put into it a moment later. Declaring the contents on
+// the template removes the second insertion entirely rather than trying to time it.
+
+// ---------------------------------------------------------------------------
+// PROBE DIAGNOSTICS -- delete with this goal
+// ---------------------------------------------------------------------------
 
 // Every ingress, whatever the destination. Reports what _InventoryHolder actually
 // is, so question 1 is answered by reading the screen rather than by assumption.
 IF
-TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+TemplateAddedTo((ITEMROOT)BAGCEPTION_TEST_WeightA_4a7ad16a-d7bc-407f-9a85-3fa89c2c0e55, _Object, _InventoryHolder, _AddType)
 AND
 GetHostCharacter(_Host)
 AND
 IsCharacter(_InventoryHolder, 1)
+AND
+ConcatenateGUID("[Bagception] ingress -> CHARACTER holder: ", _InventoryHolder, _Line1)
+AND
+Concatenate(_Line1, "; addType: ", _Line2)
+AND
+Concatenate(_Line2, _AddType, _Line)
 THEN
-ConcatenateGUID("[Bagception] ingress -> CHARACTER holder: ", _InventoryHolder, _Line);
-Concatenate(_Line, " addType: ", _Line2);
-Concatenate(_Line2, _AddType, _Line3);
-ShowNotification(_Host, _Line3);
-DebugText(_Object, _Line3);
+OpenMessageBox(_Host, _Line);
+DebugText(_Object, _Line);
+TemplateAddTo((ITEMROOT)BAGCEPTION_PROBE_HolderIsCharacter_5e2df624-53e2-4c1a-b24e-7a3c59cf41f9, _Host, 1, 0);
 
 IF
-TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+TemplateAddedTo((ITEMROOT)BAGCEPTION_TEST_WeightA_4a7ad16a-d7bc-407f-9a85-3fa89c2c0e55, _Object, _InventoryHolder, _AddType)
 AND
 GetHostCharacter(_Host)
 AND
 IsItem(_InventoryHolder, 1)
+AND
+ConcatenateGUID("[Bagception] ingress -> ITEM holder: ", _InventoryHolder, _Line1)
+AND
+Concatenate(_Line1, "; addType: ", _Line2)
+AND
+Concatenate(_Line2, _AddType, _Line)
 THEN
-ConcatenateGUID("[Bagception] ingress -> ITEM holder: ", _InventoryHolder, _Line);
-Concatenate(_Line, " addType: ", _Line2);
-Concatenate(_Line2, _AddType, _Line3);
-ShowNotification(_Host, _Line3);
-DebugText(_Object, _Line3);
+OpenMessageBox(_Host, _Line);
+DebugText(_Object, _Line);
+TemplateAddTo((ITEMROOT)BAGCEPTION_PROBE_HolderIsItem_09f81682-0e4a-49da-948c-db00fb91f055, _Host, 1, 0);
 
 // The two cases that matter, named explicitly so the answer is unambiguous on
 // screen even if the GUID text is hard to read.
@@ -50,18 +147,24 @@ TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
 AND
 GetHostCharacter(_Host)
 AND
-IsTagged(_InventoryHolder, "BAGCEPTION_MASTER", 1)
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+Concatenate("[Bagception] ROOT ingress: holder is the master bag; addType: ", _AddType, _Line)
 THEN
-ShowNotification(_Host, "[Bagception] ROOT ingress: holder is the master bag");
+OpenMessageBox(_Host, _Line);
+TemplateAddTo((ITEMROOT)BAGCEPTION_PROBE_RootIngress_5250b475-9e1f-4820-bee6-6b78afce27fc, _Host, 1, 0);
 
 IF
 TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
 AND
 GetHostCharacter(_Host)
 AND
-IsTagged(_InventoryHolder, "BAGCEPTION_INTERNAL", 1)
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+AND
+Concatenate("[Bagception] SUB-BAG ingress: holder is the potion case; addType: ", _AddType, _Line)
 THEN
-ShowNotification(_Host, "[Bagception] SUB-BAG ingress: holder is the potion case");
+OpenMessageBox(_Host, _Line);
+TemplateAddTo((ITEMROOT)BAGCEPTION_PROBE_SubBagIngress_b4cb7a44-27ef-4c31-959b-761404990bf9, _Host, 1, 0);
 
 // Question 2 needs no extra rule. This goal never moves anything, so if the
 // SUB-BAG notification above ever fires for a potion the player dropped into the
@@ -71,6 +174,119 @@ ShowNotification(_Host, "[Bagception] SUB-BAG ingress: holder is the potion case
 // Note: the AddType strings are not enumerated anywhere in story_header.div, so
 // they are not matched against literals here. The two reporting rules above print
 // whatever the engine passes, which is how we learn the vocabulary.
+
+// Question 2b, added after surveying the MagicPockets subsystem. "Magic pockets" is
+// the party's shared inventory pool, keyed on a CHARACTER, not a bag mechanism. The
+// question that matters here is whether it sees through container nesting: if it
+// does, MagicPocketsMoveToByTag is a ready-made bulk sorter for the ten tagged
+// categories. These rules only ask; they move nothing.
+IF
+TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+AND
+GetHostCharacter(_Host)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+AND
+IsInMagicPockets(_Object, _Host, 1)
+THEN
+ShowNotification(_Host, "[Bagception] magic pockets DO see an item nested in the potion case");
+
+IF
+TemplateAddedTo(_Template, _Object, _InventoryHolder, _AddType)
+AND
+GetHostCharacter(_Host)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+AND
+IsInMagicPockets(_Object, _Host, 0)
+THEN
+ShowNotification(_Host, "[Bagception] magic pockets do NOT see an item nested in the potion case");
+
+
+// Run 3: the two ApplyStatus rules below are COMMENTED OUT. The container-level
+// test needs the gems to keep their own 10 kg, so that whatever the bag reads is the
+// bag's doing and not the status's. The egress RemoveStatus rules are left live and
+// are harmless: they remove statuses that are no longer applied.
+//
+// Question 3, the weight test. Is the Weight() boost absolute or additive, and does
+// it apply to an item at all? Each probe weight is 10 kg. Dropping one into the
+// master bag applies its status; the answer is the change in carried weight.
+//
+//   A, Weight(0)    carried weight falls 10 -> absolute
+//                   carried weight unchanged -> additive
+//   B, Weight(-10)  carried weight falls 10 -> additive
+//                   carried weight falls 20 -> absolute
+//
+// Nothing happening for either means the boost does not reach items, and the native
+// weightless route is closed. HasActiveStatus is checked separately so that a status
+// that applies but does not move the number is distinguishable from one that never
+// applied at all. That distinction is the whole point: without it, "no change" is
+// ambiguous between "boost does nothing" and "ApplyStatus silently failed".
+// IF
+// TemplateAddedTo((ITEMROOT)BAGCEPTION_TEST_WeightA_4a7ad16a-d7bc-407f-9a85-3fa89c2c0e55, _Object, _InventoryHolder, _AddType)
+// AND
+// GetHostCharacter(_Host)
+// AND
+// IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+// THEN
+// ApplyStatus(_Object, "BAGCEPTION_TEST_WEIGHT_CLAMP", -1.0, 1, _Host);
+
+// IF
+// TemplateAddedTo((ITEMROOT)BAGCEPTION_TEST_WeightB_f627accd-4970-4628-b765-c69e10d6ee6a, _Object, _InventoryHolder, _AddType)
+// AND
+// GetHostCharacter(_Host)
+// AND
+// IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+// THEN
+// ApplyStatus(_Object, "BAGCEPTION_TEST_WEIGHT_MINUS", -1.0, 1, _Host);
+
+// Confirm the status actually landed, rather than assuming it did.
+IF
+StatusApplied(_Object, "BAGCEPTION_TEST_WEIGHT_CLAMP", _Causee, _StoryActionID)
+AND
+GetHostCharacter(_Host)
+THEN
+OpenMessageBox(_Host, "[Bagception] Weight(-1000) status applied to probe weight A");
+
+IF
+StatusApplied(_Object, "BAGCEPTION_TEST_WEIGHT_MINUS", _Causee, _StoryActionID)
+AND
+GetHostCharacter(_Host)
+THEN
+OpenMessageBox(_Host, "[Bagception] Weight(-10) status applied to probe weight B");
+
+
+// Question 3b, egress. The first run left a permanent status on the item: the probe
+// applied it with duration -1.0 and nothing ever took it off, so a gem taken back
+// out of the bag stayed weightless. That is not a property of Weight(); it is a
+// missing rule, and it is also the shape of the real design problem. A weightless
+// Bagception cannot be a container property, because there is none — it has to be a
+// status applied on the way in and removed on the way out, which means the mod owns
+// state on items it does not own, and any gap in that bookkeeping permanently alters
+// a player's item.
+//
+// These rules test the other half: does taking the item out restore its weight?
+IF
+RemovedFrom(_Object, _InventoryHolder)
+AND
+GetHostCharacter(_Host)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+THEN
+RemoveStatus(_Object, "BAGCEPTION_TEST_WEIGHT_CLAMP");
+RemoveStatus(_Object, "BAGCEPTION_TEST_WEIGHT_MINUS");
+OpenMessageBox(_Host, "[Bagception] egress from master bag; weight statuses removed");
+
+IF
+RemovedFrom(_Object, _InventoryHolder)
+AND
+GetHostCharacter(_Host)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+THEN
+RemoveStatus(_Object, "BAGCEPTION_TEST_WEIGHT_CLAMP");
+RemoveStatus(_Object, "BAGCEPTION_TEST_WEIGHT_MINUS");
+OpenMessageBox(_Host, "[Bagception] egress from potion case; weight statuses removed");
 
 EXITSECTION
 ENDEXITSECTION

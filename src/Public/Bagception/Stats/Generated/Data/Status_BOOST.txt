@@ -1,0 +1,75 @@
+// ---------------------------------------------------------------------------
+// SHIPPING CONTENT
+// ---------------------------------------------------------------------------
+//
+// Carrying Bagception raises the carrier's capacity. This is the shipped answer to
+// the weight problem, chosen over true weightlessness after measuring both.
+//
+// True weightlessness is achievable natively -- Weight() reaches items, is additive
+// and clamps at zero -- but only as a status applied to each item on the way in and
+// removed on the way out. Osiris cannot enumerate a container's contents and
+// GetInventoryOwner returns only the top-level holder, so there is no way to write a
+// sweep that repairs a missed removal. Correctness would rest entirely on never
+// missing an egress event, and a miss permanently alters an item the mod does not
+// own. See the decision log.
+//
+// This carries none of that risk: no per-item state, nothing to clean up, nothing
+// stranded if the mod is uninstalled. It is plain data and the game owns the effect.
+//
+// The pattern is vanilla's own: OBJ_Tool_Shovel grants HAS_SHOVEL through
+// StatusInInventory, with the same property flags used here.
+//
+// The multiplier is the one balance knob. Vanilla reference points:
+//   Rage, Giant's Might    1.25
+//   Giants_CarryCapacity   1.25 - 1.50
+//   Enlarge                2.00
+//   Strength elixirs       2.00 - 3.00
+// 2.0 puts Bagception level with Enlarge: generous, clearly useful, not absurd.
+
+new entry "BAGCEPTION_CARRY"
+type "StatusData"
+data "StatusType" "BOOST"
+data "DisplayName" "hf01a477cgb6f6g4e79gb7c8g7afc675e58fc"
+data "Description" "h7ed31a09gf1f4g483ag8c0ege7de68e2253e"
+data "StackId" "BAGCEPTION_CARRY"
+data "StatusPropertyFlags" "IgnoreResting;IgnoredByImmobilized;DisableOverhead;DisableCombatlog;ApplyToDead;DisablePortraitIndicator"
+data "Boosts" "CarryCapacityMultiplier(2.0)"
+
+// ---------------------------------------------------------------------------
+// PROBE SCAFFOLDING -- delete with the probe goal
+// ---------------------------------------------------------------------------
+
+// Phase 1 weight probe, second run.
+//
+// Settled on the first run: Weight() reaches items, and it is ADDITIVE. Two 10 kg
+// gems went into the bag; A with Weight(0) still read 10, B with Weight(-10) read 0.
+//
+// The question now is whether weight CLAMPS AT ZERO. It decides everything, because
+// Osiris cannot read an item's weight:
+//
+//   clamps   -> one large negative boost zeroes any item whatever it weighs, and
+//               native weightless storage is simply available
+//   does not -> every item needs its own exact offset, which is unknowable here,
+//               and weightlessness goes back to being a Script Extender feature
+//
+// A now carries Weight(-1000) against a 10 kg item. If A reads 0, it clamps. If it
+// reads -1000, or the bag total goes sharply negative, it does not.
+//
+// B keeps Weight(-10) as the known-good control: it should still read 0. If B stops
+// working, something other than the boost changed and A's reading means nothing.
+
+new entry "BAGCEPTION_TEST_WEIGHT_CLAMP"
+type "StatusData"
+data "StatusType" "BOOST"
+data "DisplayName" "ha4c5c70ag5f1dg41a0gb179gb71b649669c1"
+data "StackId" "BAGCEPTION_TEST_WEIGHT_CLAMP"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+data "Boosts" "Weight(-1000)"
+
+new entry "BAGCEPTION_TEST_WEIGHT_MINUS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "DisplayName" "hcb3d1ab1g053dg441dg8164g5efe61a5f0f2"
+data "StackId" "BAGCEPTION_TEST_WEIGHT_MINUS"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog;DisablePortraitIndicator"
+data "Boosts" "Weight(-10)"

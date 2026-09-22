@@ -15,6 +15,12 @@
 
   Icon, visual, physics and bounds are deliberately not set: they inherit from
   CONT_Bag_A. Custom art for every container is a Phase 8 commitment.
+
+  BAGCEPTION_TEST_WeightA and _WeightB are throwaway probe items, not part of the
+  design. Each weighs 10 kg, which is large enough to read off the inventory weight
+  display at a glance. They inherit gem templates (diamond and ruby) rather than a
+  container so that nothing about container weight accounting confounds the reading,
+  and they are visually distinct from each other. Delete both with the probe goal.
 -->
 <save>
 	<version major="4" minor="0" revision="9" build="331" />
@@ -31,7 +37,13 @@
 					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_Master" />
 					<attribute id="Type" type="FixedString" value="item" />
 					<children>
-						<node id="InventoryList" />
+						<node id="InventoryList">
+							<children>
+								<node id="InventoryItem">
+									<attribute id="Object" type="FixedString" value="BAGCEPTION_MasterContents" />
+								</node>
+							</children>
+						</node>
 						<node id="Tags">
 							<children>
 								<node id="Tag">
@@ -62,6 +74,62 @@
 							</children>
 						</node>
 					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="Description" type="TranslatedString" handle="hd5d059a0g2fd0g4396g8380g9ad68a6df910" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="ha4c5c70ag5f1dg41a0gb179gb71b649669c1" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="4a7ad16a-d7bc-407f-9a85-3fa89c2c0e55" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_TEST_WeightA" />
+					<attribute id="ParentTemplateId" type="FixedString" value="440f4817-5d30-4867-a982-5b8094ace403" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_TestWeightA" />
+					<attribute id="Type" type="FixedString" value="item" />
+				</node>
+				<node id="GameObjects">
+					<attribute id="Description" type="TranslatedString" handle="h376ef137gbab4g4602g8555g4d42a007974c" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="hcb3d1ab1g053dg441dg8164g5efe61a5f0f2" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="f627accd-4970-4628-b765-c69e10d6ee6a" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_TEST_WeightB" />
+					<attribute id="ParentTemplateId" type="FixedString" value="b085e96d-e199-467f-b6a8-5d9d44e3cb21" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_TestWeightB" />
+					<attribute id="Type" type="FixedString" value="item" />
+				</node>
+				<node id="GameObjects">
+					<attribute id="DisplayName" type="TranslatedString" handle="h2fd3c906g4bd2g4feeg9f08gc6c87b54b3e4" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="5e2df624-53e2-4c1a-b24e-7a3c59cf41f9" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_PROBE_HolderIsCharacter" />
+					<attribute id="ParentTemplateId" type="FixedString" value="20626173-dd4d-497e-94f9-b2000a86def9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_Probe_HolderIsCharacter" />
+					<attribute id="Type" type="FixedString" value="item" />
+				</node>
+				<node id="GameObjects">
+					<attribute id="DisplayName" type="TranslatedString" handle="h0a38eab4g7dcag4d72gb379g2e30205ce53b" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="09f81682-0e4a-49da-948c-db00fb91f055" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_PROBE_HolderIsItem" />
+					<attribute id="ParentTemplateId" type="FixedString" value="20626173-dd4d-497e-94f9-b2000a86def9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_Probe_HolderIsItem" />
+					<attribute id="Type" type="FixedString" value="item" />
+				</node>
+				<node id="GameObjects">
+					<attribute id="DisplayName" type="TranslatedString" handle="h9c26f77cg6c7eg40eagad7fg2f16def3158c" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="5250b475-9e1f-4820-bee6-6b78afce27fc" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_PROBE_RootIngress" />
+					<attribute id="ParentTemplateId" type="FixedString" value="20626173-dd4d-497e-94f9-b2000a86def9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_Probe_RootIngress" />
+					<attribute id="Type" type="FixedString" value="item" />
+				</node>
+				<node id="GameObjects">
+					<attribute id="DisplayName" type="TranslatedString" handle="h06868352g4d3dg4206gb9f5g3772f751374d" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="b4cb7a44-27ef-4c31-959b-761404990bf9" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_PROBE_SubBagIngress" />
+					<attribute id="ParentTemplateId" type="FixedString" value="20626173-dd4d-497e-94f9-b2000a86def9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_Probe_SubBagIngress" />
+					<attribute id="Type" type="FixedString" value="item" />
 				</node>
 			</children>
 		</node>

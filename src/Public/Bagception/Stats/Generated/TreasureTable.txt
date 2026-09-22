@@ -1,0 +1,16 @@
+// Default contents for a newly created Bagception.
+//
+// Adding the internal containers with Osiris after the bag arrives leaves the
+// client showing an empty bag until the next reload: the container's UI is built
+// before the contents land and is not refreshed. Declaring them here instead means
+// the engine creates the bag already holding them, so there is nothing to miss.
+//
+// Referenced from the master bag's InventoryList node in RootTemplates/_merged.lsx.
+// The "I_" prefix names a stats entry, not a root template; "T_" would name another
+// treasure table. Vanilla shape copied from GEN_Seashell in Shared.
+//
+// Every future internal container is added as another line here.
+
+new treasuretable "BAGCEPTION_MasterContents"
+new subtable "1,1"
+object category "I_OBJ_Bagception_PotionCase",1,0,0,0,0,0,0,0
