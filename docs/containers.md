@@ -87,6 +87,21 @@ Two things in the spec are policy rather than storage, and need no art:
   filed. Today only the Odds Sack checks for them; the other bags do not yet, so a
   story item that matches a category (the Moonlantern, for one) is still filed.
 
+## Known limitations
+
+- **Bagception's item count includes its own bags.** The number the game shows on
+  Bagception counts the eighteen bags inside it, so an otherwise empty Bagception
+  shows 18, not 0. The count is drawn by the game's inventory screen, which counts
+  every item directly in a container, and the bags are items. Nothing the mod can
+  set changes that: no item flag or template attribute hides an item from the
+  count, and Osiris cannot reach the display. Changing it would mean replacing the
+  game's inventory UI, which would alter every container in the game, not only
+  Bagception's, and was ruled out (decision log, 2026-09-23).
+- **A bag added during play looks empty until a reload.** A Bagception granted
+  mid-session, or a bag added to one by the repair on load, may show no count and
+  none of the game's container styling until the save is reloaded once. The bag and
+  its contents work normally in the meantime.
+
 ## Art specification
 
 This section is the brief for producing the icons, whether by hand or with an image

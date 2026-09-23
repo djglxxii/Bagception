@@ -76,9 +76,10 @@
       the mod had never been enabled — so every character started at zero bags,
       which is the exact condition that produced duplicates — gave every character
       exactly one bag, each containing a Potion Case.
-- [ ] Cosmetic: the master bag shows no content count despite holding the Potion
-      Case. Suspected to be a weight display with zero-weight contents rather than a
-      bug; confirm by putting a potion in the bag.
+- [x] Cosmetic: the master bag showed no content count when newly granted. Resolved
+      as the runtime-created container display issue, which clears on reload. With
+      the display correct, the count includes the inner bags, which the mod cannot
+      change; recorded under Known limitations in `docs/containers.md`.
 
 ## Coin Purse
 

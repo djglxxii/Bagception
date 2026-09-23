@@ -771,3 +771,19 @@ own inventory is still never gathered.
 Data only: the templates change, the story does not. Open questions: whether a vanilla
 Keychain the character carries takes a key before the Key Ring does, and which other
 ways gold arrives (a trader's change, a quest reward, looting a body) count as a pickup.
+
+## 2026-09-23: Bagception's item count includes its bags, and stays that way
+
+The user asked whether the inner bags could be left out of the item count the game
+shows on Bagception, so an empty Bagception would read 0 rather than 18. They cannot,
+natively. The count is drawn by the inventory UI from the items directly in the
+container. Checked for anything that would hide an item from it: the full
+`AttributeFlags` valuelist (25 values, none about visibility or counting) and every
+boolean root template attribute vanilla sets on items. The one plausible name,
+`Unimportant`, is used only on world decoration such as mirrors, crates and posters.
+Osiris has no call that reaches the display.
+
+The only route would be overriding the game's inventory UI. That would change the count
+for every container in the game, would break with UI patches or other UI mods, and
+reaches outside Bagception's own hierarchy, so it was ruled out. The count is recorded
+as a known limitation in `docs/containers.md`.
