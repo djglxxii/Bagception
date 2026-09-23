@@ -56,6 +56,55 @@ DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_D_21fafbfa-33dd-4f42-b79f-7
 DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_E_469e789d-8018-4159-ac35-9950dce9b521);
 DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_F_9d4c197a-20d3-4415-89b1-a9a7cbde8fa2);
 
+// Equipment slots for the Armour Trunk and the Jewel Box. Vanilla keeps its own list of
+// armour slots the same way (DB_GLO_Tutorials_ArmorSlots). Camp clothing and camp shoes
+// have slots of their own, VanityBody and VanityBoots. MeleeOffHand is in neither list:
+// shields are the Shield Rack's, and off-hand weapons are weapons.
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Helmet);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Breast);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Cloak);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Gloves);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Boots);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Underwear);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.VanityBody);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.VanityBoots);
+
+DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Ring);
+DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Ring2);
+DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Amulet);
+
+// Tool Roll items, by stats entry name. These are every concrete entry under vanilla's
+// own _Tool stats base: kits, digging and crafting tools, and the non-equipable
+// instruments under _Music. Only a handful carry a tag (Tool, LOCKPICKS, SHOVEL), so a
+// tag cannot reach the set; the stats name is the one thing they all have. A modded tool
+// with its own stats entry will be missed until it is listed here.
+DB_Bagception_ToolStat("FOR_SchoolOgres_Horn");
+DB_Bagception_ToolStat("OBJ_Kit_Disguise");
+DB_Bagception_ToolStat("OBJ_Kit_Forgery");
+DB_Bagception_ToolStat("OBJ_Kit_Poisoner");
+DB_Bagception_ToolStat("OBJ_Kit_ThievesTools");
+DB_Bagception_ToolStat("OBJ_Kit_TrapDisarm");
+DB_Bagception_ToolStat("OBJ_Music_Bagpipes");
+DB_Bagception_ToolStat("OBJ_Music_Drum_Big");
+DB_Bagception_ToolStat("OBJ_Music_Drum_Sticks");
+DB_Bagception_ToolStat("OBJ_Music_Dulcimer");
+DB_Bagception_ToolStat("OBJ_Music_GuitarLute_Broken");
+DB_Bagception_ToolStat("OBJ_Music_Horn");
+DB_Bagception_ToolStat("OBJ_Music_PanFlute");
+DB_Bagception_ToolStat("OBJ_Music_Shawm");
+DB_Bagception_ToolStat("OBJ_Music_Viol");
+DB_Bagception_ToolStat("OBJ_Music_Viol_Bow");
+DB_Bagception_ToolStat("OBJ_Tool_Hammer");
+DB_Bagception_ToolStat("OBJ_Tool_IdentifyingGlass");
+DB_Bagception_ToolStat("OBJ_Tool_Shears");
+DB_Bagception_ToolStat("OBJ_Tool_Shovel");
+DB_Bagception_ToolStat("OBJ_Tool_Shovel_Small");
+DB_Bagception_ToolStat("OBJ_Tool_Tong");
+DB_Bagception_ToolStat("ORI_Gale_DeathFlute");
+DB_Bagception_ToolStat("Tool_Crowbar");
+DB_Bagception_ToolStat("Tool_Saw");
+DB_Bagception_ToolStat("UNI_WYR_Circus_FacePaint");
+
 KBSECTION
 
 // ---------------------------------------------------------------------------
@@ -384,10 +433,6 @@ ToInventory(_Item, _DestLarderSack, -1, 0, 0);
 // itself: the compiler reports a parameter type mismatch and skips the rule.
 // IsTagged takes a GUIDSTRING, which is why the potion rule needs no cast and
 // every rule reaching an ITEM-typed query does.
-//
-// A DYE tag resource exists but no root template carries it, so the same kind of
-// reasoning will be needed for dyes. Weapons and jewelry are simpler, being a direct
-// IsWeapon and a slot test respectively.
 IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
@@ -400,6 +445,123 @@ AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ShieldRack_feda4623-0e32-4d33-921a-fe62fdefde98, _InventoryHolder, _ShieldRack)
 THEN
 ToInventory(_Item, _ShieldRack, -1, 0, 0);
+
+// Weapons, melee and ranged, any rarity.
+//
+// IsWeapon answers directly. Shields answer 0, which is what keeps them out of here and
+// in the Shield Rack. Torches and lanterns are weapons as well -- their stats inherit
+// from the club -- but the spec files them under Tools, so anything carrying TORCH is
+// excluded here and taken by the Tool Roll's torch rule instead. No weapon carries a
+// tag belonging to any earlier category; arrows and grenades are objects, not weapons.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsWeapon((ITEM)_Item, 1)
+AND
+IsTagged(_Item, (TAG)TORCH_a8139e1a-c593-4e0b-88cd-f703f888db83, 0)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_WeaponRoll_61e85266-71a8-46ba-b930-5ebd6ee5ab86, _InventoryHolder, _DestWeaponRoll)
+THEN
+ToInventory(_Item, _DestWeaponRoll, -1, 0, 0);
+
+// Armour and clothing, by equipment slot: see DB_Bagception_ArmourSlot in INITSECTION.
+//
+// IsEquipable comes first so the slot query is only asked of equipment. Whether
+// GetEquipmentSlotForItem fails or answers Helmet (slot 0) for a non-equipable item is
+// unmeasured, and the second would file every loose object as a hat.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsEquipable((ITEM)_Item, 1)
+AND
+GetEquipmentSlotForItem((ITEM)_Item, _Slot)
+AND
+DB_Bagception_ArmourSlot(_Slot)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ArmourTrunk_3cc455ad-78eb-456e-8018-9d0e26a3ceee, _InventoryHolder, _DestArmourTrunk)
+THEN
+ToInventory(_Item, _DestArmourTrunk, -1, 0, 0);
+
+// Jewelry: rings and amulets, by slot, guarded the same way as armour. The two slot
+// lists share no entry, so an item matches at most one of the two rules.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsEquipable((ITEM)_Item, 1)
+AND
+GetEquipmentSlotForItem((ITEM)_Item, _Slot)
+AND
+DB_Bagception_JewelrySlot(_Slot)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_JewelBox_5081c591-b256-47cc-912b-029a3348152f, _InventoryHolder, _DestJewelBox)
+THEN
+ToInventory(_Item, _DestJewelBox, -1, 0, 0);
+
+// Tools and utility. Three disjoint rules, because no one mechanism reaches the set.
+//
+// Tools by stats name: see DB_Bagception_ToolStat in INITSECTION. GetStatString takes a
+// GUIDSTRING, so this one needs no cast.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+GetStatString(_Item, _Stat)
+AND
+DB_Bagception_ToolStat(_Stat)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286, _InventoryHolder, _DestToolRoll)
+THEN
+ToInventory(_Item, _DestToolRoll, -1, 0, 0);
+
+// Torches and lanterns, which the weapon rule above leaves alone. TORCH is carried by
+// every carried torch and lantern, coloured and unique ones included, and by no stats
+// entry in the tool list.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)TORCH_a8139e1a-c593-4e0b-88cd-f703f888db83, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286, _InventoryHolder, _DestToolRoll)
+THEN
+ToInventory(_Item, _DestToolRoll, -1, 0, 0);
+
+// Equipable instruments -- the bard's lute, drum, flute, lyre and violin -- which have a
+// slot of their own and are armour in the stats, not tools. Neither slot list above
+// includes MusicalInstrument, so they reach only this rule.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsEquipable((ITEM)_Item, 1)
+AND
+GetEquipmentSlotForItem((ITEM)_Item, EQUIPMENTSLOT.MusicalInstrument)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286, _InventoryHolder, _DestToolRoll)
+THEN
+ToInventory(_Item, _DestToolRoll, -1, 0, 0);
+
+// Dyes. Tag-expressible after all: BASE_LOOT_Dye carries DYE, and every dye inherits it.
+// An earlier note here said no template carried the tag; that search missed the parent.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)DYE_d8ef5332-ed2f-42cb-817d-bd2164673223, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44bc-8175-30626c916320, _InventoryHolder, _DestDyePouch)
+THEN
+ToInventory(_Item, _DestDyePouch, -1, 0, 0);
 
 // The Phase 1 probe diagnostics were removed here. Every question they were built
 // to answer is recorded in docs/tracking/decision-log.md, and their rules shared a

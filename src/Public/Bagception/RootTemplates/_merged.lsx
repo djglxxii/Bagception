@@ -257,6 +257,112 @@
 				</node>
 				<node id="GameObjects">
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="Description" type="TranslatedString" handle="h40ae6be5g83e0g44b9g92cfg625d4bdafbad" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="h893e0d24g409eg4d01ga269g74861abee21d" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="61e85266-71a8-46ba-b930-5ebd6ee5ab86" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_WeaponRoll" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_WeaponRoll" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="Description" type="TranslatedString" handle="h90d148cbg1f3dg4527ga181gd8eb2f8eac0e" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="hecf85296gf5bdg4fd1gbbc4g7314dbbeae1c" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="3cc455ad-78eb-456e-8018-9d0e26a3ceee" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ArmourTrunk" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_ArmourTrunk" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="Description" type="TranslatedString" handle="h8b689667gf177g4292gad3fg098f655de0ba" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="h6b99bfedg8be7g4079ga0e3g7881e28e52d5" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="5081c591-b256-47cc-912b-029a3348152f" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_JewelBox" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_JewelBox" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="Description" type="TranslatedString" handle="hb66a1301ge559g49c0gb2f1gda999f58c0a3" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="h736a6dcagc123g4574gbc7agac1caa765b8d" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="6abbe0bc-6422-4943-8521-47d67c0d4286" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ToolRoll" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_ToolRoll" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;DYE&apos;)" />
+					<attribute id="Description" type="TranslatedString" handle="hdfcc72d1g77c8g4da4gb9degd49b91dff503" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="h5313238dg8cbeg460ag847dgb9b3af172205" version="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="2954188a-aee7-44bc-8175-30626c916320" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_DyePouch" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_DyePouch" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged('SCROLL')" />
 					<attribute id="Description" type="TranslatedString" handle="h9a173f39g2f38g4dffgb1b1g18f69c3bd198" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h62dcd8a8gaee8g44f5gbf86gc4172bec6967" version="1" />

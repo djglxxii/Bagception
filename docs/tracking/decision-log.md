@@ -629,3 +629,45 @@ Two consequences:
 - `INITSECTION` facts reach only games that start with this story. Fresh-game testing
   covers it; how an existing save picks up new facts is the open question on goal changes
   already recorded above.
+
+## 2026-09-22: Weapons, Armour, Jewelry, Tools and Dyes
+
+Five containers built in one pass: Weapon Roll, Armour Trunk, Jewel Box, Tool Roll and
+Dye Pouch. All set `ContainerAutoAddOnPickup` False, so they sort only what the player
+puts into Bagception. Only the Dye Pouch has a filter; the other four categories are not
+tag-expressible.
+
+- **Weapons:** `IsWeapon` 1, excluding `TORCH`. Shields answer 0, so the Shield Rack rule
+  and this one are disjoint.
+- **Armour & Clothing:** `IsEquipable` and a slot in `DB_Bagception_ArmourSlot`, which
+  includes the camp-clothing slots VanityBody and VanityBoots.
+- **Jewelry:** the same shape, slots Ring, Ring2 and Amulet. No other accessory slot
+  holds items in vanilla.
+- **Tools:** three disjoint rules. The stats names under vanilla's own `_Tool` base (26
+  entries: kits, digging and crafting tools, non-equipable instruments), matched through
+  `GetStatString`; anything tagged `TORCH`; and equipable instruments, which have the
+  MusicalInstrument slot and are armour in the stats. Bards' instruments went here
+  rather than to the Armour Trunk because the spec's Tools section is the one about
+  reusable adventuring equipment, and a lute is not clothing.
+- **Dyes:** `DYE`. The handbook said no template carried it; `BASE_LOOT_Dye` does, and
+  every dye inherits it. The earlier search did not follow the parent chain.
+
+Checked against the built categories: no `Weapon.txt` or `Armor.txt` template carries
+any earlier category's tag except `TORCH`, and no `_Tool` or dye template does either.
+
+Known and left for Phase 5 (story safety): the Moonlanterns are `TORCH`-tagged weapons,
+so they now go to the Tool Roll, and a few named uniques (Gale's flute, Oskar's torches)
+sort like their kind. Nothing in the sorter guards story items yet.
+
+## 2026-09-23: Equipment sorts at any rarity; Jewelry Box
+
+After play, the user asked whether the Weapon Roll, Armour Trunk and Jewel Box could
+take only Uncommon and better, since common gear is mostly junk. Osiris has no rarity
+query and no tag carries rarity, so it was built as a generated list of 537 common
+vanilla stats entries to skip. The user then withdrew it: a hard-coded item list is the
+wrong shape for a mod meant to sit alongside equipment mods, and filing is already
+opt-in, since nothing sorts until the player puts it into Bagception. Rarity stays out
+of classification, as spec §6.1 says.
+
+The Jewel Box is renamed **Jewelry Box** in game, so nobody expects gems in it. The
+template and stats keep the `JewelBox` identifier.

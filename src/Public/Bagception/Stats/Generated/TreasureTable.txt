@@ -42,3 +42,13 @@ new subtable "1,1"
 object category "I_OBJ_Bagception_KeyRing",1,0,0,0,0,0,0,0
 new subtable "1,1"
 object category "I_OBJ_Bagception_LarderSack",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_WeaponRoll",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_ArmourTrunk",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_JewelBox",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_ToolRoll",1,0,0,0,0,0,0,0
+new subtable "1,1"
+object category "I_OBJ_Bagception_DyePouch",1,0,0,0,0,0,0,0

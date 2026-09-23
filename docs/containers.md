@@ -13,10 +13,10 @@ inside it and can never be removed from it.
 | # | Container | Holds | Working name | Status |
 |---|-----------|-------|--------------|--------|
 | — | **Bagception** | everything; the bag the player carries | Bagception | built |
-| 1 | Weapons | swords, axes, bows, crossbows, staves — melee and ranged alike, any rarity | Weapon Roll | not built |
+| 1 | Weapons | swords, axes, bows, crossbows, staves — melee and ranged alike, any rarity | Weapon Roll | built |
 | 2 | Shields | all equipable shields | Shield Rack | built |
-| 3 | Armour & Clothing | helmets, chest, cloaks, boots, gloves, clothing | Armour Trunk | not built |
-| 4 | Jewelry | rings and amulets | Jewel Box | not built |
+| 3 | Armour & Clothing | helmets, chest, cloaks, boots, gloves, clothing, camp clothes | Armour Trunk | built |
+| 4 | Jewelry | rings and amulets | Jewelry Box | built |
 | 5 | Arrows | special, magical, elemental and utility ammunition | Quiver | built |
 | 6 | Scrolls | all spell scrolls | Scroll Case | built |
 | 7 | Potions | healing and other drinkable potions | Potion Case | built |
@@ -27,8 +27,8 @@ inside it and can never be removed from it.
 | 12 | Camp Supplies | food, drink, camp-supply packs | Larder Pack | built |
 | 13 | Books & Notes | books, letters, notes, journals | Book Satchel | built |
 | 14 | Keys | ordinary game keys | Key Ring | built |
-| 15 | Tools & Utility | thieves' tools, trap kits, shovels and similar | Tool Roll | not built |
-| 16 | Dyes | all dye items | Dye Pouch | not built |
+| 15 | Tools & Utility | thieves' tools, trap kits, shovels, torches, lanterns, instruments | Tool Roll | built |
+| 16 | Dyes | all dye items | Dye Pouch | built |
 | 17 | Valuables | gems, ingots, items whose purpose is sale | Valuables Purse | not built |
 | 18 | Miscellaneous | recognised, safe, but matching nothing above | Odds Sack | not built |
 

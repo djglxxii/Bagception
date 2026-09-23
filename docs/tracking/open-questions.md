@@ -39,8 +39,9 @@ All three are written up in the decision log with the evidence.
    `GetEquipmentSlotForItem`, `ItemGetGoldValue`, and `GetStatString` with
    `Substring` for prefix matching cover all six. The earlier claim that Osiris had
    no "is this a weapon" query was wrong. Details and the `EQUIPMENTSLOT` enum are
-   in the handbook. Phase 3 is not blocked. Still to settle in practice: the shield
-   discriminator and the gold threshold for valuables.
+   in the handbook. Phase 3 is not blocked. The shield discriminator is confirmed in
+   game; weapons, armour, jewelry and tools are built on the same queries (untested at
+   the time of writing). Still to settle: the gold threshold for valuables.
 
 ## Later
 
@@ -65,12 +66,13 @@ All three are written up in the decision log with the evidence.
    [`../script-extender-edition.md`](../script-extender-edition.md). Nothing is
    decided; revisit after 1.0.
 
-9. **The six untagged containers accept anything placed by hand.** Their categories
+9. **The untagged containers accept anything placed by hand.** Their categories
    cannot be written as a tag expression, and `ContainerContentFilterCondition` only
    understands `Tagged()`, `IsSupply()` and boolean operators, so no filter can be
    written for them. Vanilla shields carry no tags at all. Auto-routing is unaffected;
-   this is only about deliberate manual placement, and it will apply equally to
-   weapons, armour, jewelry, dyes and valuables.
+   this is only about deliberate manual placement, and it applies equally to
+   weapons, armour, jewelry, tools and valuables. Dyes turned out to be tagged and
+   have a filter.
 
    The fix is an eject rule: catch `TemplateAddedTo` where the holder is an internal
    container, decide the item does not belong, and return it to the master bag via

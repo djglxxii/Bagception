@@ -112,6 +112,21 @@ nothing generating them. `tools/Package-Mod.ps1` now compiles every staged
 `C:\src\MoreHirelings\dist\*.pak`, which ships `_merged.lsf` alongside
 `_merged.lsx`.
 
+**A template nested inside another template is ignored, silently.** Every
+`GameObjects` node must be a direct child of the one `Templates` children list. A
+script once inserted five new containers after the first line of four tabs plus
+`</node>` — which also matches the tail of a deeper `</node>`, so the blocks landed
+inside the Larder Pack's `Tags` node. The file stayed well-formed XML, the packager
+compiled it, the `.lsf` still contained every name, and the game created none of the
+five. Match a closing line exactly (the whole line, not a substring), and after any
+scripted edit check that no template contains another:
+
+```bash
+python -c "import xml.etree.ElementTree as E; r=E.parse('src/Public/Bagception/RootTemplates/_merged.lsx').getroot(); g=[n for n in r.iter('node') if n.get('id')=='GameObjects']; print(len(g), 'templates,', sum(1 for n in g for m in n.iter('node') if m is not n and m.get('id')=='GameObjects'), 'nested')"
+```
+
+The nested count must be 0.
+
 Two related conventions, both followed here: root templates live in a file named
 `_merged.lsx`, as vanilla and the Toolkit both name it, and a tag resource is named
 for its own UUID.
@@ -188,19 +203,41 @@ Untried, in rough order of promise: forcing a refresh by moving the bag after th
 grant; granting during a loading screen rather than after it. Cosmetic, self-healing
 on reload, and not worth much more chasing before the sorter exists.
 
-### Classifying the six categories with no vanilla tag
+### Classifying the categories with no vanilla tag
 
 Earlier notes said Osiris had no way to ask "is this a weapon". That was wrong — it
 has a direct query, and enough besides to cover every category that lacks a tag.
 
 | Category | Method |
 | --- | --- |
-| Weapons | `IsWeapon(_Item, 1)` |
-| Armour | `GetEquipmentSlotForItem` in Helmet, Breast, Cloak, Boots, Gloves, Underwear |
+| Weapons | `IsWeapon(_Item, 1)` and not `TORCH` |
+| Armour | `IsEquipable`, slot in Helmet, Breast, Cloak, Boots, Gloves, Underwear, VanityBody, VanityBoots |
 | Shields | offhand slot **and not** `IsWeapon` — there is no Shield slot |
-| Jewelry | `GetEquipmentSlotForItem` in Ring, Ring2, Amulet |
-| Dyes | `GetStatString` + `Substring`, prefix `OBJ_Dye_` |
+| Jewelry | `IsEquipable`, slot in Ring, Ring2, Amulet |
+| Tools | stats name in a list (`GetStatString`), **or** `TORCH`, **or** the MusicalInstrument slot |
+| Dyes | not untagged after all: `DYE`, inherited from `BASE_LOOT_Dye` |
 | Valuables | `ItemGetGoldValue` above a threshold |
+
+Slot sets live in INITSECTION databases (`DB_Bagception_ArmourSlot`,
+`DB_Bagception_JewelrySlot`) joined against `GetEquipmentSlotForItem(_Item, _Slot)`,
+which is how vanilla keeps its own armour-slot list. Every slot rule asks
+`IsEquipable` first: whether the slot query fails or answers Helmet (0) for a
+non-equipable item is unmeasured, and the second would file every loose object as a hat.
+
+Torches and lanterns are **weapons**. Their stats inherit from `WPN_Club`, so `IsWeapon`
+answers 1. Every carried torch and lantern, the Moonlanterns included, carries the
+`TORCH` tag, which is what the weapon rule excludes and the Tool Roll rule matches.
+
+Vanilla already groups tools under a `_Tool` stats base (kits, digging and crafting
+tools, and the non-equipable `_Music` instruments), but only five of its 26 entries
+carry any tag. The stats name is the one thing they share, so the Tool Roll lists them
+by name. `GetStatString` returns the item's stats entry name; the Adamantine Forge
+scripts use it the same way.
+
+**Rarity has no query and no tag.** Nothing in `story_header.div` mentions it; it exists
+only as the stats entry's `Rarity` field (Common, Uncommon, Rare, VeryRare, Legendary;
+unset displays as Common). Filtering on it would need a generated list of stats names,
+which was tried and dropped: see the decision log, 2026-09-23.
 
 The `EQUIPMENTSLOT` enum, from `story_header.div` line 45, is: Helmet 0, Breast 1,
 Cloak 2, MeleeMainHand 3, MeleeOffHand 4, RangedMainHand 5, RangedOffHand 6, Ring 7,
@@ -215,9 +252,13 @@ following the `WPN_`, `ARM_`, `OBJ_Dye_` naming convention can be classified wit
 a tag. It relies on convention, so it covers vanilla and well-behaved mods and will
 miss items that name themselves freely.
 
-Unverified: the shield discriminator, and what gold threshold makes something a
-valuable. There **is** a `DYE` tag resource, `d8ef5332-ed2f-42cb-817d-bd2164673223`,
-but no root template in Shared or Gustav carries it, so it cannot be used.
+Unverified: what gold threshold makes something a valuable.
+
+**Check the parent chain before calling a tag unused.** The `DYE` tag resource
+(`d8ef5332-…`, defined in GustavDev) was written off here once because no dye template
+carries it. None does: `BASE_LOOT_Dye` carries it, and all 42 dyes inherit it. A tag
+search has to follow `ParentTemplateId` up the chain, as the scratch tooling's
+`chain.py` does.
 
 ### Item flags, and the `AttributeFlags` list
 
@@ -652,20 +693,21 @@ needs an explicit `(ITEM)` cast when fed from this event. The compiler reports
 — the same silent-skip class as the earlier TAG mismatch, though this one at least
 appears in the error list.
 
-Which queries need the cast, for the sorter's six untagged categories:
+Which queries need the cast, for the sorter's untagged categories:
 
 | Query | First parameter | Cast needed from `TemplateAddedTo` |
 |---|---|---|
 | `IsTagged` | `(GUIDSTRING)_Target` | no |
 | `GetItemByTemplateInInventory` | `(ITEMROOT)`, `(GUIDSTRING)` holder | no |
 | `IsWeapon` | `(ITEM)_Item` | **yes** |
+| `IsEquipable` | `(ITEM)_Item` | **yes** |
 | `GetEquipmentSlotForItem` | `(ITEM)_Item` | **yes** |
 | `ItemGetGoldValue` | `(ITEM)_Item` | **yes** |
 | `IsStoryItem` | `(ITEM)_Item` | **yes** |
 | `GetStatString` | `(GUIDSTRING)_Object` | no |
 
-So the ten tag-expressible categories route without a cast, and every one of the six
-that needs real classification requires it. That asymmetry is why the potion rule
+So the tag-expressible categories route without a cast, and nearly every untagged one
+requires it; the Tool Roll's stats-name rule is the exception. That asymmetry is why the potion rule
 compiled and the shield rule did not.
 
 An `EQUIPMENTSLOT` constant is accepted in the out-parameter position, the same way an
@@ -726,9 +768,9 @@ everything or nothing, with no error.
 **A container can only be filtered if its category is tag-expressible.** That splits the
 set in two:
 
-- The ten tagged categories get a filter, which gates manual placement. A player cannot
-  put a gem in the Scroll Case by hand.
-- Shields, weapons, armour, jewelry, dyes and valuables cannot have one. Manual
+- The tagged categories get a filter, which gates manual placement. A player cannot
+  put a gem in the Scroll Case by hand. Dyes are one of them (`Tagged('DYE')`).
+- Shields, weapons, armour, jewelry, tools and valuables cannot have one. Manual
   placement into those containers is unrestricted — anything can be dropped in by hand,
   not merely things that are nearly right. Auto-routing is unaffected, since Osiris does
   that.
