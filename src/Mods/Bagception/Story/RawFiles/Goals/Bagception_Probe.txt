@@ -123,6 +123,7 @@ SavegameLoaded()
 THEN
 PROC_Bagception_LoadData();
 PROC_Bagception_RepairParty();
+PROC_Bagception_SweepWeight();
 
 IF
 LevelGameplayStarted(_Level, _IsEditorMode)
@@ -859,6 +860,168 @@ AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_OddsSack_d50b2909-3daa-439b-aeb0-11e97a369521, _Holder, _DestOddsSack)
 THEN
 ToInventory(_Item, _DestOddsSack, -1, 0, 0);
+
+// ---------------------------------------------------------------------------
+// PLAYTEST: weightless contents
+// ---------------------------------------------------------------------------
+//
+// On trial alongside the carry boost; the user decides after playing with it.
+//
+// Whatever sits directly in a Bagception or one of its bags carries
+// BAGCEPTION_WEIGHTLESS, a Weight(-100000) boost that zeroes the item whatever it
+// weighs. The status belongs to the item, not the bag, so it has to be put on when an
+// item goes in and taken off when it comes out. Three layers keep that honest:
+//
+//   1. Arrival in a Bagception or an inner bag applies it.
+//   2. Leaving one, or turning up anywhere else still carrying it, starts a short
+//      timer; PROC_Bagception_Reweigh then looks where the item actually is. The
+//      timer is there because a move between two of our bags reports a removal and
+//      an arrival in an order nobody has measured, and the item must not lose the
+//      status on its way from the master bag into the Potion Case.
+//   3. Every load sweeps each party member, their Bagception and its inner bags, and
+//      reweighs every item found. This repairs anything the first two missed, and
+//      is what makes items already stowed before this version weightless.
+//
+// Layer 2's arrival case also covers a split stack: dragging part of a stack out
+// creates a new item, and if that copy inherits the status no removal is ever
+// reported for it.
+//
+// Not covered: the contents of someone else's container placed in Bagception. The
+// container itself weighs nothing, but its contents are not directly in one of our
+// bags and keep their weight.
+
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 0)
+THEN
+ApplyStatus(_Item, "BAGCEPTION_WEIGHTLESS", -1.0, 1);
+
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+THEN
+ApplyStatus(_Item, "BAGCEPTION_WEIGHTLESS", -1.0, 1);
+
+IF
+RemovedFrom(_Item, _InventoryHolder)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+THEN
+RealtimeObjectTimerLaunch(_Item, "Bagception_Reweigh", 250);
+
+IF
+RemovedFrom(_Item, _InventoryHolder)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+THEN
+RealtimeObjectTimerLaunch(_Item, "Bagception_Reweigh", 250);
+
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+HasActiveStatus(_Item, "BAGCEPTION_WEIGHTLESS", 1)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 0)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 0)
+THEN
+RealtimeObjectTimerLaunch(_Item, "Bagception_Reweigh", 250);
+
+IF
+ObjectTimerFinished(_Item, "Bagception_Reweigh")
+THEN
+PROC_Bagception_Reweigh(_Item);
+
+// Reweigh makes the status match where the item is: on if it sits directly in a
+// Bagception or an inner bag, off anywhere else, including the ground, where
+// GetDirectInventoryOwner answers nothing. PROC rules run in the order written, so
+// DB_Bagception_Stowed is set, acted on, then cleared within the one call.
+PROC
+PROC_Bagception_Reweigh((GUIDSTRING)_Item)
+AND
+GetDirectInventoryOwner(_Item, _Holder)
+AND
+IsTagged(_Holder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+THEN
+DB_Bagception_Stowed(_Item);
+
+PROC
+PROC_Bagception_Reweigh((GUIDSTRING)_Item)
+AND
+GetDirectInventoryOwner(_Item, _Holder)
+AND
+IsTagged(_Holder, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 1)
+THEN
+DB_Bagception_Stowed(_Item);
+
+PROC
+PROC_Bagception_Reweigh((GUIDSTRING)_Item)
+AND
+DB_Bagception_Stowed(_Item)
+AND
+IsTagged(_Item, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 0)
+AND
+HasActiveStatus(_Item, "BAGCEPTION_WEIGHTLESS", 0)
+THEN
+ApplyStatus(_Item, "BAGCEPTION_WEIGHTLESS", -1.0, 1);
+
+PROC
+PROC_Bagception_Reweigh((GUIDSTRING)_Item)
+AND
+NOT DB_Bagception_Stowed(_Item)
+AND
+HasActiveStatus(_Item, "BAGCEPTION_WEIGHTLESS", 1)
+THEN
+RemoveStatus(_Item, "BAGCEPTION_WEIGHTLESS");
+
+PROC
+PROC_Bagception_Reweigh((GUIDSTRING)_Item)
+AND
+DB_Bagception_Stowed(_Item)
+THEN
+NOT DB_Bagception_Stowed(_Item);
+
+// The load sweep. Whether IterateInventory walks into containers is not known, so the
+// Bagception and each inner bag are walked explicitly; an item seen twice is simply
+// reweighed twice. The character's own inventory is walked to strip the status from
+// anything that left a bag without being noticed.
+PROC
+PROC_Bagception_SweepWeight()
+AND
+DB_Players(_Character)
+THEN
+IterateInventory(_Character, "Bagception_WeighItem", "Bagception_WeighDone");
+
+PROC
+PROC_Bagception_SweepWeight()
+AND
+DB_Players(_Character)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, _Bag)
+THEN
+IterateInventory(_Bag, "Bagception_WeighItem", "Bagception_WeighDone");
+
+PROC
+PROC_Bagception_SweepWeight()
+AND
+DB_Players(_Character)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, _Bag)
+AND
+DB_Bagception_InternalContainer(_Container)
+AND
+GetItemByTemplateInInventory(_Container, _Bag, _Inner)
+THEN
+IterateInventory(_Inner, "Bagception_WeighItem", "Bagception_WeighDone");
+
+IF
+EntityEvent(_Item, "Bagception_WeighItem")
+THEN
+PROC_Bagception_Reweigh(_Item);
 
 EXITSECTION
 ENDEXITSECTION

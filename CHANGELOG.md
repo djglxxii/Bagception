@@ -5,6 +5,12 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ## [Unreleased]
 
+### Added (on trial)
+
+- **Weightless contents.** Everything inside Bagception and its bags weighs nothing.
+  Being play-tested alongside the doubled carrying capacity before deciding which to
+  keep. Development build 1.0.0.5.
+
 ## [1.0.0.4] - 2026-09-23
 
 First release. Development builds 1.0.0.0 to 1.0.0.3 were never published.

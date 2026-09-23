@@ -34,3 +34,26 @@ data "Description" "h7ed31a09gf1f4g483ag8c0ege7de68e2253e"
 data "StackId" "BAGCEPTION_CARRY"
 data "StatusPropertyFlags" "IgnoreResting;IgnoredByImmobilized;DisableOverhead;DisableCombatlog;ApplyToDead;DisablePortraitIndicator"
 data "Boosts" "CarryCapacityMultiplier(2.0)"
+
+// ---------------------------------------------------------------------------
+// PLAYTEST: true weightlessness
+// ---------------------------------------------------------------------------
+//
+// On trial alongside BAGCEPTION_CARRY, not yet a shipping decision. The Bagception_Probe
+// goal applies this to every item that goes into a Bagception or one of its bags, and
+// removes it when the item leaves; a sweep on every load repairs anything missed.
+// Weight() is additive and clamps at zero per item, so one boost larger than any item
+// zeroes it without the mod needing to know what it weighed.
+//
+// The comment above on sweeps is out of date: IterateInventory does enumerate a
+// container, which is what makes the repair sweep possible. See the decision log,
+// 2026-09-22.
+
+new entry "BAGCEPTION_WEIGHTLESS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "DisplayName" "he9d45eb5gc833g41e1gbfc4gfc5c153c29bd"
+data "Description" "h96dac754gd7e3g46begacb7gb707b14b3374"
+data "StackId" "BAGCEPTION_WEIGHTLESS"
+data "StatusPropertyFlags" "IgnoreResting;IgnoredByImmobilized;DisableOverhead;DisableCombatlog;ApplyToDead;DisablePortraitIndicator"
+data "Boosts" "Weight(-100000)"

@@ -835,3 +835,25 @@ real work, it weakens a protection that currently cannot fail, and a rule that p
 items back can fight the player. The test was reverted, both flags stay, and the
 workaround is documented: drag an item out of Bagception into the character's own
 inventory, then sell it.
+
+## 2026-09-23: Weightless contents built for a playtest
+
+The user wants true weightlessness if it can be had, and will play with it before
+choosing between it and the carry boost. Built on the `weightless` branch as 1.0.0.5,
+with `BAGCEPTION_CARRY` left in place so both can be felt together.
+
+Design, from the measurements of 2026-09-20 and the correction of 2026-09-22:
+
+- `BAGCEPTION_WEIGHTLESS`, a hidden `Weight(-100000)` boost status, applied to an item
+  arriving directly in a Bagception or an inner bag.
+- Leaving one of those, or arriving anywhere else still carrying the status (a split
+  stack), starts a 250 ms timer; `PROC_Bagception_Reweigh` then sets the status to
+  match where the item really is. The delay covers the master-bag-to-inner-bag move,
+  whose removal and arrival order is unmeasured.
+- Every load walks each party member, their Bagception and its inner bags with
+  `IterateInventory` and reweighs everything. This is the repair sweep that was once
+  thought impossible, and it also brings items stowed before 1.0.0.5 up to date.
+
+Still open, and the reason this is a trial: what an uninstall leaves behind. If the
+trial is dropped, the status entry must stay for one more version, with a sweep that
+only removes it, so no player keeps weightless items.
