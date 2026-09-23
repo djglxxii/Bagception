@@ -80,14 +80,24 @@
       Case. Suspected to be a weight display with zero-weight contents rather than a
       bug; confirm by putting a potion in the bag.
 
+## Coin Purse
+
+- [x] Template, stats, treasure table, localization, sorter rule, repair list.
+- [x] Verified 2026-09-23: gold in the purse counts when trading.
+- [x] Verified 2026-09-23: gold and keys picked up in the world go straight into
+      their bags.
+- [ ] Verify an existing save's bags receive the purse through the repair.
+
 ## Art
 
 - [x] Eighteen source icons supplied in `art/icons/` (2026-09-23), checked for real
       alpha and read at 64 px: every bag has its own silhouette and colour.
 - [x] `tools/Build-Icons.py` generates the inventory sheet, its index and texture
       registration, the tooltip and controller icons, and each template's `Icon`.
-- [ ] Verify in game: inventory, tooltip and controller icons for all eighteen bags.
+- [x] Verified in game 2026-09-23: all eighteen icons show.
 - [ ] Confirm the Toolkit's Publish packs `Public/Game` (tooltip and controller icons).
+- [x] `CoinPurse.png` for the Coin Purse, added and built 2026-09-23.
+- [x] Coin Purse icon verified in game 2026-09-23.
 
 ## Research
 

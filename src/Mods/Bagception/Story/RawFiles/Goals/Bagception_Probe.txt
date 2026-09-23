@@ -272,6 +272,7 @@ DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ArmourTrunk_3cc455ad-7
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_JewelBox_5081c591-b256-47cc-912b-029a3348152f);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44bc-8175-30626c916320);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_CoinPurse_1a1ec4ca-9c08-4a99-8980-913c843471b7);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_OddsSack_d50b2909-3daa-439b-aeb0-11e97a369521);
 
 // Repair: give an existing Bagception any internal container it lacks.
@@ -722,6 +723,22 @@ GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44
 THEN
 ToInventory(_Item, _DestDyePouch, -1, 0, 0);
 
+// Gold. Every gold stack in the game is LOOT_Gold_A or inherits it, and it carries
+// LOOT_GOLD; nothing else does. This rule files gold the player puts into Bagception.
+// Gold picked up in the world is collected by the purse itself, through
+// ContainerAutoAddOnPickup on its template, and never passes through here. Gold
+// already in the character's own inventory is never gathered.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)LOOT_GOLD_6c6b7cac-113c-42ee-bc46-05567b067a9f, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_CoinPurse_1a1ec4ca-9c08-4a99-8980-913c843471b7, _InventoryHolder, _DestCoinPurse)
+THEN
+ToInventory(_Item, _DestCoinPurse, -1, 0, 0);
+
 // Miscellaneous: whatever no other rule claimed goes to the Odds Sack.
 //
 // A catch-all cannot be one more TemplateAddedTo rule. Osiris does not promise rule
@@ -750,7 +767,8 @@ RealtimeObjectTimerLaunch(_Item, "Bagception_Leftover", 1000);
 //   dismantles someone else's organisation;
 // - story items, so no quest script loses track of one (the first story-safety check
 //   in the sorter; the other categories do not have it yet);
-// - gold, left to the game's own currency handling.
+// - gold, which has the Coin Purse. It is still excluded here, so that in a bag
+//   missing its purse gold stays loose rather than going to the Odds Sack.
 //
 // GetDirectInventoryOwner is the check that the item is still where it arrived. Filed,
 // dragged out, or dropped in the meantime, it answers something else and nothing moves.

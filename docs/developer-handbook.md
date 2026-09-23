@@ -377,7 +377,8 @@ out items with `IsCharacterCreationLevel(_Level, 0)`, or filter the characters.
   vanilla auto-collect bag of the same kind (Alchemy Pouch, Keychain, Camp Supply Sack)
   wins when the character carries one is not yet measured. The attribute is a per-
   container design choice: `True` only where collecting on pickup is wanted, currently
-  the Reagent Pouch and the Larder Pack, and set `False` explicitly everywhere else.
+  the Reagent Pouch, Larder Pack, Key Ring and Coin Purse, and set `False` explicitly
+  everywhere else.
 - **Vanilla tags are split across `Shared` and `SharedDev`.** `ALCH_EXTRACT` and the
   extract templates live in `SharedDev`. A search of `Shared` alone reports such a tag
   as nonexistent; check every `*Dev` module before concluding a tag is missing.

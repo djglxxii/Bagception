@@ -220,7 +220,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;KEY&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="hb38e322cg40b7g4473g812cg387c2d689d5a" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h8ad8c752g8720g4bf4gbcd7g5bf830db509f" version="1" />
@@ -364,6 +364,29 @@
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_DyePouch" />
 					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
 					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_DyePouch" />
+					<attribute id="Type" type="FixedString" value="item" />
+					<children>
+						<node id="InventoryList" />
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid" value="a97f9268-5575-4f3d-8bca-58b31986b308" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;LOOT_GOLD&apos;)" />
+					<attribute id="Description" type="TranslatedString" handle="h526e278bg1304g4603ga70agf817679c4cda" version="1" />
+					<attribute id="DisplayName" type="TranslatedString" handle="h00cbeaceg9cb5g472agb522gd41bef5c9240" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_CoinPurse" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString" value="1a1ec4ca-9c08-4a99-8980-913c843471b7" />
+					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_CoinPurse" />
+					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
+					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_CoinPurse" />
 					<attribute id="Type" type="FixedString" value="item" />
 					<children>
 						<node id="InventoryList" />

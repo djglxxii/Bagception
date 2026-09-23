@@ -125,9 +125,16 @@
                     <attribute id="V2" type="float" value="0.74804688"/>
                 </node>
                 <node id="IconUV">
-                    <attribute id="MapKey" type="FixedString" value="Bagception_OddsSack"/>
+                    <attribute id="MapKey" type="FixedString" value="Bagception_CoinPurse"/>
                     <attribute id="U1" type="float" value="0.12597656"/>
                     <attribute id="U2" type="float" value="0.24902344"/>
+                    <attribute id="V1" type="float" value="0.50195312"/>
+                    <attribute id="V2" type="float" value="0.74804688"/>
+                </node>
+                <node id="IconUV">
+                    <attribute id="MapKey" type="FixedString" value="Bagception_OddsSack"/>
+                    <attribute id="U1" type="float" value="0.25097656"/>
+                    <attribute id="U2" type="float" value="0.37402344"/>
                     <attribute id="V1" type="float" value="0.50195312"/>
                     <attribute id="V2" type="float" value="0.74804688"/>
                 </node>

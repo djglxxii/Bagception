@@ -114,6 +114,12 @@ if ((Test-Path -LiteralPath $authoredGoals) -and (Test-Path -LiteralPath $staged
     foreach ($match in [regex]::Matches($goalText, '\b(?:DB|PROC|QRY)_\w+')) {
       [void]$declared.Add($match.Value)
     }
+    # The module's own templates and tags too, as the full name_GUID the story uses. A
+    # change that only adds facts and rules for a new container, reusing existing DB
+    # and PROC names, introduces no new identifier above; the container is what it adds.
+    foreach ($match in [regex]::Matches($goalText, '\bBAGCEPTION_\w+?_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b')) {
+      [void]$declared.Add($match.Value)
+    }
   }
 
   $missing = @($declared | Where-Object { $compiled -notmatch "\b$([regex]::Escape($_))\b" } | Sort-Object)

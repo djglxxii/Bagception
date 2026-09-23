@@ -740,5 +740,34 @@ explosives rule filed the Smokepowder Satchel and Runepowder Vial.
 
 Consequence: every release that changes the story bumps `Version64`, which the release
 workflow already does, and the reload-and-repair work of the same day is what makes a
-merged update complete. The development build stays at 1.0.0.1; it has not been
-published.
+merged update complete. The development build was at 1.0.0.1, unpublished; it went
+to 1.0.0.2 the same day to carry the Coin Purse into the same save.
+
+## 2026-09-23: A Coin Purse for gold
+
+Requested by the user. Spec §6.18 left gold to the game's own handling unless there was
+a reason for a purse, and allowed one as an optional addition later; the request is the
+reason. The purse follows the rule every other bag does: it files only gold the player
+puts into Bagception, and never gathers gold from the character's own inventory or from
+pickup.
+
+Every gold stack in the game is `LOOT_Gold_A` or a child of it, and that template alone
+carries `LOOT_GOLD` (`6c6b7cac-…`), so one tag identifies gold for both the sorter rule
+and the hand-placement filter. The Odds Sack keeps its gold exclusions, so in a bag
+missing its purse gold stays loose instead of going to the catch-all.
+
+Unverified: whether gold inside a container still counts towards the party's gold when
+trading. If it does not, filing gold into the purse would hide it from traders, and the
+purse would need rethinking. That is the first thing to test.
+
+## 2026-09-23: Keys and gold are collected on pickup
+
+At the user's request the Key Ring and the Coin Purse now set `ContainerAutoAddOnPickup`,
+joining the Reagent Pouch and the Larder Pack. A key or gold picked up in the world
+goes straight into its bag rather than waiting to be dragged onto Bagception. Keys match
+vanilla's own Keychain, which collects the same way. Gold already in the character's
+own inventory is still never gathered.
+
+Data only: the templates change, the story does not. Open questions: whether a vanilla
+Keychain the character carries takes a key before the Key Ring does, and which other
+ways gold arrives (a trader's change, a quest reward, looting a body) count as a pickup.

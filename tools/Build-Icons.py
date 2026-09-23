@@ -75,6 +75,7 @@ BAGS = [
     ("KeyRing", "BAGCEPTION_CONT_KeyRing"),
     ("ToolRoll", "BAGCEPTION_CONT_ToolRoll"),
     ("DyePouch", "BAGCEPTION_CONT_DyePouch"),
+    ("CoinPurse", "BAGCEPTION_CONT_CoinPurse"),
     ("OddsSack", "BAGCEPTION_CONT_OddsSack"),
 ]
 
