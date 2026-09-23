@@ -67,9 +67,13 @@ if (Test-Path -LiteralPath $stagedLocalization) {
 # the .lsf beside the .lsx; when a resource is hand-authored, as these are, nothing
 # has generated one, so compile them here. Both are kept, as a Toolkit-built package
 # keeps both.
+#
+# The exception is GUI: the game reads icon sheet indexes there as .lsx, and vanilla
+# ships them that way, with no .lsf beside them.
 $stagedPublic = Join-Path $moduleStage "Public"
 if (Test-Path -LiteralPath $stagedPublic) {
-  $resourceFiles = @(Get-ChildItem -LiteralPath $stagedPublic -Recurse -File -Filter "*.lsx")
+  $resourceFiles = @(Get-ChildItem -LiteralPath $stagedPublic -Recurse -File -Filter "*.lsx" |
+    Where-Object { $_.Directory.Name -ne "GUI" })
   if ($resourceFiles.Count -gt 0) {
     $divine = Get-DivinePath
     foreach ($file in $resourceFiles) {

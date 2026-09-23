@@ -80,6 +80,15 @@
       Case. Suspected to be a weight display with zero-weight contents rather than a
       bug; confirm by putting a potion in the bag.
 
+## Art
+
+- [x] Eighteen source icons supplied in `art/icons/` (2026-09-23), checked for real
+      alpha and read at 64 px: every bag has its own silhouette and colour.
+- [x] `tools/Build-Icons.py` generates the inventory sheet, its index and texture
+      registration, the tooltip and controller icons, and each template's `Icon`.
+- [ ] Verify in game: inventory, tooltip and controller icons for all eighteen bags.
+- [ ] Confirm the Toolkit's Publish packs `Public/Game` (tooltip and controller icons).
+
 ## Research
 
 - [x] Can the native system make container contents weightless, or approximate it?

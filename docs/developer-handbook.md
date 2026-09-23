@@ -521,9 +521,39 @@ Both of these were compile errors on the first Story Editor build of the probe.
   means not setting those, which is why the templates are short.
 - Do not invent icon names. `Item_CONT_GEN_Bag_A` was assumed during authoring and
   does not exist; the real icon on `CONT_Bag_A` is `Item_LOOT_Bag_Blackpowder`.
-  Inherit rather than name one.
+  Every bag now names its own icon, `Bagception_<Name>`, written by
+  `tools/Build-Icons.py`; see "Custom icons" below.
 - Localization handles are `h` + a GUID with `g` in place of each `-`. They must match
   between the template and `Bagception.xml`, version attribute included.
+
+## Custom icons
+
+Source art is `art/icons/*.png`; `python tools/Build-Icons.py` generates everything else
+and sets each template's `Icon`. `docs/containers.md` lists the files. What it relies
+on, checked against vanilla's `Shared.pak` and `Game.pak`:
+
+- **An item icon is found by name in two places.** The inventory grid looks the name up
+  in an icon sheet index (`Public/<Mod>/GUI/*.lsx`: `IconUVList` of MapKey and UVs,
+  plus `TextureAtlasInfo` naming the sheet's path and UUID). Tooltips and the controller
+  UI look for a loose file of that name under `Public/Game/GUI/...`, one per size.
+- **The sheet must also be registered as a texture.** Its UUID has to match a
+  `TextureBank` resource in `Public/<Mod>/Content/UI/[PAK]_UI/_merged.lsx`, shaped as
+  vanilla's entry for `Icons_Items`. The index alone points at nothing.
+- **Ship the GUI index as `.lsx`, not `.lsf`.** Vanilla does, and `Package-Mod.ps1`
+  skips `GUI` when compiling resources for that reason. The TextureBank is compiled.
+- **UVs are inset half a texel** on each side of the cell, as vanilla's are, so
+  filtering never picks up the neighbouring icon.
+- **Formats:** sheet and tooltip icons DXT5 with the legacy DDS header; controller
+  icons BC7 with the DX10 header. No mipmaps. Generated files match vanilla's byte
+  sizes exactly, which is a quick check that the format is right.
+- **Do not use Pillow's DXT5 writer.** It emits whole 4 × 4 blocks of pure magenta
+  inside opaque, ordinary-coloured regions near soft edges. `texconv` (DirectXTex,
+  fetched by `Install-Texconv.ps1`) does not. Pillow still does the resizing.
+- **Resize premultiplied, then refill transparent pixels' colour** from the object.
+  Otherwise the soft edge fades through black, or, where near-zero alpha is divided
+  back out, through saturated noise that block compression smears into the visible edge.
+- **Not yet confirmed:** whether the Toolkit's Publish packs a mod's `Public/Game`
+  folder. The offline package includes it. `Sync-ToolkitProject.ps1` does not copy it.
 
 ## LSLib and Divine
 

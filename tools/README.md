@@ -15,6 +15,10 @@ publishes to mod.io. These scripts support that workflow; they do not replace it
   `dist/unpacked/Bagception/` and compiles each staged localization `.xml` to `.loca`.
 - `Build-Pak.ps1` stages the mod and uses Divine to create `dist/Bagception.pak`.
 - `Deploy-Pak.ps1 -PakPath .\dist\Bagception.pak` copies a `.pak` to the BG3 Mods folder.
+- `Build-Icons.py` builds every icon file from `art/icons/*.png` and sets each bag's
+  template `Icon`. Run `python tools/Build-Icons.py` after changing the art.
+- `Install-Texconv.ps1` downloads Microsoft's texconv into ignored `tools/external/`;
+  `Build-Icons.py` uses it for DDS compression.
 - `Install-ExportTool.ps1` downloads Norbyte's LSLib ExportTool into ignored
   `tools/external/`.
 

@@ -36,6 +36,7 @@
 				<node id="GameObjects">
 					<attribute id="Description" type="TranslatedString" handle="h271db971g9d0dgea47g01a5gd3c2ade18566" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="ha86b2ccag9495g083fgad32g4bc47d3bc676" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_Bagception" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="856bd140-6963-4de1-9471-25440149e87d" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_Master" />
@@ -62,6 +63,7 @@
 				<node id="GameObjects">
 					<attribute id="Description" type="TranslatedString" handle="h82c509f8g0af8g4764ga814gb42721fe8586" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="hcbce351cg5c48g43c5ga4f3gce2a518fe955" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_ShieldRack" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="feda4623-0e32-4d33-921a-fe62fdefde98" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ShieldRack" />
@@ -84,6 +86,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ARROW&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="hf7623cdcgb522g4e17g83a0g0bd8168b6d50" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h0557312cgd09dg4642ga16bg7a5dc4e0dd33" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_Quiver" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="99206dbf-1477-4cf9-88f2-fccb83e55a1b" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_Quiver" />
@@ -106,6 +109,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_SOLUTION_ELIXIR&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h366860ddg6c9fg4f02ga676g4028ef5695ff" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h48e86f63g5461g482eg84d4gad284067a2d7" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_ElixirRack" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="6e1e9bc8-699b-4a63-902f-1b6b11707ea3" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ElixirRack" />
@@ -128,6 +132,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_SOLUTION_COATING&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h9e837dd6g326bg430agb511g70ae9dda69f6" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h8c85ec57gb037g4f87g9886g909bd209d709" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_CoatingKit" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="936b3efd-ef6e-4626-8db1-71a8aac440c9" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_CoatingKit" />
@@ -150,6 +155,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;GRENADE&apos;) or Tagged(&apos;ALCH_SOLUTION_GRENADE&apos;) or Tagged(&apos;EXPLOSIVES&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h665fc19fgbb27g4e0bgb1c6ga4b731c8821b" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="hcf2c35e3g7a65g4d88ga7b7g430153d38a79" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_GrenadeSatchel" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="1803d81d-8dab-42ee-981e-a6914b2c5ea8" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_GrenadeSatchel" />
@@ -172,6 +178,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_INGREDIENT&apos;) or Tagged(&apos;ALCH_EXTRACT&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h6b1c8acbg307eg4b1bgb45bgcab2030a1af3" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h2557a8b3g090fg4deag86f6gabcf1ab69325" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_ReagentPouch" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="27607d0b-a6c8-4690-b118-47f36a871b40" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ReagentPouch" />
@@ -194,6 +201,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;BOOK&apos;) and not Tagged(&apos;SCROLL&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h4d462210g0424g4531gac83g4b42d94d4b9c" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="ha23ccdf9gad5cg4371gb0c4gc2e0871bb7b3" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_BookSatchel" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="d3c867a8-1d54-4b13-a8a8-5299ccc10911" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_BookSatchel" />
@@ -216,6 +224,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;KEY&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="hb38e322cg40b7g4473g812cg387c2d689d5a" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h8ad8c752g8720g4bf4gbcd7g5bf830db509f" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_KeyRing" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="a2ceacf9-b44d-4483-b112-dbdd82b790e1" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_KeyRing" />
@@ -238,6 +247,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="IsSupply()" />
 					<attribute id="Description" type="TranslatedString" handle="ha8b87d5bg3f1cg4898g8951g8b8b8dac8b3d" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h8dda3429gbd44g4194g912ag58d8ab82144d" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_LarderPack" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="5691a197-d3a9-46a3-be03-91cb09ec804e" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_LarderSack" />
@@ -259,6 +269,7 @@
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="Description" type="TranslatedString" handle="h40ae6be5g83e0g44b9g92cfg625d4bdafbad" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h893e0d24g409eg4d01ga269g74861abee21d" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_WeaponRoll" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="61e85266-71a8-46ba-b930-5ebd6ee5ab86" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_WeaponRoll" />
@@ -280,6 +291,7 @@
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="Description" type="TranslatedString" handle="h90d148cbg1f3dg4527ga181gd8eb2f8eac0e" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="hecf85296gf5bdg4fd1gbbc4g7314dbbeae1c" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_ArmourTrunk" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="3cc455ad-78eb-456e-8018-9d0e26a3ceee" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ArmourTrunk" />
@@ -301,6 +313,7 @@
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="Description" type="TranslatedString" handle="h8b689667gf177g4292gad3fg098f655de0ba" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h6b99bfedg8be7g4079ga0e3g7881e28e52d5" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_JewelryBox" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="5081c591-b256-47cc-912b-029a3348152f" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_JewelBox" />
@@ -322,6 +335,7 @@
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="Description" type="TranslatedString" handle="hb66a1301ge559g49c0gb2f1gda999f58c0a3" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h736a6dcagc123g4574gbc7agac1caa765b8d" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_ToolRoll" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="6abbe0bc-6422-4943-8521-47d67c0d4286" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ToolRoll" />
@@ -344,6 +358,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;DYE&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="hdfcc72d1g77c8g4da4gb9degd49b91dff503" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h5313238dg8cbeg460ag847dgb9b3af172205" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_DyePouch" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="2954188a-aee7-44bc-8175-30626c916320" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_DyePouch" />
@@ -365,6 +380,7 @@
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="Description" type="TranslatedString" handle="h75ab378dg5a69g4646gb32eg6849dd9483e5" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h4c20c993gfe3dg44eegabedge0e592318f11" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_OddsSack" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="d50b2909-3daa-439b-aeb0-11e97a369521" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_OddsSack" />
@@ -387,6 +403,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged('SCROLL')" />
 					<attribute id="Description" type="TranslatedString" handle="h9a173f39g2f38g4dffgb1b1g18f69c3bd198" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h62dcd8a8gaee8g44f5gbf86gc4172bec6967" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_ScrollCase" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="acf14532-8d31-4d94-b467-72018dd2cde9" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_ScrollCase" />
@@ -409,6 +426,7 @@
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged('ALCH_SOLUTION_POTION')" />
 					<attribute id="Description" type="TranslatedString" handle="h2bc86cc7g38afg9ffbg9fbdgedd510514cd8" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h99b68a19g753cg6b16g30e4g2da2c0daac42" version="1" />
+					<attribute id="Icon" type="FixedString" value="Bagception_PotionCase" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString" value="8bf1ed2d-3655-415e-868e-fe3138760337" />
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_PotionCase" />
