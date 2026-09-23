@@ -54,7 +54,8 @@
       had never had the mod.
 - [x] Verify that rule changes reach a save made with an earlier build. They do when
       `Version64` changes (2026-09-23, Act 2 save, 1.0.0.0 to 1.0.0.1), and not otherwise.
-- [ ] See the bag repair add a missing container in a save whose bags predate one.
+- [x] See the bag repair add a missing container in a save whose bags predate one.
+      Verified 2026-09-23: the Act 2 save's bags each received the Coin Purse on 1.0.0.2.
 
 ## Shipping content so far
 
@@ -81,17 +82,28 @@
       the display correct, the count includes the inner bags, which the mod cannot
       change; recorded under Known limitations in `docs/containers.md`.
 
+## Quest Satchel
+
+- [x] Template, stats, treasure table, localization, repair list, and the story rule,
+      checked ahead of every category; 22 category rules carry `IsStoryItem 0`. Keys
+      stay on the Key Ring.
+- [x] Verified 2026-09-23 on 1.0.0.3: the satchel reaches an existing save and quest
+      items file into it.
+- [ ] Verify quest and dialogue checks still find an item two bags deep.
+- [x] `QuestSatchel.png`, added and built 2026-09-23.
+- [x] Quest Satchel icon shown in game 2026-09-23.
+
 ## Coin Purse
 
 - [x] Template, stats, treasure table, localization, sorter rule, repair list.
 - [x] Verified 2026-09-23: gold in the purse counts when trading.
 - [x] Verified 2026-09-23: gold and keys picked up in the world go straight into
       their bags.
-- [ ] Verify an existing save's bags receive the purse through the repair.
+- [x] Verified 2026-09-23: an existing save's bags received the purse through the repair.
 
 ## Art
 
-- [x] Eighteen source icons supplied in `art/icons/` (2026-09-23), checked for real
+- [x] Twenty source icons supplied in `art/icons/` (2026-09-23), checked for real
       alpha and read at 64 px: every bag has its own silhouette and colour.
 - [x] `tools/Build-Icons.py` generates the inventory sheet, its index and texture
       registration, the tooltip and controller icons, and each template's `Icon`.

@@ -4,7 +4,7 @@ Every bag in Bagception, with the name the player sees in game and what files in
 This is also the brief for the art: each bag's picture should read as the name in the
 first column.
 
-Bagception itself is the bag the player carries. The other eighteen live inside it and
+Bagception itself is the bag the player carries. The other nineteen live inside it and
 can never be taken out.
 
 ## How sorting works
@@ -22,7 +22,7 @@ Anything no bag claims moves into the Odds Sack about a second later.
 
 | # | In game | What sorts into it |
 |---|---------|--------------------|
-| — | **Bagception** | The bag the player carries. Holds the eighteen bags below. Other containers and story items stay loose at its top level. |
+| — | **Bagception** | The bag the player carries. Holds the nineteen bags below. Other containers stay loose at its top level. |
 | 1 | **Weapon Roll** | Every weapon, melee and ranged, at any rarity. Torches and lanterns go to the Tool Roll instead. |
 | 2 | **Shield Rack** | Shields. |
 | 3 | **Armour Trunk** | Helmets and hats, body armour and clothing, cloaks, gloves, boots, underwear, and camp clothes and shoes. |
@@ -39,18 +39,41 @@ Anything no bag claims moves into the Odds Sack about a second later.
 | 14 | **Key Ring** | Keys. *Collects on pickup.* |
 | 15 | **Tool Roll** | Thieves' tools and the other kits (trap disarm, disguise, forgery, poisoner), shovels and hand tools, musical instruments, torches and lanterns. |
 | 16 | **Dye Pouch** | Dyes, and dye remover. |
-| 17 | **Coin Purse** | Gold coins. *Collects on pickup.* See below. |
-| 18 | **Odds Sack** | Everything the bags above do not claim: gems, silverware, trinkets and junk. |
+| 17 | **Quest Satchel** | Quest items: anything the game marks as a story item, such as the Moonlantern, the netherstones and the rune slates. Checked before every other bag, so a quest item that is also a light or a book comes here. Keys are the exception and stay on the Key Ring. See below. |
+| 18 | **Coin Purse** | Gold coins. *Collects on pickup.* See below. |
+| 19 | **Odds Sack** | Everything the bags above do not claim: gems, silverware, trinkets and junk. |
 
-Nineteen pieces of art in total: the eighteen bags plus Bagception itself.
+Twenty pieces of art in total: the nineteen bags plus Bagception itself.
 
 **Placing items by hand.** A player can also drag an item straight into one of the inner
 bags. Twelve bags refuse anything that does not belong: the Quiver, Scroll Case, Potion
 Case, Elixir Rack, Coating Kit, Grenade Satchel, Reagent Pouch, Larder Pack, Book Satchel,
-Key Ring, Dye Pouch and Coin Purse. The other six (Weapon Roll, Shield Rack, Armour
-Trunk, Jewelry Box, Tool Roll and Odds Sack) accept anything placed by hand, because the
-game's filter cannot express their categories. Items sort correctly either way when dropped
+Key Ring, Dye Pouch and Coin Purse. The other seven (Weapon Roll, Shield Rack, Armour
+Trunk, Jewelry Box, Tool Roll, Quest Satchel and Odds Sack) accept anything placed by
+hand, because the game's filter cannot express their categories. Items sort correctly either way when dropped
 into Bagception itself.
+
+**The Quest Satchel.** Added 2026-09-23 at the user's request. The spec (§7) kept story
+items loose at Bagception's top level; a bag of their own keeps them together instead.
+
+- **What counts as a quest item.** Whatever the game itself marks as a story item, the
+  same mark that stops such items being sold or destroyed. There is no list to keep up,
+  and a mod's quest items are covered if the mod marks them.
+- **Ahead of every category.** The Moonlantern is a light, the Orphic Hammer a weapon,
+  and several quest items are books; all of them come here rather than to the Tool
+  Roll, Weapon Roll or Book Satchel.
+- **Keys stay on the Key Ring.** Every key in the game is marked as a story item (all
+  36 vanilla key templates inherit it), so putting story first without an exception
+  would leave the Key Ring empty.
+- **Containers stay loose**, as every other container does, even when marked as story.
+- **Only what is put into Bagception.** It does not collect on pickup: the game's
+  collection filter cannot test for story items. For the same reason, a quest item
+  collected on pickup by the Reagent Pouch, Larder Pack or Coin Purse stays there.
+- **Never in the Odds Sack.** If a bag lacks its satchel, as an older bag can until the
+  repair adds one, quest items stay loose at Bagception's top level.
+- **Not yet verified:** that quest and dialogue checks still find an item two bags
+  deep, and whether any quest item refuses to go into a container at all. A refused
+  item stays loose; nothing is lost.
 
 **The Coin Purse.** Added 2026-09-23 at the user's request; the spec (§6.18) left gold to
 the game unless there was a reason for a purse, and allowed one as a later addition.
@@ -78,20 +101,17 @@ catch-all was preferred to either. See the decision log, 2026-09-23.
 
 ## Not containers
 
-Two things in the spec are policy rather than storage, and need no art:
+One thing in the spec is policy rather than storage, and needs no art:
 
 - **Arbitrary containers.** A bag or pouch from vanilla or another mod that is placed
   into Bagception stays at the top level and is never sorted into, to avoid recursive
   nesting and to leave another mod's organisation alone.
-- **Protected items.** Story items stay at Bagception's top level rather than being
-  filed. Today only the Odds Sack checks for them; the other bags do not yet, so a
-  story item that matches a category (the Moonlantern, for one) is still filed.
 
 ## Known limitations
 
 - **Bagception's item count includes its own bags.** The number the game shows on
-  Bagception counts the eighteen bags inside it, so an otherwise empty Bagception
-  shows 18, not 0. The count is drawn by the game's inventory screen, which counts
+  Bagception counts the nineteen bags inside it, so an otherwise empty Bagception
+  shows 19, not 0. The count is drawn by the game's inventory screen, which counts
   every item directly in a container, and the bags are items. Nothing the mod can
   set changes that: no item flag or template attribute hides an item from the
   count, and Osiris cannot reach the display. Changing it would mean replacing the
@@ -109,17 +129,18 @@ generation model. It is written to be handed over as it stands.
 
 ### What is needed
 
-**Nineteen icons**, one per bag in the table above: Bagception and the eighteen bags
-inside it. All nineteen source PNGs are present and the icon builder has generated
-their game assets. The original eighteen were verified in game; the Coin Purse
-still needs an in-game check. Only icons are needed. Each bag keeps the vanilla 3D pouch model, which is
-only seen when an item lies in the world, and none of these bags can ever be dropped.
+**Twenty icons**, one per bag in the table above: Bagception and the nineteen bags
+inside it. All twenty source PNGs are present and the icon builder has generated
+their game assets. The original nineteen were verified in game; the Quest Satchel
+still needs an in-game check. Only icons are needed. Each bag keeps the vanilla 3D
+pouch model, which is only seen when an item lies in the world, and none of these
+bags can ever be dropped.
 
 ### Deliverable format
 
 | | |
 |---|---|
-| Count | 19 images, one object per image |
+| Count | 20 images, one object per image |
 | File type | PNG |
 | Size | **1024 × 1024** preferred; 512 × 512 minimum. Square, 1:1 |
 | Background | **Truly transparent** (a real alpha channel) |
@@ -129,8 +150,8 @@ only seen when an item lies in the world, and none of these bags can ever be dro
 File names: `Bagception.png`, `WeaponRoll.png`, `ShieldRack.png`, `ArmourTrunk.png`,
 `JewelryBox.png`, `Quiver.png`, `ScrollCase.png`, `PotionCase.png`, `ElixirRack.png`,
 `CoatingKit.png`, `GrenadeSatchel.png`, `ReagentPouch.png`, `LarderPack.png`,
-`BookSatchel.png`, `KeyRing.png`, `ToolRoll.png`, `DyePouch.png`, `CoinPurse.png`,
-`OddsSack.png`.
+`BookSatchel.png`, `KeyRing.png`, `ToolRoll.png`, `DyePouch.png`, `QuestSatchel.png`,
+`CoinPurse.png`, `OddsSack.png`.
 They go in `art/icons/`; see "Where the files go" below.
 
 **Transparency is the most common failure with generation models.** A grey-and-white
@@ -152,6 +173,7 @@ art/
     Bagception.png
     WeaponRoll.png
     ...                 one PNG per bag, named exactly as listed above
+    QuestSatchel.png
     CoinPurse.png
     OddsSack.png
     README.md           optional: note anything unusual, such as keyed backgrounds
@@ -229,7 +251,7 @@ the Alchemy Pouch, a healing potion), share these traits. The set should too.
   95 per cent, and is centred horizontally. Leave only a thin margin; vanilla icons
   nearly touch the top and bottom edges.
 - **Seen from slightly above and in front**, a gentle three-quarter view, upright. The
-  same angle for all nineteen.
+  same angle for all twenty.
 - **Lit the same way throughout.** Soft key light from the upper left, a faint cool rim
   light around the silhouette, gentle falloff into shadow. No hard cast shadow, no floor,
   no contact shadow.
@@ -246,11 +268,11 @@ the Alchemy Pouch, a healing potion), share these traits. The set should too.
 
 ### Readability rules
 
-These icons sit side by side in a grid of eighteen, at 64 pixels. What tells them apart
+These icons sit side by side in a grid of nineteen, at 64 pixels. What tells them apart
 at that size is silhouette and colour, not detail.
 
 1. **Each bag needs its own silhouette.** A roll, a rack, a box, a tube, a ring, a sack
-   and a satchel should be recognisable as outlines alone. Avoid nineteen round pouches.
+   and a satchel should be recognisable as outlines alone. Avoid twenty round pouches.
 2. **Each bag needs its own dominant colour.** Use the accents below so no two bags
    share one.
 3. **Show what it holds.** A hilt, arrow fletching, a scroll end, a potion neck or a key
@@ -264,7 +286,7 @@ at that size is silhouette and colour, not detail.
 
 | File | Concept | Accent colour | Must be distinct from |
 |---|---|---|---|
-| `Bagception.png` | A sturdy travelling bag, mouth open, with smaller bags visibly nested inside it: "bags all the way down". The hero icon of the set | deep teal | every other bag; it is the one the player carries |
+| `Bagception.png` | A sturdy travelling bag, mouth open, with smaller bags visibly nested inside it: "bags all the way down". The hero icon of the set | deep teal | every other bag; it is the one the player carries. Also **Quest Satchel**, the other important-looking bag |
 | `WeaponRoll.png` | A long canvas or leather roll, partly unrolled, sword and dagger hilts in pockets | steel grey on oxblood leather | **Tool Roll**: same roll idea, so different colour and contents |
 | `ShieldRack.png` | A small wooden rack or strap-frame holding a round shield face-on | oak brown with iron | Armour Trunk |
 | `ArmourTrunk.png` | A compact banded chest with a pauldron or folded cloth spilling over the lid | dark green | Jewelry Box: both are boxes, so this one is larger and plainer |
@@ -274,13 +296,14 @@ at that size is silhouette and colour, not detail.
 | `PotionCase.png` | A padded case with round potion flasks, red liquid visible | red | **Elixir Rack.** The pair most easily confused: potions are round-bellied flasks in a soft case |
 | `ElixirRack.png` | A small upright rack of tall, slender vials, blue or violet liquid | cobalt blue | **Potion Case**: tall and upright against round and soft |
 | `CoatingKit.png` | A small sealed kit with a vial of green oil and a dripping applicator | poison green | Reagent Pouch, Dye Pouch |
-| `GrenadeSatchel.png` | A stout satchel with a round fused bomb and a flask peeking out | charcoal with orange | Odds Sack |
+| `GrenadeSatchel.png` | A stout satchel with a round fused bomb and a flask peeking out | charcoal with orange | Odds Sack, **Quest Satchel** |
 | `ReagentPouch.png` | A pouch of many small compartments, herbs and mushrooms showing | moss green and brown | **vanilla Alchemy Pouch** (purple, starred): must not resemble it |
 | `LarderPack.png` | A food pack with a bread loaf and a wine bottle neck showing | wheat gold | **vanilla Camp Supply Sack** |
-| `BookSatchel.png` | A flat document satchel, book spines and a folded letter showing | navy blue | Scroll Case |
+| `BookSatchel.png` | A flat document satchel, book spines and a folded letter showing | navy blue | Scroll Case, **Quest Satchel**: both are satchels, so this one stays flat and plain |
 | `KeyRing.png` | A large iron ring with several keys hanging from it; not a bag at all | iron and brass | nothing: its silhouette is unique |
 | `ToolRoll.png` | A tool roll with a hammer, lockpicks and a small shovel, a torch alongside | leather brown with brass | **Weapon Roll** |
 | `DyePouch.png` | A pouch of stoppered vials, each a different bright colour | multicolour vials on white cloth | Coating Kit, Elixir Rack, **Coin Purse** |
+| `QuestSatchel.png` | A sturdy upright messenger satchel of black leather with silver fittings. Its flap is fastened by a large round silver medallion clasp, embossed with an abstract rune (not a letter). A faintly glowing pale-amber crystal shard and the edge of an old, ornate artefact peek out from under the flap. It should look important, the bag you would never leave behind | black leather, silver, a soft amber glow | **Book Satchel** (flat, navy), **Grenade Satchel** (charcoal, bomb) and **Bagception** (teal, open, bags inside): the medallion clasp and the glow must carry it. Do not reproduce any real BG3 quest item, such as the Astral Prism or a netherstone |
 | `CoinPurse.png` | A small, stiff-framed leather purse with a metal clasp top, open, gold coins heaped in its mouth and a few spilling in front of it. Not a drawstring sack | bright gold coins on dark brown leather | **Dye Pouch and Odds Sack**, both drawstring sacks: the rigid clasp frame and the coins must carry it. Also Jewelry Box and Larder Pack, which already use gold: here the gold is the coins themselves, bright and metallic, against dark leather |
 | `OddsSack.png` | A lumpy, patched sack, odds and ends spilling out: a gem, a spoon, a candle | faded burlap with one bright gem | Grenade Satchel, **Coin Purse**; it should look humble |
 
@@ -299,9 +322,9 @@ at that size is silhouette and colour, not detail.
 - **Elixirs are separate from potions**, and the pair is the one most easily confused
   in a full bag. It has the strictest brief above for that reason.
 - **Every bag is a reskin of one vanilla pouch** (`3e6aac21-…`), so its icon is the only
-  thing that tells it apart. The Coin Purse's new icon still needs an in-game check.
-- **The Coin Purse matches the existing eighteen.** It uses the shared prompt
-  recorded in `art/icons/README.md`, with the Coin Purse's subject and accent from
-  the table above.
+  thing that tells it apart. The Quest Satchel's new icon still needs an in-game check.
+- **The Quest Satchel matches the existing nineteen.** It uses the shared prompt
+  recorded in `art/icons/README.md`, with the Quest Satchel's subject and accent
+  from the table above.
 - **Extracts share the Reagent Pouch with ingredients**, as in vanilla's Alchemy Pouch;
   the icon needs to suggest alchemy in general, not extracts specifically.

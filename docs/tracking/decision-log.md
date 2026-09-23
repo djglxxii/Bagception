@@ -741,7 +741,8 @@ explosives rule filed the Smokepowder Satchel and Runepowder Vial.
 Consequence: every release that changes the story bumps `Version64`, which the release
 workflow already does, and the reload-and-repair work of the same day is what makes a
 merged update complete. The development build was at 1.0.0.1, unpublished; it went
-to 1.0.0.2 the same day to carry the Coin Purse into the same save.
+to 1.0.0.2 the same day to carry the Coin Purse into the same save, and to 1.0.0.3
+for the Quest Satchel.
 
 ## 2026-09-23: A Coin Purse for gold
 
@@ -787,3 +788,25 @@ The only route would be overriding the game's inventory UI. That would change th
 for every container in the game, would break with UI patches or other UI mods, and
 reaches outside Bagception's own hierarchy, so it was ruled out. The count is recorded
 as a known limitation in `docs/containers.md`.
+
+## 2026-09-23: A Quest Satchel for story items, ahead of every category
+
+Spec §7 kept story items loose at Bagception's top level, and until now only the Odds
+Sack honoured that; a story item matching a category, such as the Moonlantern, was
+filed. At the user's request story items instead get a bag of their own, the Quest
+Satchel, checked ahead of every category. The sorter asks `IsStoryItem`: a Quest
+Satchel rule takes story items, and every other category rule carries `IsStoryItem 0`,
+so no rule order matters.
+
+Keys are the exception, chosen by the user. Every vanilla key is a story item, all 36
+templates tagged `KEY` inheriting `StoryItem` from `BASE_KEY`, so story-first without an
+exception would have emptied the Key Ring. Containers stay loose even when marked as
+story, as every container does (§6.19).
+
+Limits: the filter language cannot test for story items, so the satchel accepts
+anything placed by hand, cannot collect on pickup, and cannot stop the Reagent Pouch,
+Larder Pack or Coin Purse collecting a story item on pickup. Unverified: whether quest
+and dialogue checks find an item two bags deep. Uninstall was also raised: removing the
+mod may take the bags and their contents, story items included. The user's position is
+that the game already warns that removing a mod can destabilise a playthrough, so that
+is on the player.

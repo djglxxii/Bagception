@@ -1,6 +1,6 @@
 # Bagception icon source art
 
-These nineteen PNGs are the source icons specified by `docs/containers.md`. Each
+These twenty PNGs are the source icons specified by `docs/containers.md`. Each
 is 1024 x 1024, 8-bit RGBA with a genuine transparent background. The built-in
 image generation tool produced the artwork; the selected images were resized
 from 1254 x 1254 with high-quality bicubic interpolation. No keyed background
@@ -41,6 +41,7 @@ The subject instructions were:
 | KeyRing | Large iron ring with four brass and iron keys; no bag. |
 | ToolRoll | Brown and brass roll with hammer, lockpicks, shovel, and unlit torch. |
 | DyePouch | Off-white cloth pouch with red, blue, yellow, and violet dye bottles. |
+| QuestSatchel | Upright near-black leather messenger satchel with silver fittings, a large round rune medallion clasp, and a pale-amber crystal shard peeking from beneath its flap. |
 | CoinPurse | Small dark-brown leather purse with a rigid open metal clasp, gold coins heaped in its mouth, and a few coins spilling in front. |
 | OddsSack | Patched burlap sack with a gem, spoon, and candle. |
 

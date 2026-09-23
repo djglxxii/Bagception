@@ -286,6 +286,16 @@ bag goes to the Odds Sack. Realtime, because `ObjectTimerLaunch` ticks by turn i
 Vanilla's Adamantine Forge uses the same pair. Containers, story items and gold are
 excluded there and stay at the top level.
 
+**Precedence is written into the conditions, not the rule order.** The Quest Satchel
+takes story items ahead of every category, and it does so because every other category
+rule carries `IsStoryItem((ITEM)_Item, 0)`, never because its rule comes first. A new
+category rule must carry the same check, or story items matching it will race.
+
+**Every key is a story item.** All 36 vanilla templates tagged `KEY` resolve
+`StoryItem True`, inherited from `BASE_KEY`. Anything keyed on `IsStoryItem` has to
+decide about keys explicitly; the Quest Satchel rule excludes `KEY`, and the Key Ring
+rule has no story check.
+
 There is no Valuables container. No tag or consistent stats field marks a trade good:
 `BASE_LOOT_Valuable` is a parent template that also holds dyes, Netherstones and
 Ketheric's crown controllers, and `ObjectCategory` prices some junk above silverware.

@@ -272,6 +272,7 @@ DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ArmourTrunk_3cc455ad-7
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_JewelBox_5081c591-b256-47cc-912b-029a3348152f);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44bc-8175-30626c916320);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_QuestSatchel_651a1742-b423-4fc5-8990-52d2e61f746e);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_CoinPurse_1a1ec4ca-9c08-4a99-8980-913c843471b7);
 DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_OddsSack_d50b2909-3daa-439b-aeb0-11e97a369521);
 
@@ -353,11 +354,36 @@ TemplateAddTo(_Container, _Bag, 1, 0);
 // sorting silent. ClearOriginalOwner 0 preserves ownership, so filing a stolen item
 // does not launder it.
 
-// Potions. The first category, and the shape the other fifteen will copy.
+// Story items. They go to the Quest Satchel ahead of every category, so the Moonlantern
+// is a quest item before it is a light, and every category rule below carries
+// IsStoryItem 0 to stay out of its way. Two exceptions:
+// - keys. Every vanilla key is a story item, inherited from BASE_KEY, so this rule
+//   would empty the Key Ring. Keys stay there, story or not.
+// - containers, which stay at the top level whatever they are (spec section 6.19).
+// Items collected on pickup by the Reagent Pouch, Larder Pack and Coin Purse bypass
+// the sorter, and their filters cannot test for story items.
 IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 1)
+AND
+IsTagged(_Item, (TAG)KEY_9851fa99-5538-432a-8e77-c90929a88974, 0)
+AND
+IsContainer((ITEM)_Item, 0)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_QuestSatchel_651a1742-b423-4fc5-8990-52d2e61f746e, _InventoryHolder, _DestQuestSatchel)
+THEN
+ToInventory(_Item, _DestQuestSatchel, -1, 0, 0);
+
+// Potions. The first category, and the shape the others copy.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)ALCH_SOLUTION_POTION_8798a644-4720-4487-bc1a-6a4bf8f3a126, 1)
 AND
@@ -377,6 +403,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)SCROLL_dd86c045-0370-4ec9-b7c5-b0b160706f09, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ScrollCase_acf14532-8d31-4d94-b467-72018dd2cde9, _InventoryHolder, _ScrollCase)
@@ -388,6 +416,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)ARROW_fa8afea4-4742-4467-bdef-69851bd15878, 1)
 AND
@@ -401,6 +431,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)ALCH_SOLUTION_ELIXIR_71031c9c-eb3e-49b3-bf38-20ce078eff15, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ElixirRack_6e1e9bc8-699b-4a63-902f-1b6b11707ea3, _InventoryHolder, _DestElixirRack)
@@ -412,6 +444,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)ALCH_SOLUTION_COATING_9a42f996-decf-4fcc-ad11-2ba6abada287, 1)
 AND
@@ -430,6 +464,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)GRENADE_fe0d86c3-a562-430e-a633-d8bf9bb27284, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8, _InventoryHolder, _DestGrenadeSatchel)
@@ -440,6 +476,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)ALCH_SOLUTION_GRENADE_f87b203d-75ad-4527-b717-137044bc2ea1, 1)
 AND
@@ -459,6 +497,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)EXPLOSIVES_f6e89388-0e91-4e9d-b5b7-1d4938dda540, 1)
 AND
@@ -484,6 +524,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)ALCH_INGREDIENT_64b824e7-50c5-475a-98c2-52026e372d77, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ReagentPouch_27607d0b-a6c8-4690-b118-47f36a871b40, _InventoryHolder, _DestReagentPouch)
@@ -494,6 +536,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)ALCH_EXTRACT_85b58b89-c881-43c2-bbbe-7c8a0b3bf981, 1)
 AND
@@ -516,6 +560,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)BOOK_8a8e253a-c081-45a1-9fa2-91b6901dc568, 1)
 AND
 IsTagged(_Item, (TAG)SCROLL_dd86c045-0370-4ec9-b7c5-b0b160706f09, 0)
@@ -532,6 +578,8 @@ AND
 DB_Bagception_BookTemplate(_Template)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_BookSatchel_d3c867a8-1d54-4b13-a8a8-5299ccc10911, _InventoryHolder, _DestBookSatchel)
 THEN
@@ -566,6 +614,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 ItemGetSupplyValue((ITEM)_Item, _SupplyValue)
 AND
 _SupplyValue > 0
@@ -597,6 +647,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 GetEquipmentSlotForItem((ITEM)_Item, EQUIPMENTSLOT.MeleeOffHand)
 AND
 IsWeapon((ITEM)_Item, 0)
@@ -617,6 +669,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsWeapon((ITEM)_Item, 1)
 AND
 IsTagged(_Item, (TAG)TORCH_a8139e1a-c593-4e0b-88cd-f703f888db83, 0)
@@ -636,6 +690,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsEquipable((ITEM)_Item, 1)
 AND
 GetEquipmentSlotForItem((ITEM)_Item, _Slot)
@@ -652,6 +708,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsEquipable((ITEM)_Item, 1)
 AND
@@ -672,6 +730,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 GetStatString(_Item, _Stat)
 AND
 DB_Bagception_ToolStat(_Stat)
@@ -688,6 +748,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)TORCH_a8139e1a-c593-4e0b-88cd-f703f888db83, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286, _InventoryHolder, _DestToolRoll)
@@ -701,6 +763,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsEquipable((ITEM)_Item, 1)
 AND
@@ -717,6 +781,8 @@ TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
+IsStoryItem((ITEM)_Item, 0)
+AND
 IsTagged(_Item, (TAG)DYE_d8ef5332-ed2f-42cb-817d-bd2164673223, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44bc-8175-30626c916320, _InventoryHolder, _DestDyePouch)
@@ -732,6 +798,8 @@ IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsStoryItem((ITEM)_Item, 0)
 AND
 IsTagged(_Item, (TAG)LOOT_GOLD_6c6b7cac-113c-42ee-bc46-05567b067a9f, 1)
 AND
@@ -765,8 +833,8 @@ RealtimeObjectTimerLaunch(_Item, "Bagception_Leftover", 1000);
 // What stays at the top level on purpose, per spec sections 6.18, 6.19 and 7:
 // - any container, from vanilla or another mod, so Bagception never sorts into or
 //   dismantles someone else's organisation;
-// - story items, so no quest script loses track of one (the first story-safety check
-//   in the sorter; the other categories do not have it yet);
+// - story items, which have the Quest Satchel. They are still excluded here, so that
+//   in a bag missing its satchel they stay loose rather than going to the Odds Sack;
 // - gold, which has the Coin Purse. It is still excluded here, so that in a bag
 //   missing its purse gold stays loose rather than going to the Odds Sack.
 //
