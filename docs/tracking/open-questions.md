@@ -41,7 +41,7 @@ All three are written up in the decision log with the evidence.
    no "is this a weapon" query was wrong. Details and the `EQUIPMENTSLOT` enum are
    in the handbook. Phase 3 is not blocked. The shield discriminator is confirmed in
    game; weapons, armour, jewelry and tools are built on the same queries (untested at
-   the time of writing). Still to settle: the gold threshold for valuables.
+   the time of writing). Valuables was dropped, so no gold threshold is needed.
 
 ## Later
 
@@ -71,7 +71,7 @@ All three are written up in the decision log with the evidence.
    understands `Tagged()`, `IsSupply()` and boolean operators, so no filter can be
    written for them. Vanilla shields carry no tags at all. Auto-routing is unaffected;
    this is only about deliberate manual placement, and it applies equally to
-   weapons, armour, jewelry, tools and valuables. Dyes turned out to be tagged and
+   weapons, armour, jewelry, tools and the Odds Sack. Dyes turned out to be tagged and
    have a filter.
 
    The fix is an eject rule: catch `TemplateAddedTo` where the holder is an internal

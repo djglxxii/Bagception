@@ -161,6 +161,14 @@ data "Weight" "0"
 data "Flags" "InventoryBound;Unstorable"
 data "Vitality" "-1"
 
+new entry "OBJ_Bagception_OddsSack"
+type "Object"
+using "_Container"
+data "RootTemplate" "d50b2909-3daa-439b-aeb0-11e97a369521"
+data "Weight" "0"
+data "Flags" "InventoryBound;Unstorable"
+data "Vitality" "-1"
+
 // Phase 1 weight probe. Ten kilograms each, heavy enough to read straight off the
 // inventory weight display. Both are deleted with the probe goal.
 new entry "OBJ_Bagception_TestWeightA"

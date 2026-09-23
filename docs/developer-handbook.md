@@ -64,8 +64,10 @@ absent or disabled before release.
   and any offline packager here should do the same once goals exist.
 - Osiris asserts `INITSECTION` facts once, when a goal is first initialized in a save.
   A goal added after distribution does initialize on load in an existing save, but an
-  existing goal's `INITSECTION` does not re-run. Plan roster or registration changes
-  around that: new facts need a new goal, not an edit to an old one.
+  existing goal's `INITSECTION` does not re-run. **So sorting data does not live in
+  `INITSECTION`.** It is asserted by `PROC_Bagception_LoadData`, which clears and
+  reloads every list on `SavegameLoaded` and `LevelGameplayStarted`; see "Updating a
+  save already in progress" below.
 - `TemplateAddedTo((ROOT)_ObjectTemplate, (GUIDSTRING)_Object, (GUIDSTRING)_InventoryHolder, (STRING)_AddType)`
   is confirmed present, as is the simpler `AddedTo`. What `_InventoryHolder` refers to
   is not yet known; the Phase 1 probe answers it.
@@ -189,6 +191,28 @@ Prefer this to adding contents with `TemplateAddTo` after the parent arrives. It
 one line per container instead of a rule per container, and it removes a real race
 between the parent's arrival and the child's insertion.
 
+### Updating a save already in progress
+
+A mod update has to reach players mid-campaign, so "test in a fresh game" is a testing
+convenience, never a requirement on players. Two things do not update by themselves:
+
+- **A bag's contents.** The treasure table fills a bag once, at creation. An older bag
+  never gains a container added since. `PROC_Bagception_RepairBag` adds whatever is
+  missing from `DB_Bagception_InternalContainer`, on `SavegameLoaded` for `DB_Players`
+  and on `CharacterJoinedParty` for a companion rejoining from camp. It must never run
+  while a bag is being created: the contents arrive in their own events after the bag,
+  and a check in that window would duplicate everything. Neither trigger can see a bag
+  in that state.
+- **`INITSECTION` facts**, as above. Every lookup list is reloaded instead.
+
+**Adding a container therefore takes one more line than it used to:** its entry in
+`BAGCEPTION_MasterContents` for new bags, and its `DB_Bagception_InternalContainer` fact
+for old ones. Keep `DB_Bagception_InternalContainer` in treasure-table order.
+
+Rule changes themselves reach an existing save only when the game merges the mod's
+story into it on load, and it does that when the mod's `Version64` differs from the one
+the save recorded. See "The savegame carries its own copy of the story".
+
 ### Known issue: a container created at runtime shows no content count until reload
 
 A Bagception granted mid-session displays as empty even though its Potion Case is
@@ -216,7 +240,7 @@ has a direct query, and enough besides to cover every category that lacks a tag.
 | Jewelry | `IsEquipable`, slot in Ring, Ring2, Amulet |
 | Tools | stats name in a list (`GetStatString`), **or** `TORCH`, **or** the MusicalInstrument slot |
 | Dyes | not untagged after all: `DYE`, inherited from `BASE_LOOT_Dye` |
-| Valuables | `ItemGetGoldValue` above a threshold |
+| Miscellaneous | still at the top level a second later: see below |
 
 Slot sets live in INITSECTION databases (`DB_Bagception_ArmourSlot`,
 `DB_Bagception_JewelrySlot`) joined against `GetEquipmentSlotForItem(_Item, _Slot)`,
@@ -252,7 +276,19 @@ following the `WPN_`, `ARM_`, `OBJ_Dye_` naming convention can be classified wit
 a tag. It relies on convention, so it covers vanilla and well-behaved mods and will
 miss items that name themselves freely.
 
-Unverified: what gold threshold makes something a valuable.
+**A catch-all waits rather than negates.** "Matches nothing else" written as one more
+`TemplateAddedTo` rule would race every category rule for the same item, since Osiris does
+not promise rule order, and the alternative -- repeating every other rule's conditions,
+negated -- would have to be kept in step with each new container. Instead every arrival
+in the master bag starts `RealtimeObjectTimerLaunch(_Item, "Bagception_Leftover", 1000)`,
+and on `ObjectTimerFinished` anything whose `GetDirectInventoryOwner` is still the master
+bag goes to the Odds Sack. Realtime, because `ObjectTimerLaunch` ticks by turn in combat.
+Vanilla's Adamantine Forge uses the same pair. Containers, story items and gold are
+excluded there and stay at the top level.
+
+There is no Valuables container. No tag or consistent stats field marks a trade good:
+`BASE_LOOT_Valuable` is a parent template that also holds dyes, Netherstones and
+Ketheric's crown controllers, and `ObjectCategory` prices some junk above silverware.
 
 **Check the parent chain before calling a tag unused.** The `DYE` tag resource
 (`d8ef5332-…`, defined in GustavDev) was written off here once because no dye template
@@ -646,13 +682,57 @@ identical after a story change, the running story is the savegame's copy and any
 result is meaningless. This was measured across three launches that spanned the
 deletion of five rules and roughly 190 lines: the count did not move by one.
 
-**Testing a story change therefore means starting a new game**, which compiles the
-story fresh from the paks. A save made before the mod had any story also works, and is
-what made the very first grant test succeed.
+**But the game also merges, and that is how an update reaches a save.** Two loads on
+2026-09-23 show it in the Extender runtime log: the savegame's story loads, then the
+mod's, then the two are merged, and the mod's rules run from then on.
 
-A goal the savegame has never seen appears to be merged in from the mod, which is why
-the sorter lives in its own goal rather than beside the grant rules. That is inferred
-from the first grant test rather than measured directly, and is still unverified.
+```
+ScriptExtender::OnAfterOsirisLoad: 151453 nodes     <- the savegame's copy
+ScriptExtender::OnAfterOsirisLoad: 151704 nodes     <- the story in the paks
+ScriptExtender::MergeWrapper() - Started merge
+ScriptExtender::MergeWrapper() - Finished merge
+```
+
+One was a save made with an earlier build of this session; the other an Act 1 save that
+had never had the mod, which is how its goal came to initialise and grant bags there.
+Other loads the same day show one node count and no merge. **What triggers the merge
+is not established.** The measurement above that found no change may have been
+confounded: it fell in the same stretch as the CRLF goal that the compiler was silently
+dropping, so the paks' story may not have changed between those launches at all.
+
+What a merge keeps and what it does not, as Osiris merges go: rules come from the new
+story, database contents come from the save, a goal the save has never seen is
+initialised, and an existing goal's `INITSECTION` does not re-run. That last point is
+why sorting data is reloaded by a PROC rather than asserted there.
+
+**Measured 2026-09-23, loading one Act 2 save with a newer build:** no merge. The session
+ran the new story through character creation, then the save was loaded, and from
+`SavegameLoaded` on the Osiris log shows only the save's older rules -- no reload PROC, no
+repair, no explosives rule. The save's `meta.lsf` records every mod as
+`ModuleShortDesc` with `Version64` **and an `MD5` of the pak**. Here the MD5 differed from
+the installed pak and `Version64` did not (1.0.0.0 both), so **a changed pak alone does
+not trigger a merge**. A save with no Bagception entry at all did merge.
+
+**A `Version64` bump does trigger it.** The same save, loaded after bumping 1.0.0.0 to
+1.0.0.1 with nothing else changed, merged: two node counts and the merge lines in the
+Extender log, `PROC_Bagception_LoadData` and the repair ran on `SavegameLoaded`, and the
+explosives rule filed a Smokepowder Satchel and a Runepowder Vial.
+
+So: **every release that changes the story must bump `Version64`**, or players' saves
+keep running the old rules. The release workflow already bumps it; this is why it is
+not optional. The same bump is the way to test a story change against an existing save
+during development. A new game remains the quickest test of the rules themselves.
+
+## Never write a section keyword in a goal comment
+
+The Story Editor finds a goal's sections by the words themselves, and a comment does
+not hide them. A comment inside `INITSECTION` that mentioned "the KB section" by its
+keyword name produced `syntax error: "KBSECTION" unexpected` and `goal KB section
+incorrect`, with line numbers in the combined story rather than the goal. Mentioning
+`INITSECTION` in comments has compiled without complaint, but treat all four keywords
+(`INITSECTION`, `KBSECTION`, `EXITSECTION`, `ENDEXITSECTION`) as reserved in comments
+and write "the init section" or "the rules below" instead. Unlike most failures in this
+handbook, this one does appear in the error list.
 
 ## Goal files must use LF line endings
 
@@ -770,7 +850,7 @@ set in two:
 
 - The tagged categories get a filter, which gates manual placement. A player cannot
   put a gem in the Scroll Case by hand. Dyes are one of them (`Tagged('DYE')`).
-- Shields, weapons, armour, jewelry, tools and valuables cannot have one. Manual
+- Shields, weapons, armour, jewelry, tools and the Odds Sack cannot have one. Manual
   placement into those containers is unrestricted — anything can be dropped in by hand,
   not merely things that are nearly right. Auto-routing is unaffected, since Osiris does
   that.

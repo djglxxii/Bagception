@@ -671,3 +671,74 @@ of classification, as spec §6.1 says.
 
 The Jewel Box is renamed **Jewelry Box** in game, so nobody expects gems in it. The
 template and stats keep the `JewelBox` identifier.
+
+## 2026-09-23: One catch-all, no Valuables container
+
+Spec §6.17 wants a Valuables container for items whose purpose is sale, and §6.20 a
+Miscellaneous one for the rest. Nothing in the game marks a trade good: there is no tag,
+`BASE_LOOT_Valuable` is a parent template that also holds dyes and story items, and
+`ObjectCategory` is inconsistent. The choices were a gold threshold (mod-friendly but
+fuzzy), a generated list of vanilla trade goods (precise but blind to mods), or no
+Valuables at all. The user chose none: everything unclaimed goes to one **Odds Sack**.
+
+The catch-all runs on a one-second realtime timer started when an item arrives in the
+master bag. When it fires, an item still lying directly in the master bag is one no
+category took, and it moves to the Odds Sack. This keeps the catch-all independent of
+the category rules: no rule order is assumed, and no list of other categories exists to
+keep in step. The cost is a visible second's delay before misc items file.
+
+Left at the top level, per spec: any container (§6.19), story items (§7; the first
+story check in the sorter), and gold (§6.18).
+
+## 2026-09-23: Explosives go to the Grenade Satchel
+
+The Smokepowder Satchel and the Runepowder Vial carry `EXPLOSIVES`
+(`f6e89388-…`, "all the smokepowder, runepowder and other explosive items") but not
+`GRENADE`, so they fell through to the Odds Sack. A third Grenade Satchel rule takes
+`EXPLOSIVES`, excluding both grenade tags so it stays disjoint from the other two, and
+the filter gains `Tagged('EXPLOSIVES')`.
+
+The tag also marks the smokepowder and runepowder barrels and the firework boxes, all
+under `BASE_CONT`. The user asked for them in the satchel unless they count as
+containers, which spec §6.19 keeps at the top level. The rule asks `IsContainer` at
+runtime, so the barrels file only if the engine says they are not containers. Which way
+it answers is not yet observed. The filter cannot express that test, so a barrel dragged
+into the satchel by hand is accepted either way. The user accepted that: a player who drags a
+barrel in by hand has chosen to.
+
+## 2026-09-23: Updates must reach saves in progress
+
+The user questioned why every test needed a new game, since a bug-fix release that only
+reached new games would be no release at all. Two parts of the design did not update in
+an existing save, and fresh-game testing had been hiding them:
+
+- **Internal containers.** The treasure table fills a bag once, when it is created. A
+  player updating from an earlier version would never have received the five equipment
+  bags or the Odds Sack.
+- **Lookup data in `INITSECTION`.** The book, slot and tool lists were asserted once per
+  save, so a later version could never add to them.
+
+Fixes: every lookup list moved to `PROC_Bagception_LoadData`, which clears and reloads
+on `SavegameLoaded` and `LevelGameplayStarted`. Clearing first makes the reload exact,
+so a dropped entry is dropped from saves too, and it removes the copies earlier
+versions put there. A new `DB_Bagception_InternalContainer` lists every container, and
+`PROC_Bagception_RepairBag` adds any a bag lacks, on `SavegameLoaded` and
+`CharacterJoinedParty`. Neither trigger can observe a bag between its creation and the
+arrival of its treasure-table contents, which is the window that would duplicate them.
+
+Expected cost: a container added to an existing bag may not be drawn until the next
+reload, the same stale-display issue seen with runtime-created containers before.
+
+## 2026-09-23: A version bump is what carries an update into a save
+
+Tested on one Act 2 save made with an earlier build. Loaded with a newer pak at the same
+`Version64`, the game kept the story stored in the save: none of the new rules ran. The
+save records each mod's `Version64` and the pak's MD5, so a changed pak alone is not the
+trigger. Loaded again after bumping Bagception to 1.0.0.1 and changing nothing else, the
+game merged the mod's story into the save, the data reload and bag repair ran, and the
+explosives rule filed the Smokepowder Satchel and Runepowder Vial.
+
+Consequence: every release that changes the story bumps `Version64`, which the release
+workflow already does, and the reload-and-repair work of the same day is what makes a
+merged update complete. The development build stays at 1.0.0.1; it has not been
+published.

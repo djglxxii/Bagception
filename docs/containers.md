@@ -22,17 +22,19 @@ inside it and can never be removed from it.
 | 7 | Potions | healing and other drinkable potions | Potion Case | built |
 | 8 | Elixirs | elixirs, distinct from potions | Elixir Rack | built |
 | 9 | Coatings & Poisons | weapon coatings, oils, poisons | Coating Kit | built |
-| 10 | Throwables | grenades, bombs, flasks, caltrops, void bulbs | Grenade Satchel | built |
+| 10 | Throwables | grenades, bombs, flasks, caltrops, void bulbs, smokepowder and runepowder | Grenade Satchel | built |
 | 11 | Alchemy | ingredients, extracts, salts, reagents | Reagent Pouch | built |
 | 12 | Camp Supplies | food, drink, camp-supply packs | Larder Pack | built |
 | 13 | Books & Notes | books, letters, notes, journals | Book Satchel | built |
 | 14 | Keys | ordinary game keys | Key Ring | built |
 | 15 | Tools & Utility | thieves' tools, trap kits, shovels, torches, lanterns, instruments | Tool Roll | built |
 | 16 | Dyes | all dye items | Dye Pouch | built |
-| 17 | Valuables | gems, ingots, items whose purpose is sale | Valuables Purse | not built |
-| 18 | Miscellaneous | recognised, safe, but matching nothing above | Odds Sack | not built |
+| 17 | Miscellaneous | everything the containers above do not claim, gems and silverware included | Odds Sack | built |
 
-Nineteen pieces of art in total: eighteen internal containers plus Bagception itself.
+Eighteen pieces of art in total: seventeen internal containers plus Bagception itself.
+The spec's Valuables container is not in the set: nothing marks an item as a trade good
+short of a gold threshold or a hard-coded list, and the user chose one catch-all over
+either. See the decision log, 2026-09-23.
 
 ## Not containers
 

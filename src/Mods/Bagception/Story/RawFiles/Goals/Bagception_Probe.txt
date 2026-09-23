@@ -20,90 +20,14 @@ INITSECTION
 // GUIDSTRING. GUIDSTRING accepts a CHARACTER; the reverse is a type error.
 DB_Bagception_GrantPending((GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000);
 
-// INITSECTION no longer carries the grant flag. The grant used to hang off a DB flag asserted
+// The init section no longer carries the grant flag. The grant used to hang off a DB flag asserted
 // here, which was consumed once and could never recover if the grant was missed.
 // The inventory-count guard below replaces it and is self-healing.
 
-// Book Satchel templates that carry no BOOK tag. Tags cannot reach these, so they are
-// listed by root template. The first group are readable (they have a BookId) but were
-// never given the tag: maps, posters, the Highberry and Stormshore Tabernacle books,
-// the Nightsong pamphlet. The second group are the Rune Slates; the Eldritch Tablet in
-// the nautiloid lab is a placed instance of Rune_Tablet_E. Neither group carries SCROLL,
-// so none of them can also match the Scroll Case rule.
-DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfBaldursGate_dcf4fd8a-2cfa-4e11-89e6-7ae98a25be00);
-DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfElturgard_fb790852-3b1b-4083-954b-a3cfe7f111f0);
-DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfSwordCoast_35d1e5f0-75d0-49ef-9556-2955ac5c0fda);
-DB_Bagception_BookTemplate((ROOT)BOOK_UNI_MOO_ARichAndFertileLand_33000220-4964-4b46-9867-067fc082e703);
-DB_Bagception_BookTemplate((ROOT)BOOK_UNI_WYR_GortashPoster_3a81e442-b4c8-4498-998e-4dfab1ea4ed8);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_Prayerbook_4911de84-7b94-4767-8a24-e0b6f232f0d0);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_TradeWayRoutes_0704ee73-4471-447e-b0b9-ddf4d117c953);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_WinesOfSwordCoast_74dc0ae4-2f88-4579-97e9-229509d472fc);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleBlessingsRefugees_6bf81178-ec84-41d8-9be1-0885590af7de);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleDeadThreeEssay_2eabd463-e5f3-41a2-ad6f-adffa400fa03);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleDonations_22ff2ddd-cbf6-419c-b5cc-26a1a0fb229d);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleHauntedBlessings_b06b9c80-cf21-4783-ba60-c75efd5c9692);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernaclePrayersCollection_e68bad7f-d035-471f-9edc-a9b75f4daf93);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernaclePrayersTempus_3a9da8f2-3c13-4515-b753-6f0c659f0280);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleQuestinoingCitizen_c9792c72-d217-44e4-8a77-2c9c653ea24b);
-DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_VicarPrayerDraft_af63faa5-c058-4a75-83a4-47cfb0ed39eb);
-DB_Bagception_BookTemplate((ROOT)UNI_LOW_NightsongPamphlet_e7968b1c-d109-4a4f-b296-d90dd3662a9d);
-DB_Bagception_BookTemplate((ROOT)BOOK_GEN_Scroll_Parchment_Row_Multiple_A_8f4287f4-2c9e-4b57-b3b1-f76e66a58112);
-
-DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_A_d1896edc-a99f-4ccb-9748-2eed1a6d691d);
-DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_B_e5b89f56-4b92-4736-b835-9d9e94e51ced);
-DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_C_66737e9d-9583-4b82-9799-c294b955c9d1);
-DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_D_21fafbfa-33dd-4f42-b79f-7de798701f52);
-DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_E_469e789d-8018-4159-ac35-9950dce9b521);
-DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_F_9d4c197a-20d3-4415-89b1-a9a7cbde8fa2);
-
-// Equipment slots for the Armour Trunk and the Jewel Box. Vanilla keeps its own list of
-// armour slots the same way (DB_GLO_Tutorials_ArmorSlots). Camp clothing and camp shoes
-// have slots of their own, VanityBody and VanityBoots. MeleeOffHand is in neither list:
-// shields are the Shield Rack's, and off-hand weapons are weapons.
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Helmet);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Breast);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Cloak);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Gloves);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Boots);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Underwear);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.VanityBody);
-DB_Bagception_ArmourSlot(EQUIPMENTSLOT.VanityBoots);
-
-DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Ring);
-DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Ring2);
-DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Amulet);
-
-// Tool Roll items, by stats entry name. These are every concrete entry under vanilla's
-// own _Tool stats base: kits, digging and crafting tools, and the non-equipable
-// instruments under _Music. Only a handful carry a tag (Tool, LOCKPICKS, SHOVEL), so a
-// tag cannot reach the set; the stats name is the one thing they all have. A modded tool
-// with its own stats entry will be missed until it is listed here.
-DB_Bagception_ToolStat("FOR_SchoolOgres_Horn");
-DB_Bagception_ToolStat("OBJ_Kit_Disguise");
-DB_Bagception_ToolStat("OBJ_Kit_Forgery");
-DB_Bagception_ToolStat("OBJ_Kit_Poisoner");
-DB_Bagception_ToolStat("OBJ_Kit_ThievesTools");
-DB_Bagception_ToolStat("OBJ_Kit_TrapDisarm");
-DB_Bagception_ToolStat("OBJ_Music_Bagpipes");
-DB_Bagception_ToolStat("OBJ_Music_Drum_Big");
-DB_Bagception_ToolStat("OBJ_Music_Drum_Sticks");
-DB_Bagception_ToolStat("OBJ_Music_Dulcimer");
-DB_Bagception_ToolStat("OBJ_Music_GuitarLute_Broken");
-DB_Bagception_ToolStat("OBJ_Music_Horn");
-DB_Bagception_ToolStat("OBJ_Music_PanFlute");
-DB_Bagception_ToolStat("OBJ_Music_Shawm");
-DB_Bagception_ToolStat("OBJ_Music_Viol");
-DB_Bagception_ToolStat("OBJ_Music_Viol_Bow");
-DB_Bagception_ToolStat("OBJ_Tool_Hammer");
-DB_Bagception_ToolStat("OBJ_Tool_IdentifyingGlass");
-DB_Bagception_ToolStat("OBJ_Tool_Shears");
-DB_Bagception_ToolStat("OBJ_Tool_Shovel");
-DB_Bagception_ToolStat("OBJ_Tool_Shovel_Small");
-DB_Bagception_ToolStat("OBJ_Tool_Tong");
-DB_Bagception_ToolStat("ORI_Gale_DeathFlute");
-DB_Bagception_ToolStat("Tool_Crowbar");
-DB_Bagception_ToolStat("Tool_Saw");
-DB_Bagception_ToolStat("UNI_WYR_Circus_FacePaint");
+// Sorting data -- the book, slot, tool and container lists -- is not asserted here.
+// The init section runs once, when the goal first starts in a save, so a later version of
+// the mod could never add to a list in a save that already has it. The data lives in
+// PROC_Bagception_LoadData below instead, reloaded on every load.
 
 KBSECTION
 
@@ -180,6 +104,217 @@ NOT DB_Bagception_GrantPending(_InventoryHolder);
 // the next reload: the container's UI is built when the bag arrives and is not
 // refreshed when something is put into it a moment later. Declaring the contents on
 // the template removes the second insertion entirely rather than trying to time it.
+
+// ---------------------------------------------------------------------------
+// SHIPPING: sorting data, and keeping existing bags up to date
+// ---------------------------------------------------------------------------
+//
+// Everything the sorter looks up -- templates, slots, stats names, the container list --
+// is asserted here rather than in the init section, which runs only once per save. Reloading
+// on SavegameLoaded is what lets an update reach a save already in progress: a list that
+// grows in a later version grows in the save on its next load.
+//
+// The clear comes first so the reload is exact rather than additive: an entry a later
+// version drops is dropped from the save too. It also clears the copies earlier versions
+// asserted from the init section. Clear and reload run inside one PROC call, so no sorting
+// rule can run between them.
+//
+// LevelGameplayStarted covers a new game, where no save is loaded, and every level change
+// after it. Reloading more often than needed costs nothing.
+IF
+SavegameLoaded()
+THEN
+PROC_Bagception_LoadData();
+PROC_Bagception_RepairParty();
+
+IF
+LevelGameplayStarted(_Level, _IsEditorMode)
+THEN
+PROC_Bagception_LoadData();
+
+PROC
+PROC_Bagception_ClearData()
+AND
+DB_Bagception_BookTemplate(_Template)
+THEN
+NOT DB_Bagception_BookTemplate(_Template);
+
+PROC
+PROC_Bagception_ClearData()
+AND
+DB_Bagception_ArmourSlot(_Slot)
+THEN
+NOT DB_Bagception_ArmourSlot(_Slot);
+
+PROC
+PROC_Bagception_ClearData()
+AND
+DB_Bagception_JewelrySlot(_Slot)
+THEN
+NOT DB_Bagception_JewelrySlot(_Slot);
+
+PROC
+PROC_Bagception_ClearData()
+AND
+DB_Bagception_ToolStat(_Stat)
+THEN
+NOT DB_Bagception_ToolStat(_Stat);
+
+PROC
+PROC_Bagception_ClearData()
+AND
+DB_Bagception_InternalContainer(_Container)
+THEN
+NOT DB_Bagception_InternalContainer(_Container);
+
+PROC
+PROC_Bagception_LoadData()
+THEN
+PROC_Bagception_ClearData();
+
+// Book Satchel templates that carry no BOOK tag. Tags cannot reach these, so they are
+// listed by root template. The first group are readable (they have a BookId) but were
+// never given the tag: maps, posters, the Highberry and Stormshore Tabernacle books,
+// the Nightsong pamphlet. The second group are the Rune Slates; the Eldritch Tablet in
+// the nautiloid lab is a placed instance of Rune_Tablet_E. Neither group carries SCROLL,
+// so none of them can also match the Scroll Case rule.
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfBaldursGate_dcf4fd8a-2cfa-4e11-89e6-7ae98a25be00);
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfElturgard_fb790852-3b1b-4083-954b-a3cfe7f111f0);
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfSwordCoast_35d1e5f0-75d0-49ef-9556-2955ac5c0fda);
+DB_Bagception_BookTemplate((ROOT)BOOK_UNI_MOO_ARichAndFertileLand_33000220-4964-4b46-9867-067fc082e703);
+DB_Bagception_BookTemplate((ROOT)BOOK_UNI_WYR_GortashPoster_3a81e442-b4c8-4498-998e-4dfab1ea4ed8);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_Prayerbook_4911de84-7b94-4767-8a24-e0b6f232f0d0);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_TradeWayRoutes_0704ee73-4471-447e-b0b9-ddf4d117c953);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_WinesOfSwordCoast_74dc0ae4-2f88-4579-97e9-229509d472fc);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleBlessingsRefugees_6bf81178-ec84-41d8-9be1-0885590af7de);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleDeadThreeEssay_2eabd463-e5f3-41a2-ad6f-adffa400fa03);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleDonations_22ff2ddd-cbf6-419c-b5cc-26a1a0fb229d);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleHauntedBlessings_b06b9c80-cf21-4783-ba60-c75efd5c9692);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernaclePrayersCollection_e68bad7f-d035-471f-9edc-a9b75f4daf93);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernaclePrayersTempus_3a9da8f2-3c13-4515-b753-6f0c659f0280);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleQuestinoingCitizen_c9792c72-d217-44e4-8a77-2c9c653ea24b);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_VicarPrayerDraft_af63faa5-c058-4a75-83a4-47cfb0ed39eb);
+DB_Bagception_BookTemplate((ROOT)UNI_LOW_NightsongPamphlet_e7968b1c-d109-4a4f-b296-d90dd3662a9d);
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_Scroll_Parchment_Row_Multiple_A_8f4287f4-2c9e-4b57-b3b1-f76e66a58112);
+
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_A_d1896edc-a99f-4ccb-9748-2eed1a6d691d);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_B_e5b89f56-4b92-4736-b835-9d9e94e51ced);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_C_66737e9d-9583-4b82-9799-c294b955c9d1);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_D_21fafbfa-33dd-4f42-b79f-7de798701f52);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_E_469e789d-8018-4159-ac35-9950dce9b521);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_F_9d4c197a-20d3-4415-89b1-a9a7cbde8fa2);
+
+// Equipment slots for the Armour Trunk and the Jewelry Box. Vanilla keeps its own list of
+// armour slots the same way (DB_GLO_Tutorials_ArmorSlots). Camp clothing and camp shoes
+// have slots of their own, VanityBody and VanityBoots. MeleeOffHand is in neither list:
+// shields are the Shield Rack's, and off-hand weapons are weapons.
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Helmet);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Breast);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Cloak);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Gloves);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Boots);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.Underwear);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.VanityBody);
+DB_Bagception_ArmourSlot(EQUIPMENTSLOT.VanityBoots);
+
+DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Ring);
+DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Ring2);
+DB_Bagception_JewelrySlot(EQUIPMENTSLOT.Amulet);
+
+// Tool Roll items, by stats entry name. These are every concrete entry under vanilla's
+// own _Tool stats base: kits, digging and crafting tools, and the non-equipable
+// instruments under _Music. Only a handful carry a tag (Tool, LOCKPICKS, SHOVEL), so a
+// tag cannot reach the set; the stats name is the one thing they all have. A modded tool
+// with its own stats entry will be missed until it is listed here.
+DB_Bagception_ToolStat("FOR_SchoolOgres_Horn");
+DB_Bagception_ToolStat("OBJ_Kit_Disguise");
+DB_Bagception_ToolStat("OBJ_Kit_Forgery");
+DB_Bagception_ToolStat("OBJ_Kit_Poisoner");
+DB_Bagception_ToolStat("OBJ_Kit_ThievesTools");
+DB_Bagception_ToolStat("OBJ_Kit_TrapDisarm");
+DB_Bagception_ToolStat("OBJ_Music_Bagpipes");
+DB_Bagception_ToolStat("OBJ_Music_Drum_Big");
+DB_Bagception_ToolStat("OBJ_Music_Drum_Sticks");
+DB_Bagception_ToolStat("OBJ_Music_Dulcimer");
+DB_Bagception_ToolStat("OBJ_Music_GuitarLute_Broken");
+DB_Bagception_ToolStat("OBJ_Music_Horn");
+DB_Bagception_ToolStat("OBJ_Music_PanFlute");
+DB_Bagception_ToolStat("OBJ_Music_Shawm");
+DB_Bagception_ToolStat("OBJ_Music_Viol");
+DB_Bagception_ToolStat("OBJ_Music_Viol_Bow");
+DB_Bagception_ToolStat("OBJ_Tool_Hammer");
+DB_Bagception_ToolStat("OBJ_Tool_IdentifyingGlass");
+DB_Bagception_ToolStat("OBJ_Tool_Shears");
+DB_Bagception_ToolStat("OBJ_Tool_Shovel");
+DB_Bagception_ToolStat("OBJ_Tool_Shovel_Small");
+DB_Bagception_ToolStat("OBJ_Tool_Tong");
+DB_Bagception_ToolStat("ORI_Gale_DeathFlute");
+DB_Bagception_ToolStat("Tool_Crowbar");
+DB_Bagception_ToolStat("Tool_Saw");
+DB_Bagception_ToolStat("UNI_WYR_Circus_FacePaint");
+
+// Every internal container a Bagception should hold, in the treasure table's order. A
+// new container is added here as well as to BAGCEPTION_MasterContents: the table fills
+// bags created from now on, and this list lets the repair below fill the older ones.
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_PotionCase_8bf1ed2d-3655-415e-868e-fe3138760337);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ShieldRack_feda4623-0e32-4d33-921a-fe62fdefde98);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ScrollCase_acf14532-8d31-4d94-b467-72018dd2cde9);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_Quiver_99206dbf-1477-4cf9-88f2-fccb83e55a1b);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ElixirRack_6e1e9bc8-699b-4a63-902f-1b6b11707ea3);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_CoatingKit_936b3efd-ef6e-4626-8db1-71a8aac440c9);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ReagentPouch_27607d0b-a6c8-4690-b118-47f36a871b40);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_BookSatchel_d3c867a8-1d54-4b13-a8a8-5299ccc10911);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_KeyRing_a2ceacf9-b44d-4483-b112-dbdd82b790e1);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_LarderSack_5691a197-d3a9-46a3-be03-91cb09ec804e);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_WeaponRoll_61e85266-71a8-46ba-b930-5ebd6ee5ab86);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ArmourTrunk_3cc455ad-78eb-456e-8018-9d0e26a3ceee);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_JewelBox_5081c591-b256-47cc-912b-029a3348152f);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_ToolRoll_6abbe0bc-6422-4943-8521-47d67c0d4286);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44bc-8175-30626c916320);
+DB_Bagception_InternalContainer((ITEMROOT)BAGCEPTION_CONT_OddsSack_d50b2909-3daa-439b-aeb0-11e97a369521);
+
+// Repair: give an existing Bagception any internal container it lacks.
+//
+// A bag gets its containers from the treasure table once, when it is created, so a bag
+// from an earlier version never receives a container added since. This adds each
+// missing one, and is what makes a new container reach a save already in progress.
+//
+// It must never run while a bag is still being filled. A new bag's contents arrive in
+// events of their own after the bag itself, so a check in between would see an empty
+// bag and add a second copy of everything. Both triggers are clear of that window.
+// SavegameLoaded sees only bags that were saved whole; one granted by the grant rule on
+// the same event is still in flight, so GetItemByTemplateInInventory finds nothing.
+// CharacterJoinedParty fires before a newcomer's bag is granted, so it repairs only a
+// character who already had one: a companion rejoining from camp, who may have been
+// out of the party when the save loaded.
+//
+// The known cost is cosmetic: a container added to a bag that already exists may not
+// be drawn until the next reload, as with the earlier Osiris-added containers.
+PROC
+PROC_Bagception_RepairParty()
+AND
+DB_Players(_Character)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, _Bag)
+THEN
+PROC_Bagception_RepairBag(_Bag);
+
+IF
+CharacterJoinedParty(_Character)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_Master_856bd140-6963-4de1-9471-25440149e87d, _Character, _Bag)
+THEN
+PROC_Bagception_RepairBag(_Bag);
+
+PROC
+PROC_Bagception_RepairBag((ITEM)_Bag)
+AND
+DB_Bagception_InternalContainer(_Container)
+AND
+TemplateIsInInventory(_Container, _Bag, 0)
+THEN
+TemplateAddTo(_Container, _Bag, 1, 0);
 
 
 // ---------------------------------------------------------------------------
@@ -283,7 +418,7 @@ GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_CoatingKit_936b3efd-ef6e-
 THEN
 ToInventory(_Item, _DestCoatingKit, -1, 0, 0);
 
-// Throwables: grenades, bombs, flasks, caltrops, nets and void bulbs.
+// Throwables: grenades, bombs, flasks, caltrops, nets, void bulbs and explosives.
 //
 // GRENADE is the broad throwable tag, carried by 71 templates including the mind flayer
 // bulbs, which inherit it from BASE_LOOT_Throwable. ALCH_SOLUTION_GRENADE covers only the
@@ -308,6 +443,29 @@ AND
 IsTagged(_Item, (TAG)ALCH_SOLUTION_GRENADE_f87b203d-75ad-4527-b717-137044bc2ea1, 1)
 AND
 IsTagged(_Item, (TAG)GRENADE_fe0d86c3-a562-430e-a633-d8bf9bb27284, 0)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8, _InventoryHolder, _DestGrenadeSatchel)
+THEN
+ToInventory(_Item, _DestGrenadeSatchel, -1, 0, 0);
+
+// Explosives: the Smokepowder Satchel and the Runepowder Vial, which carry EXPLOSIVES
+// but not GRENADE. The same tag is on the smokepowder and runepowder barrels and the
+// firework boxes, which inherit from vanilla's container base. Whatever the engine
+// counts as a container stays at Bagception's top level, as spec section 6.19 asks, so
+// the barrels file here only if IsContainer says they are not containers. Excluding
+// both grenade tags keeps this rule disjoint from the two above.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)EXPLOSIVES_f6e89388-0e91-4e9d-b5b7-1d4938dda540, 1)
+AND
+IsTagged(_Item, (TAG)GRENADE_fe0d86c3-a562-430e-a633-d8bf9bb27284, 0)
+AND
+IsTagged(_Item, (TAG)ALCH_SOLUTION_GRENADE_f87b203d-75ad-4527-b717-137044bc2ea1, 0)
+AND
+IsContainer((ITEM)_Item, 0)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8, _InventoryHolder, _DestGrenadeSatchel)
 THEN
@@ -365,8 +523,8 @@ GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_BookSatchel_d3c867a8-1d54
 THEN
 ToInventory(_Item, _DestBookSatchel, -1, 0, 0);
 
-// Untagged books, by root template: see DB_Bagception_BookTemplate in INITSECTION. No
-// listed template carries BOOK, so this and the tag rule above never both match.
+// Untagged books, by root template: see DB_Bagception_BookTemplate in
+// PROC_Bagception_LoadData. No listed template carries BOOK, so this and the tag rule above never both match.
 IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
@@ -466,7 +624,8 @@ GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_WeaponRoll_61e85266-71a8-
 THEN
 ToInventory(_Item, _DestWeaponRoll, -1, 0, 0);
 
-// Armour and clothing, by equipment slot: see DB_Bagception_ArmourSlot in INITSECTION.
+// Armour and clothing, by equipment slot: see DB_Bagception_ArmourSlot in
+// PROC_Bagception_LoadData.
 //
 // IsEquipable comes first so the slot query is only asked of equipment. Whether
 // GetEquipmentSlotForItem fails or answers Helmet (slot 0) for a non-equipable item is
@@ -505,8 +664,8 @@ ToInventory(_Item, _DestJewelBox, -1, 0, 0);
 
 // Tools and utility. Three disjoint rules, because no one mechanism reaches the set.
 //
-// Tools by stats name: see DB_Bagception_ToolStat in INITSECTION. GetStatString takes a
-// GUIDSTRING, so this one needs no cast.
+// Tools by stats name: see DB_Bagception_ToolStat in PROC_Bagception_LoadData.
+// GetStatString takes a GUIDSTRING, so this one needs no cast.
 IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
@@ -562,6 +721,61 @@ AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_DyePouch_2954188a-aee7-44bc-8175-30626c916320, _InventoryHolder, _DestDyePouch)
 THEN
 ToInventory(_Item, _DestDyePouch, -1, 0, 0);
+
+// Miscellaneous: whatever no other rule claimed goes to the Odds Sack.
+//
+// A catch-all cannot be one more TemplateAddedTo rule. Osiris does not promise rule
+// order, so it would race every category rule for the same item, and writing it as
+// "none of the above" means repeating every other rule's conditions, negated, and
+// keeping them in step forever. It waits instead. Every arrival in the master bag starts
+// a short timer on the item; when it runs out, anything still lying directly in the
+// master bag is by definition something nothing else took. The category rules are never
+// named here, so a container added later needs no change to this one.
+//
+// The internal containers themselves arrive in the master bag too, when it is created;
+// they are skipped before a timer starts rather than after.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)BAGCEPTION_INTERNAL_a97f9268-5575-4f3d-8bca-58b31986b308, 0)
+THEN
+RealtimeObjectTimerLaunch(_Item, "Bagception_Leftover", 1000);
+
+// Realtime rather than ObjectTimerLaunch, which ticks by turn during combat.
+//
+// What stays at the top level on purpose, per spec sections 6.18, 6.19 and 7:
+// - any container, from vanilla or another mod, so Bagception never sorts into or
+//   dismantles someone else's organisation;
+// - story items, so no quest script loses track of one (the first story-safety check
+//   in the sorter; the other categories do not have it yet);
+// - gold, left to the game's own currency handling.
+//
+// GetDirectInventoryOwner is the check that the item is still where it arrived. Filed,
+// dragged out, or dropped in the meantime, it answers something else and nothing moves.
+IF
+ObjectTimerFinished(_Item, "Bagception_Leftover")
+AND
+GetDirectInventoryOwner(_Item, _Holder)
+AND
+IsTagged(_Holder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsContainer((ITEM)_Item, 0)
+AND
+IsStoryItem((ITEM)_Item, 0)
+AND
+IsTagged(_Item, (TAG)LOOT_GOLD_6c6b7cac-113c-42ee-bc46-05567b067a9f, 0)
+AND
+GetStatString(_Item, _Stat)
+AND
+_Stat != "OBJ_GoldCoin"
+AND
+_Stat != "OBJ_GoldPile"
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_OddsSack_d50b2909-3daa-439b-aeb0-11e97a369521, _Holder, _DestOddsSack)
+THEN
+ToInventory(_Item, _DestOddsSack, -1, 0, 0);
 
 // The Phase 1 probe diagnostics were removed here. Every question they were built
 // to answer is recorded in docs/tracking/decision-log.md, and their rules shared a

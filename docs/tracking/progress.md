@@ -43,11 +43,18 @@
 - [ ] Settle whether native auto-collect covers the ten tag-expressible categories
       on its own. Build the next tagged container with a filter and no Osiris rule;
       if it sorts, those ten are data-only and need no rules.
-- [ ] Author the remaining fifteen containers: root templates, Object entries,
-      localization, and treasure-table contents.
-- [ ] Write the routing rule for each, copying the verified shape.
-- [ ] Settle the shield discriminator and the gold threshold for valuables.
-- [ ] Verify whether a new goal merges into a save that has never seen it.
+- [x] Author the remaining containers: root templates, Object entries,
+      localization, and treasure-table contents. Seventeen internal containers; the
+      spec's Valuables was dropped in favour of one catch-all.
+- [x] Write the routing rule for each. Sixteen verified in game 2026-09-23; the Odds
+      Sack catch-all awaiting test.
+- [x] Settle the shield discriminator. Valuables dropped, so no gold threshold.
+- [x] Verify whether a new goal merges into a save that has never seen it. It does:
+      the 2026-09-23 Act 1 load granted bags and initialised the goal in a save that
+      had never had the mod.
+- [x] Verify that rule changes reach a save made with an earlier build. They do when
+      `Version64` changes (2026-09-23, Act 2 save, 1.0.0.0 to 1.0.0.1), and not otherwise.
+- [ ] See the bag repair add a missing container in a save whose bags predate one.
 
 ## Shipping content so far
 
