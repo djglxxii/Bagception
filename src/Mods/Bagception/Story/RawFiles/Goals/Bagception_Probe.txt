@@ -24,6 +24,38 @@ DB_Bagception_GrantPending((GUIDSTRING)NULL_00000000-0000-0000-0000-000000000000
 // here, which was consumed once and could never recover if the grant was missed.
 // The inventory-count guard below replaces it and is self-healing.
 
+// Book Satchel templates that carry no BOOK tag. Tags cannot reach these, so they are
+// listed by root template. The first group are readable (they have a BookId) but were
+// never given the tag: maps, posters, the Highberry and Stormshore Tabernacle books,
+// the Nightsong pamphlet. The second group are the Rune Slates; the Eldritch Tablet in
+// the nautiloid lab is a placed instance of Rune_Tablet_E. Neither group carries SCROLL,
+// so none of them can also match the Scroll Case rule.
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfBaldursGate_dcf4fd8a-2cfa-4e11-89e6-7ae98a25be00);
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfElturgard_fb790852-3b1b-4083-954b-a3cfe7f111f0);
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_MOO_MapOfSwordCoast_35d1e5f0-75d0-49ef-9556-2955ac5c0fda);
+DB_Bagception_BookTemplate((ROOT)BOOK_UNI_MOO_ARichAndFertileLand_33000220-4964-4b46-9867-067fc082e703);
+DB_Bagception_BookTemplate((ROOT)BOOK_UNI_WYR_GortashPoster_3a81e442-b4c8-4498-998e-4dfab1ea4ed8);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_Prayerbook_4911de84-7b94-4767-8a24-e0b6f232f0d0);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_TradeWayRoutes_0704ee73-4471-447e-b0b9-ddf4d117c953);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_SerialKiller_Highberrys_WinesOfSwordCoast_74dc0ae4-2f88-4579-97e9-229509d472fc);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleBlessingsRefugees_6bf81178-ec84-41d8-9be1-0885590af7de);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleDeadThreeEssay_2eabd463-e5f3-41a2-ad6f-adffa400fa03);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleDonations_22ff2ddd-cbf6-419c-b5cc-26a1a0fb229d);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleHauntedBlessings_b06b9c80-cf21-4783-ba60-c75efd5c9692);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernaclePrayersCollection_e68bad7f-d035-471f-9edc-a9b75f4daf93);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernaclePrayersTempus_3a9da8f2-3c13-4515-b753-6f0c659f0280);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_TabernacleQuestinoingCitizen_c9792c72-d217-44e4-8a77-2c9c653ea24b);
+DB_Bagception_BookTemplate((ROOT)UNI_BOOK_LOW_StormshoreTabernacle_VicarPrayerDraft_af63faa5-c058-4a75-83a4-47cfb0ed39eb);
+DB_Bagception_BookTemplate((ROOT)UNI_LOW_NightsongPamphlet_e7968b1c-d109-4a4f-b296-d90dd3662a9d);
+DB_Bagception_BookTemplate((ROOT)BOOK_GEN_Scroll_Parchment_Row_Multiple_A_8f4287f4-2c9e-4b57-b3b1-f76e66a58112);
+
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_A_d1896edc-a99f-4ccb-9748-2eed1a6d691d);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_B_e5b89f56-4b92-4736-b835-9d9e94e51ced);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_C_66737e9d-9583-4b82-9799-c294b955c9d1);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_D_21fafbfa-33dd-4f42-b79f-7de798701f52);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_E_469e789d-8018-4159-ac35-9950dce9b521);
+DB_Bagception_BookTemplate((ROOT)LOOT_MF_Rune_Tablet_F_9d4c197a-20d3-4415-89b1-a9a7cbde8fa2);
+
 KBSECTION
 
 // ---------------------------------------------------------------------------
@@ -202,7 +234,23 @@ GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_CoatingKit_936b3efd-ef6e-
 THEN
 ToInventory(_Item, _DestCoatingKit, -1, 0, 0);
 
-// Throwables: grenades, bombs and explosive flasks.
+// Throwables: grenades, bombs, flasks, caltrops, nets and void bulbs.
+//
+// GRENADE is the broad throwable tag, carried by 71 templates including the mind flayer
+// bulbs, which inherit it from BASE_LOOT_Throwable. ALCH_SOLUTION_GRENADE covers only the
+// eleven alchemy-crafted grenades, and all but one of those carry GRENADE as well. The
+// second rule catches that one and excludes GRENADE, so no item matches both rules.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)GRENADE_fe0d86c3-a562-430e-a633-d8bf9bb27284, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8, _InventoryHolder, _DestGrenadeSatchel)
+THEN
+ToInventory(_Item, _DestGrenadeSatchel, -1, 0, 0);
+
 IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
@@ -210,25 +258,36 @@ IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8
 AND
 IsTagged(_Item, (TAG)ALCH_SOLUTION_GRENADE_f87b203d-75ad-4527-b717-137044bc2ea1, 1)
 AND
+IsTagged(_Item, (TAG)GRENADE_fe0d86c3-a562-430e-a633-d8bf9bb27284, 0)
+AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_GrenadeSatchel_1803d81d-8dab-42ee-981e-a6914b2c5ea8, _InventoryHolder, _DestGrenadeSatchel)
 THEN
 ToInventory(_Item, _DestGrenadeSatchel, -1, 0, 0);
 
-// Alchemical ingredients.
+// Alchemical ingredients and extracts.
 //
-// ALCH_INGREDIENT alone is enough, and extracts need no rule. A player never picks an
-// extract up: reagents are the thing found in the world, and extracts are produced from
-// them through the in-game extraction option, which deposits the result directly. So an
-// extract does not arrive as a loose item that could be dragged into Bagception.
-//
-// This is why the six elemental ALCH_EXTRACT_* tags are not matched here, despite there
-// being no plain ALCH_EXTRACT tag for them to share.
+// Extraction deposits the extract into the character's own inventory, which is outside
+// Bagception, so extracts sort only once the player drags them in, like anything else.
+// Every extract carries ALCH_EXTRACT (defined in SharedDev), and no item carries both it
+// and ALCH_INGREDIENT, so the two rules are disjoint. Vanilla's Alchemy Pouch accepts
+// the same pair.
 IF
 TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
 AND
 IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
 IsTagged(_Item, (TAG)ALCH_INGREDIENT_64b824e7-50c5-475a-98c2-52026e372d77, 1)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ReagentPouch_27607d0b-a6c8-4690-b118-47f36a871b40, _InventoryHolder, _DestReagentPouch)
+THEN
+ToInventory(_Item, _DestReagentPouch, -1, 0, 0);
+
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
+AND
+IsTagged(_Item, (TAG)ALCH_EXTRACT_85b58b89-c881-43c2-bbbe-7c8a0b3bf981, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_ReagentPouch_27607d0b-a6c8-4690-b118-47f36a871b40, _InventoryHolder, _DestReagentPouch)
 THEN
@@ -252,6 +311,19 @@ AND
 IsTagged(_Item, (TAG)BOOK_8a8e253a-c081-45a1-9fa2-91b6901dc568, 1)
 AND
 IsTagged(_Item, (TAG)SCROLL_dd86c045-0370-4ec9-b7c5-b0b160706f09, 0)
+AND
+GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_BookSatchel_d3c867a8-1d54-4b13-a8a8-5299ccc10911, _InventoryHolder, _DestBookSatchel)
+THEN
+ToInventory(_Item, _DestBookSatchel, -1, 0, 0);
+
+// Untagged books, by root template: see DB_Bagception_BookTemplate in INITSECTION. No
+// listed template carries BOOK, so this and the tag rule above never both match.
+IF
+TemplateAddedTo(_Template, _Item, _InventoryHolder, _AddType)
+AND
+DB_Bagception_BookTemplate(_Template)
+AND
+IsTagged(_InventoryHolder, (TAG)BAGCEPTION_MASTER_e9e54868-4241-49d7-b7ac-9202a8cd6397, 1)
 AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_BookSatchel_d3c867a8-1d54-4b13-a8a8-5299ccc10911, _InventoryHolder, _DestBookSatchel)
 THEN

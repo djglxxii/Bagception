@@ -17,16 +17,16 @@ inside it and can never be removed from it.
 | 2 | Shields | all equipable shields | Shield Rack | built |
 | 3 | Armour & Clothing | helmets, chest, cloaks, boots, gloves, clothing | Armour Trunk | not built |
 | 4 | Jewelry | rings and amulets | Jewel Box | not built |
-| 5 | Arrows | special, magical, elemental and utility ammunition | Quiver | not built |
-| 6 | Scrolls | all spell scrolls | Scroll Case | not built |
+| 5 | Arrows | special, magical, elemental and utility ammunition | Quiver | built |
+| 6 | Scrolls | all spell scrolls | Scroll Case | built |
 | 7 | Potions | healing and other drinkable potions | Potion Case | built |
-| 8 | Elixirs | elixirs, distinct from potions | Elixir Rack | not built |
-| 9 | Coatings & Poisons | weapon coatings, oils, poisons | Coating Kit | not built |
-| 10 | Throwables | grenades, bombs, explosive flasks | Grenade Satchel | not built |
-| 11 | Alchemy | ingredients, extracts, salts, reagents | Reagent Pouch | not built |
-| 12 | Camp Supplies | food, drink, camp-supply packs | Larder Sack | not built |
-| 13 | Books & Notes | books, letters, notes, journals | Book Satchel | not built |
-| 14 | Keys | ordinary game keys | Key Ring | not built |
+| 8 | Elixirs | elixirs, distinct from potions | Elixir Rack | built |
+| 9 | Coatings & Poisons | weapon coatings, oils, poisons | Coating Kit | built |
+| 10 | Throwables | grenades, bombs, flasks, caltrops, void bulbs | Grenade Satchel | built |
+| 11 | Alchemy | ingredients, extracts, salts, reagents | Reagent Pouch | built |
+| 12 | Camp Supplies | food, drink, camp-supply packs | Larder Pack | built |
+| 13 | Books & Notes | books, letters, notes, journals | Book Satchel | built |
+| 14 | Keys | ordinary game keys | Key Ring | built |
 | 15 | Tools & Utility | thieves' tools, trap kits, shovels and similar | Tool Roll | not built |
 | 16 | Dyes | all dye items | Dye Pouch | not built |
 | 17 | Valuables | gems, ingots, items whose purpose is sale | Valuables Purse | not built |
@@ -52,10 +52,10 @@ Three things in the spec are policy rather than storage, and need no art:
   off-hand slot with weapons and are told apart by not being a weapon. Nothing about
   this affects the picture, but it is why Shields is an early build rather than a late
   one.
-- **Extracts need no handling.** A player never picks one up: reagents are what is
-  found in the world, and extracts are produced from them through the in-game
-  extraction option, which deposits the result directly. Only reagents can be dragged
-  into Bagception, so `ALCH_INGREDIENT` covers the Reagent Pouch on its own.
+- **Extracts share the Reagent Pouch with ingredients.** Extraction deposits the
+  extract into the character's own inventory, not into Bagception, so extracts sort
+  when the player drags them in. Vanilla's Alchemy Pouch holds the same pair. A
+  separate Extract container is possible if the two turn out to want splitting.
 - **Keys may not need a container at all.** The spec allows using BG3's native key
   handling instead if that proves safer in testing. Treat this one as provisional.
 - **Elixirs are separate from Potions** and the two want to be distinguishable at a

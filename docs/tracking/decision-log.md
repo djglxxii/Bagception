@@ -564,3 +564,68 @@ deployed pak, and the loose story at that moment contained the rule even though 
 did not. That is a hypothesis, not a measurement, and it matters for testing: verifying
 a pak's contents does not prove what the game will run. Until it is settled, confirm a
 change is present in **both** the pak and the loose story before trusting a test.
+
+## 2026-09-22: Sort only what enters Bagception; widen throwables; route extracts
+
+Three results from the eleven-container test.
+
+**A picked-up book went straight into the Book Satchel.** `ContainerAutoAddOnPickup` does
+collect into a nested container on a world pickup, though not on a drag. That bypasses
+the master bag, which is wrong for most categories: Bagception should sort what the
+player puts into it. The attribute is therefore a per-container choice rather than a
+default. It is `True` on the Reagent Pouch and the Larder Pack, at the user's request —
+ingredients, extracts and camp supplies are collected on pickup, as vanilla's own
+Alchemy Pouch and Camp Supply Sack do — and `False` on every other container. The filter
+is kept everywhere for manual placement.
+
+The same test showed no such collection for categories that have a vanilla auto-collect
+bag. Whether that is because the vanilla bag claims the item first, or because those
+items simply were not picked up from the world during the test, is not established.
+
+This is also the likely answer to what moved potions in the rule-less build: potions have
+no vanilla auto-collect bag, so a potion picked up from the world would have gone
+straight into the Potion Case. Likely, not confirmed — it depends on how those potions
+were obtained, which was not recorded.
+
+**Void bulbs did not reach the Grenade Satchel.** They carry `GRENADE`, not
+`ALCH_SOLUTION_GRENADE`. `GRENADE` is the broad throwable tag (71 templates, including
+caltrops and flasks); the alchemy tag covers eleven, all but one of which carry `GRENADE`
+too. The Grenade Satchel now takes either, with the second rule excluding `GRENADE` so no
+item matches twice.
+
+**Extracts land in the character's inventory, not the Reagent Pouch.** The earlier
+statement that extracts need no handling was wrong on two counts: extraction deposits
+into the character, and `ALCH_EXTRACT` does exist — in `SharedDev`, which the tag search
+had not covered. Extracts now route to the Reagent Pouch when dragged into Bagception,
+matching vanilla's Alchemy Pouch. Extraction itself is not intercepted by Osiris: the
+character's inventory is outside Bagception's hierarchy. Whether the Reagent Pouch's
+pickup collection also catches a freshly extracted item is untested.
+
+The camp-supply container is renamed from Larder Sack to Larder Pack (display name only;
+the template name and UUID are unchanged).
+
+## 2026-09-22: Books the BOOK tag misses are listed by template
+
+The user noticed the Rune Slate and the Eldritch Tablet staying at the top level. Neither
+is a book to the game: all six `LOOT_MF_Rune_Tablet_*` templates are untagged generic loot
+(`OBJ_GenericLootItem`) with no `BookId`, so they cannot be read. The Eldritch Tablet is a
+placed instance of `LOOT_MF_Rune_Tablet_E` in `TUT_Avernus_C` with its own display name.
+They go in the Book Satchel because that is where a player looks for them.
+
+Checking for them turned up a real gap: eighteen readable templates (`BookId` set) without
+`BOOK` — the three MOO maps, the Gortash poster, the Highberry and Stormshore Tabernacle
+books, the Nightsong pamphlet and a parchment. Placed level items add no further templates.
+
+Both groups are asserted as `DB_Bagception_BookTemplate` facts in `INITSECTION` and
+matched against `TemplateAddedTo`'s template by a second Book Satchel rule. None carries
+`BOOK` or `SCROLL`, so the tag rules and this one stay disjoint.
+
+Two consequences:
+
+- The Book Satchel's filter is tag-only, so these items cannot be dragged **directly**
+  into it by hand. Dragging them into Bagception works through the rule. Whether the
+  filter also refuses a scripted `ToInventory` is untested; if it does, the item stays at
+  Bagception's top level, which is safe.
+- `INITSECTION` facts reach only games that start with this story. Fresh-game testing
+  covers it; how an existing save picks up new facts is the open question on goal changes
+  already recorded above.

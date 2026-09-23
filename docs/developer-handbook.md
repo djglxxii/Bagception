@@ -295,8 +295,24 @@ out items with `IsCharacterCreationLevel(_Level, 0)`, or filter the characters.
 - **`ContainerAutoAddOnPickup` does not collect into a nested container** on a
   manual drag. Items dropped into the master bag stay in the master bag even with a
   filtering sub-bag inside it. Dragging directly into the sub-bag works.
+- **It does collect into a nested container on a world pickup.** A book picked up from
+  the ground went straight into the Book Satchel, skipping the master bag. Whether a
+  vanilla auto-collect bag of the same kind (Alchemy Pouch, Keychain, Camp Supply Sack)
+  wins when the character carries one is not yet measured. The attribute is a per-
+  container design choice: `True` only where collecting on pickup is wanted, currently
+  the Reagent Pouch and the Larder Pack, and set `False` explicitly everywhere else.
+- **Vanilla tags are split across `Shared` and `SharedDev`.** `ALCH_EXTRACT` and the
+  extract templates live in `SharedDev`. A search of `Shared` alone reports such a tag
+  as nonexistent; check every `*Dev` module before concluding a tag is missing.
 - **Magic pockets see nested items**, so `MagicPocketsMoveToByTag` can act as a bulk
   move primitive rather than routing item by item.
+- **A tag is not a complete category.** Eighteen readable templates (a `BookId` is set)
+  carry no `BOOK` tag, and the Rune Slates are unreadable loot a player files as books
+  anyway. Where a tag falls short, list the root templates in a DB and match
+  `TemplateAddedTo`'s `_Template` against it. To find the templates behind a display
+  name, extract `english.loca` from `Localization/English.pak`, look up the handle, then
+  search root templates *and* placed level items (`Mods/*/Levels/*/Items/_merged.lsf`),
+  which can rename an instance: the Eldritch Tablet is `LOOT_MF_Rune_Tablet_E`.
 
 ### Diagnostics have to outlive the moment
 

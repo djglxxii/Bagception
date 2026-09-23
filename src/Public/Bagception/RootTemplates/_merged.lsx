@@ -6,9 +6,15 @@
   behaviour, icon, visual, physics and bounds. No custom art, per the Phase 2 art
   decision in docs/tracking/decision-log.md.
 
-  The sub-bag carries ContainerContentFilterCondition, BG3's native auto-collect
-  filter. Whether it fires while nested inside the master bag is the question this
-  build exists to answer; see docs/tracking/open-questions.md.
+  Internal containers carry ContainerContentFilterCondition, which gates what a player
+  can place into them by hand. Sorting itself is done by Osiris, in Bagception_Probe.
+
+  ContainerAutoAddOnPickup collects a world pickup straight into the nested container,
+  skipping the master bag (it does not fire on a drag). Most internal containers set it
+  False, so they sort only what the player puts into Bagception. The Reagent Pouch and
+  the Larder Pack set it True by design: ingredients and camp supplies are collected on
+  pickup, as vanilla's Alchemy Pouch and Camp Supply Sack do. A vanilla bag of the same
+  kind carried by the character may claim the item first.
 
   Both use mod-owned Stats entries with Weight 0 so the containers themselves cost
   nothing to carry.
@@ -74,7 +80,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ARROW&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="hf7623cdcgb522g4e17g83a0g0bd8168b6d50" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h0557312cgd09dg4642ga16bg7a5dc4e0dd33" version="1" />
@@ -96,7 +102,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_SOLUTION_ELIXIR&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h366860ddg6c9fg4f02ga676g4028ef5695ff" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h48e86f63g5461g482eg84d4gad284067a2d7" version="1" />
@@ -118,7 +124,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_SOLUTION_COATING&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h9e837dd6g326bg430agb511g70ae9dda69f6" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h8c85ec57gb037g4f87g9886g909bd209d709" version="1" />
@@ -140,8 +146,8 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
-					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_SOLUTION_GRENADE&apos;)" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
+					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;GRENADE&apos;) or Tagged(&apos;ALCH_SOLUTION_GRENADE&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h665fc19fgbb27g4e0bgb1c6ga4b731c8821b" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="hcf2c35e3g7a65g4d88ga7b7g430153d38a79" version="1" />
 					<attribute id="LevelName" type="FixedString" value="" />
@@ -163,7 +169,7 @@
 				</node>
 				<node id="GameObjects">
 					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
-					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_INGREDIENT&apos;)" />
+					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;ALCH_INGREDIENT&apos;) or Tagged(&apos;ALCH_EXTRACT&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h6b1c8acbg307eg4b1bgb45bgcab2030a1af3" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h2557a8b3g090fg4deag86f6gabcf1ab69325" version="1" />
 					<attribute id="LevelName" type="FixedString" value="" />
@@ -184,7 +190,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;BOOK&apos;) and not Tagged(&apos;SCROLL&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="h4d462210g0424g4531gac83g4b42d94d4b9c" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="ha23ccdf9gad5cg4371gb0c4gc2e0871bb7b3" version="1" />
@@ -206,7 +212,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged(&apos;KEY&apos;)" />
 					<attribute id="Description" type="TranslatedString" handle="hb38e322cg40b7g4473g812cg387c2d689d5a" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h8ad8c752g8720g4bf4gbcd7g5bf830db509f" version="1" />
@@ -250,7 +256,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged('SCROLL')" />
 					<attribute id="Description" type="TranslatedString" handle="h9a173f39g2f38g4dffgb1b1g18f69c3bd198" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h62dcd8a8gaee8g44f5gbf86gc4172bec6967" version="1" />
@@ -272,7 +278,7 @@
 					</children>
 				</node>
 				<node id="GameObjects">
-					<attribute id="ContainerAutoAddOnPickup" type="bool" value="True" />
+					<attribute id="ContainerAutoAddOnPickup" type="bool" value="False" />
 					<attribute id="ContainerContentFilterCondition" type="LSString" value="Tagged('ALCH_SOLUTION_POTION')" />
 					<attribute id="Description" type="TranslatedString" handle="h2bc86cc7g38afg9ffbg9fbdgedd510514cd8" version="1" />
 					<attribute id="DisplayName" type="TranslatedString" handle="h99b68a19g753cg6b16g30e4g2da2c0daac42" version="1" />
