@@ -82,6 +82,18 @@
       the display correct, the count includes the inner bags, which the mod cannot
       change; recorded under Known limitations in `docs/containers.md`.
 
+## Container protection
+
+- [x] Verified 2026-09-23: Bagception cannot be dropped, and the inner bags cannot
+      be removed from it. `InventoryBound` provides this natively; no Osiris rule.
+- [x] Verified 2026-09-23: Bagception cannot be sent to camp or given to another
+      character.
+- [x] Trading: Bagception does not appear in the trade window at all, so it cannot be
+      sold, and neither can anything inside it. Accepted; the workaround is recorded
+      under Known limitations in `docs/containers.md`.
+- [x] Verified 2026-09-23: Bagception cannot be put into a chest or any other
+      container. Protection is complete with no Osiris rule.
+
 ## Quest Satchel
 
 - [x] Template, stats, treasure table, localization, repair list, and the story rule,

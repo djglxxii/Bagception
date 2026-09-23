@@ -121,6 +121,13 @@ One thing in the spec is policy rather than storage, and needs no art:
   mid-session, or a bag added to one by the repair on load, may show no count and
   none of the game's container styling until the save is reloaded once. The bag and
   its contents work normally in the meantime.
+- **Bagception does not appear in the trade window.** Nothing inside it can be sold
+  directly. **Workaround:** drag the item out of Bagception into the character's own
+  inventory, then sell it from there. The cause is what keeps Bagception safe: the
+  flag that stops it being dropped, sent to camp or given away also marks it as
+  untradeable, and the trade window hides it together with everything inside.
+  Removing that flag would leave Bagception unprotected, with only a script to put
+  it back after it left; that was judged not worth it (decision log, 2026-09-23).
 
 ## Art specification
 

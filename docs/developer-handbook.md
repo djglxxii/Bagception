@@ -322,7 +322,13 @@ dropped. Prefer the static `data "Flags"` form on an item the mod owns; use the
 status form only when the binding has to come and go.
 
 Bagception's containers use `InventoryBound;Unstorable`. `InventoryBound` is
-vanilla-proven. **`Unstorable` has no user anywhere in the shipped stats**, so it is
+vanilla-proven, and verified here in game 2026-09-23: Bagception cannot be dropped,
+and the inner bags cannot be taken out of it, sent to camp or given away.
+**`InventoryBound` also hides an item from the trade window**, together with
+everything inside it when it is a container, so nothing in Bagception can be sold
+directly. Removing `Unstorable` alone did not bring it back (tested 2026-09-23),
+which is how the cause was isolated. **`Unstorable` has no user anywhere in the
+shipped stats**, so its own effect is not isolated; it is
 unverified; if a chest still accepts a container, that is the flag that did nothing.
 
 ### `TemplateAddTo` is asynchronous, so an inventory count cannot debounce it

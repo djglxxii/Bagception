@@ -58,6 +58,12 @@ All three are written up in the decision log with the evidence.
 
 4. **Can Osiris enforce the container-protection invariant** in spec sections 15 to
    17, detecting an internal container leaving Bagception and restoring it? Phase 4.
+   **Largely unnecessary:** tested 2026-09-23, Bagception cannot be dropped and the
+   inner bags cannot be removed. `InventoryBound` on the stats does the work natively,
+   so no Osiris restore rule is needed unless a route below leaks. Send to camp and
+   giving to another character are also blocked, and Bagception is hidden from the
+   trade window. It cannot be put into a chest or other container either. **Answered:**
+   every route is blocked natively, so Phase 4 needs no Osiris rule.
 5. **Player-facing configuration**, if ever wanted, has no MCM route under the
    native-only constraint. Spec section 36's settings would need an in-game mechanism
    or optional add-on paks. Not needed for 1.0.

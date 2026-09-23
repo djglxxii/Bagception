@@ -810,3 +810,28 @@ and dialogue checks find an item two bags deep. Uninstall was also raised: remov
 mod may take the bags and their contents, story items included. The user's position is
 that the game already warns that removing a mod can destabilise a playthrough, so that
 is on the player.
+
+## 2026-09-23: Container protection is native
+
+Tested by the user: Bagception cannot be dropped, and none of its inner bags can be
+taken out of it. Both carry `InventoryBound;Unstorable` in their stats, and
+`InventoryBound` is the vanilla mechanism that pins conjured weapons to their owner.
+Phase 4's planned Osiris detect-and-restore rule is therefore not needed, which also
+avoids fighting the player. Every route has since been tested and is blocked: send to
+camp, giving to another character, a chest or other container, and trading (where
+Bagception is hidden entirely; see the entry below).
+
+## 2026-09-23: Items are sold by taking them out of Bagception first
+
+The user found Bagception absent from the trade window, so nothing in it can be sold
+directly, and asked whether that could change. A test build removed `Unstorable`
+from all twenty bags and kept `InventoryBound`; Bagception stayed hidden. The flag
+hiding it is therefore `InventoryBound`, the same one that makes Bagception
+impossible to drop, send to camp or give away.
+
+The only way to make it tradeable would be to drop `InventoryBound` and replace it
+with an Osiris rule that returns Bagception whenever it leaves a character. That is
+real work, it weakens a protection that currently cannot fail, and a rule that pulls
+items back can fight the player. The test was reverted, both flags stay, and the
+workaround is documented: drag an item out of Bagception into the character's own
+inventory, then sell it.
