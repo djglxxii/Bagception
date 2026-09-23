@@ -2,15 +2,12 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 
-// Bagception, Phase 1.
+// Bagception.
 //
-// This goal now does two unrelated jobs, kept apart below:
-//
-//   SHIPPING     one Bagception per character, with its internal containers,
-//                granted and repaired idempotently.
-//   DIAGNOSTICS  the Phase 1 probe. Its questions are answered and recorded in
-//                docs/tracking/decision-log.md; these rules exist only until the
-//                sorter is written, and must not ship.
+// Grants one Bagception per character with its internal containers, keeps existing
+// bags up to date, and sorts what is put into a Bagception into the right container.
+// The goal keeps its Phase 1 name, Bagception_Probe: saves record goals by name, so
+// renaming it would start a second goal in every save that has the first.
 //
 // DB_Bagception_GrantPending is declared here only to give the database a defined
 // shape; the NULL entry never matches a real character.
@@ -862,12 +859,6 @@ AND
 GetItemByTemplateInInventory((ITEMROOT)BAGCEPTION_CONT_OddsSack_d50b2909-3daa-439b-aeb0-11e97a369521, _Holder, _DestOddsSack)
 THEN
 ToInventory(_Item, _DestOddsSack, -1, 0, 0);
-
-// The Phase 1 probe diagnostics were removed here. Every question they were built
-// to answer is recorded in docs/tracking/decision-log.md, and their rules shared a
-// condition prefix with the sorter, which made the runtime log hard to read.
-// The probe root templates and BAGCEPTION_TEST_* statuses still exist and come out
-// in the release-prep pass.
 
 EXITSECTION
 ENDEXITSECTION

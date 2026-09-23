@@ -124,6 +124,22 @@
 - [x] `CoinPurse.png` for the Coin Purse, added and built 2026-09-23.
 - [x] Coin Purse icon verified in game 2026-09-23.
 
+## Release prep
+
+- [x] Remove the Phase 1 probe: six root templates, eight stats entries, two
+      statuses and eight localization strings. The goal keeps its name,
+      `Bagception_Probe`, because saves record goals by name.
+- [x] Replace the stale compiled `_merged.lsf` in `src/` and the Toolkit workspace,
+      which still carried the probe templates. Sync never deletes, and the Toolkit
+      packs its workspace verbatim.
+- [x] Write the changelog's first-release entry.
+- [x] Cleaned build tested in game 2026-09-23.
+- [ ] Test with the Script Extender absent or disabled.
+- [ ] Build through the Toolkit's Publish Local, and confirm the package includes
+      `Public/Game` (tooltip and controller icons).
+- [x] Release version 1.0.0.4 (`36028797018963972`), bumped, committed and tagged.
+- [ ] mod.io page: description, known limitations, screenshots.
+
 ## Research
 
 - [x] Can the native system make container contents weightless, or approximate it?

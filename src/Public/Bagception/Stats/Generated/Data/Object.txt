@@ -5,17 +5,22 @@
 // bag read 0, and two 10 kg gems took it to 20. The clamp is per entity, so the
 // container's own weight floors at zero and contents sum normally on top of it.
 // Back to 0, as vanilla does for the camp supply sack.
-// Both containers are sticky: they cannot be dropped, handed to another character,
-// or sent to a chest. "InventoryBound" and "Unstorable" are both AttributeFlags
-// values, so this is plain data on our own items and needs no Osiris and no status.
+
+// Every container is sticky: it cannot be dropped, handed to another character,
+// sent to camp or put in a chest, and an inner bag cannot leave Bagception.
+// "InventoryBound" and "Unstorable" are both AttributeFlags values, so this is plain
+// data on our own items and needs no Osiris and no status.
 //
 // InventoryBound is vanilla-proven -- GEN_INVENTORYBOUND applies it as a boost, and
 // Flame Blade and Shillelagh use it to stop a conjured weapon being dropped.
-// Unstorable has no vanilla user anywhere in the stats, so it is the unproven half;
-// if the camp chest still accepts a bag, that is the flag that did not work.
+// Verified in game for every route. Unstorable has no vanilla user anywhere in the
+// stats, so which of the two does which part is not isolated; both stay.
 //
-// On the Potion Case this may also deliver spec sections 15 to 17 for free: an
-// internal container bound to its inventory cannot be dragged out of the bag.
+// The cost: InventoryBound also hides Bagception from the trade window, contents and
+// all. Items are sold by taking them out first. See the decision log.
+//
+// This is what delivers spec sections 15 to 17 with no Osiris at all: an internal
+// container bound to its inventory cannot be dragged out of the bag.
 
 new entry "OBJ_Bagception_Master"
 type "Object"
@@ -184,47 +189,3 @@ data "RootTemplate" "d50b2909-3daa-439b-aeb0-11e97a369521"
 data "Weight" "0"
 data "Flags" "InventoryBound;Unstorable"
 data "Vitality" "-1"
-
-// Phase 1 weight probe. Ten kilograms each, heavy enough to read straight off the
-// inventory weight display. Both are deleted with the probe goal.
-new entry "OBJ_Bagception_TestWeightA"
-type "Object"
-using "OBJ_GemGeneric"
-data "RootTemplate" "4a7ad16a-d7bc-407f-9a85-3fa89c2c0e55"
-data "Weight" "10"
-
-new entry "OBJ_Bagception_TestWeightB"
-type "Object"
-using "OBJ_GemGeneric"
-data "RootTemplate" "f627accd-4970-4628-b765-c69e10d6ee6a"
-data "Weight" "10"
-
-// Probe result markers. A diagnostic that only exists as an on-screen message is
-// lost the moment it is dismissed; two runs produced answers nobody could read.
-// These are added to the player's inventory instead, so the result is still there
-// afterwards and can be read at leisure. Weightless, so they never confuse a weight
-// reading. Deleted with the probe goal.
-
-new entry "OBJ_Bagception_Probe_HolderIsCharacter"
-type "Object"
-using "OBJ_GemGeneric"
-data "RootTemplate" "5e2df624-53e2-4c1a-b24e-7a3c59cf41f9"
-data "Weight" "0"
-
-new entry "OBJ_Bagception_Probe_HolderIsItem"
-type "Object"
-using "OBJ_GemGeneric"
-data "RootTemplate" "09f81682-0e4a-49da-948c-db00fb91f055"
-data "Weight" "0"
-
-new entry "OBJ_Bagception_Probe_RootIngress"
-type "Object"
-using "OBJ_GemGeneric"
-data "RootTemplate" "5250b475-9e1f-4820-bee6-6b78afce27fc"
-data "Weight" "0"
-
-new entry "OBJ_Bagception_Probe_SubBagIngress"
-type "Object"
-using "OBJ_GemGeneric"
-data "RootTemplate" "b4cb7a44-27ef-4c31-959b-761404990bf9"
-data "Weight" "0"
