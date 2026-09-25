@@ -1,5 +1,5 @@
-// Bagception containers. Weight 0 so the bags themselves cost nothing to carry;
-// their contents weigh what they weigh. See docs/research/native-capabilities.md.
+// Bagception containers. Weight 0 so the bags themselves cost nothing to carry. Their
+// contents are made weightless separately, by BAGCEPTION_WEIGHTLESS in Status_BOOST.txt.
 
 // A container's own weight cannot mask its contents. Tested at -100000: the empty
 // bag read 0, and two 10 kg gems took it to 20. The clamp is per entity, so the
@@ -28,7 +28,6 @@ using "_Container"
 data "RootTemplate" "856bd140-6963-4de1-9471-25440149e87d"
 data "Weight" "0"
 data "Flags" "InventoryBound;Unstorable"
-data "StatusInInventory" "BAGCEPTION_CARRY"
 data "Vitality" "-1"
 
 new entry "OBJ_Bagception_PotionCase"

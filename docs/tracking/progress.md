@@ -124,6 +124,17 @@
 - [x] `CoinPurse.png` for the Coin Purse, added and built 2026-09-23.
 - [x] Coin Purse icon verified in game 2026-09-23.
 
+## Weightless contents
+
+- [x] `BAGCEPTION_WEIGHTLESS`, `Weight(-100000)`, applied on arrival in a Bagception
+      or inner bag, reconciled after a delay on removal, repaired by a sweep on load.
+- [x] Verified in game 2026-09-23 (1.0.0.5): items in the bags weigh 0.
+- [x] Carry boost retired; the master bag no longer grants `BAGCEPTION_CARRY`.
+- [x] Verified in game 2026-09-24: capacity back to normal, contents still weigh 0.
+      Items sent from a bag straight to the camp chest got their weight back; no way
+      was found to keep an item at 0 outside Bagception.
+- [ ] Not tested, accepted: what an uninstall leaves on items.
+
 ## Release prep
 
 - [x] Remove the Phase 1 probe: six root templates, eight stats entries, two

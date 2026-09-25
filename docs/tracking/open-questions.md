@@ -26,14 +26,15 @@ All three are written up in the decision log with the evidence.
    `Weight -100000` read 0 empty and 20 with two 10 kg gems, because the clamp is
    per entity and contents sum on top of it.
 
-2d. **If weightlessness is ever built, what happens on uninstall?** The status sits
-   on items the mod does not own and outlives it. Does the boost stop applying once
-   its stats entry is gone, or does the item stay weightless forever? Untested, and
-   it decides whether the feature is shippable at all.
+2d. **What does an uninstall leave behind?** Weightlessness shipped in 1.0.0.5; the
+   status sits on items the mod does not own. Whether it outlives the stats entry is
+   still untested. The user accepted the risk on 2026-09-23: the game already warns
+   that removing a mod can destabilise a playthrough.
 
 2e. **Does a master-bag-to-sub-bag move strip a status that was just applied?**
    `RemovedFrom` and `TemplateAddedTo` both fire and their order is unknown.
-   Deliberately not measured yet; the probe was driven in and out of the bag only.
+   Still not measured, and no longer needs to be: the removal rule waits a moment and
+   then checks where the item actually is, so the order does not matter.
 
 3. **Classifying the six untagged categories: answered.** `IsWeapon`,
    `GetEquipmentSlotForItem`, `ItemGetGoldValue`, and `GetStatString` with

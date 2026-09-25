@@ -444,6 +444,15 @@ so it survives until something removes it — including after the item leaves th
 container, and after the mod is uninstalled. Pair every apply with a removal rule on
 `RemovedFrom`.
 
+**How the shipping version does it** (1.0.0.5, `BAGCEPTION_WEIGHTLESS`): apply on
+`TemplateAddedTo` into a Bagception or inner bag. On `RemovedFrom` either one, wait
+250 ms and then look at `GetDirectInventoryOwner` rather than removing straight away,
+because a move from the master bag into an inner bag reports a removal and an arrival
+in no known order. Do the same for any arrival elsewhere still carrying the status,
+which catches split stacks. On load, `IterateInventory` over each party member, their
+Bagception and every inner bag reconciles everything else. The four-argument
+`ApplyStatus` form, with no `_Source`, is vanilla's own for statuses with no cause.
+
 ### Stats boosts are a third place to look
 
 When asking "can the engine do X natively", there are **four** vocabularies, not

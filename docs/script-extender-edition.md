@@ -1,5 +1,9 @@
 # Script Extender edition (future, under consideration)
 
+> **Its main reason is gone.** The base mod makes Bagception's contents weightless
+> natively as of 1.0.0.5 (2026-09-23). This document is kept as a record, and for
+> the constraints below, which still hold.
+
 The base mod is native-only and will stay that way. Separately, the user wants to keep
 open the option of a **Script Extender companion that adds weightless storage** — the
 feature dropped from 1.0 because the native system cannot do it.

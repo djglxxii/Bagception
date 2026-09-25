@@ -20,7 +20,7 @@
                 <node id="ModuleInfo">
                     <attribute id="Author" type="LSString" value="djgLXXII"/>
                     <attribute id="CharacterCreationLevelName" type="FixedString" value=""/>
-                    <attribute id="Description" type="LSString" value="One bag that holds every other bag. Items placed into Bagception are filed into the right internal container automatically."/>
+                    <attribute id="Description" type="LSString" value="One bag per party member, with nineteen bags inside it. Items put into Bagception are filed into the right bag automatically, and everything inside weighs nothing. Alchemy ingredients, camp supplies, keys and gold are collected on pickup. No Script Extender required."/>
                     <attribute id="Folder" type="LSString" value="Bagception"/>
                     <attribute id="LobbyLevelName" type="FixedString" value=""/>
                     <attribute id="MD5" type="LSString" value=""/>

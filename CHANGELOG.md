@@ -5,11 +5,21 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ## [Unreleased]
 
-### Added (on trial)
+### Added
 
 - **Weightless contents.** Everything inside Bagception and its bags weighs nothing.
-  Being play-tested alongside the doubled carrying capacity before deciding which to
-  keep. Development build 1.0.0.5.
+  An item gets its weight back when it is taken out. Items already in Bagception
+  become weightless the next time the save is loaded.
+
+### Removed
+
+- **The doubled carrying capacity.** Weightless contents replace it. Anything carried
+  outside Bagception counts against the normal limit again.
+
+### Known limitations
+
+- A container from the base game or another mod placed in Bagception weighs nothing,
+  but its own contents keep their weight.
 
 ## [1.0.0.4] - 2026-09-23
 

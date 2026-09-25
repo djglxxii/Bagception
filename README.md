@@ -16,14 +16,9 @@ and the in-game mod manager. **No Script Extender and no third-party mod depende
 Scaffold only. The repository holds an identity-complete module with no content and no
 behaviour yet. See [`docs/tracking/progress.md`](docs/tracking/progress.md).
 
-Bagception organizes; it does not reduce weight. The original draft called for
-weightless storage, which is not achievable without the Script Extender. That
-requirement was dropped to keep this a standard Larian mod. See
-[`docs/research/native-capabilities.md`](docs/research/native-capabilities.md).
-
-A separate Script Extender companion that would add weightless storage is under
-consideration as a future package. The base mod will never require it. See
-[`docs/script-extender-edition.md`](docs/script-extender-edition.md).
+Everything inside Bagception weighs nothing, without the Script Extender: a hidden
+status zeroes each item's weight while it is inside and is removed when it comes
+out. See the decision log, 2026-09-20 to 2026-09-23.
 
 ## Design
 

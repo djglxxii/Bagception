@@ -862,10 +862,8 @@ THEN
 ToInventory(_Item, _DestOddsSack, -1, 0, 0);
 
 // ---------------------------------------------------------------------------
-// PLAYTEST: weightless contents
+// SHIPPING: weightless contents
 // ---------------------------------------------------------------------------
-//
-// On trial alongside the carry boost; the user decides after playing with it.
 //
 // Whatever sits directly in a Bagception or one of its bags carries
 // BAGCEPTION_WEIGHTLESS, a Weight(-100000) boost that zeroes the item whatever it

@@ -109,6 +109,10 @@ One thing in the spec is policy rather than storage, and needs no art:
 
 ## Known limitations
 
+- **Other containers inside Bagception keep their contents' weight.** Everything placed
+  directly in Bagception or one of its bags weighs nothing, including a vanilla pouch or
+  another mod's bag. What is inside that pouch is not directly in one of ours and keeps
+  its weight (decision log, 2026-09-23).
 - **Bagception's item count includes its own bags.** The number the game shows on
   Bagception counts the nineteen bags inside it, so an otherwise empty Bagception
   shows 19, not 0. The count is drawn by the game's inventory screen, which counts

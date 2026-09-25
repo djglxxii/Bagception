@@ -44,7 +44,10 @@ written, and one build answers both.
      weapon. This sizes the gap Osiris has to cover and validates the hybrid.
 5. Record both answers in the handbook, then write the routing goal.
 
-## Phase 2 — Weightless storage (dropped)
+## Phase 2 — Weightless storage (dropped, then built)
+
+> **Built natively in 1.0.0.5 (2026-09-23)**, after the measurements proved it
+> possible. The text below is kept as the record of why it was first dropped.
 
 Not achievable natively, and the requirement was dropped on 2026-09-20. The slot is
 kept so the numbering still matches spec section 44.

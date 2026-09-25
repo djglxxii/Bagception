@@ -857,3 +857,25 @@ Design, from the measurements of 2026-09-20 and the correction of 2026-09-22:
 Still open, and the reason this is a trial: what an uninstall leaves behind. If the
 trial is dropped, the status entry must stay for one more version, with a sweep that
 only removes it, so no player keeps weightless items.
+
+## 2026-09-23: Weightless contents ship; the carry boost is retired
+
+The user played 1.0.0.5 and confirmed that items in the bags weigh 0. Two remaining
+worries were weighed and accepted:
+
+- **Leaks.** Bagception is hidden from traders, so selling, like every other way out,
+  goes through a drag that fires the removal check. Anything that slips through is
+  caught by the arrival rule or the load sweep, and the worst case is an item that
+  weighs nothing, never one that is lost.
+- **Uninstall.** Whether the status outlives the mod is still untested. The user
+  accepts it as part of the risk the game already warns about when a mod is removed
+  from a playthrough.
+
+The user chose to drop `BAGCEPTION_CARRY` rather than stack both. The master bag no
+longer grants it; the entry stays with no boost so a character still holding it
+from a 1.0.0.4 save carries a valid, inert status.
+
+Verified 2026-09-24: with the carry boost gone, capacity is back to normal and the
+contents still weigh 0. The user tried to make weightlessness stick outside Bagception,
+including sending items from a bag straight to the camp chest, and found no way; every
+item got its weight back.
