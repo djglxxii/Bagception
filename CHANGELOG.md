@@ -5,6 +5,11 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ## [Unreleased]
 
+## [1.0.0.7] - 2026-09-24
+
+First public release, on mod.io. It is 1.0.0.4 plus the changes below; the Toolkit's
+Publish Local stamped the build number, so 1.0.0.5 and 1.0.0.6 were never published.
+
 ### Added
 
 - **Weightless contents.** Everything inside Bagception and its bags weighs nothing.
@@ -23,7 +28,8 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ## [1.0.0.4] - 2026-09-23
 
-First release. Development builds 1.0.0.0 to 1.0.0.3 were never published.
+Tagged as the first release but never published; 1.0.0.7 went out in its place.
+Development builds 1.0.0.0 to 1.0.0.3 were never published either.
 
 ### Added
 

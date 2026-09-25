@@ -1,7 +1,7 @@
 # Bagception: mod.io description
 
-Draft written 2026-09-23 and revised the same day for weightless contents, awaiting
-the user's approval. `modio-description.html` holds the full description as HTML, ready
+Written 2026-09-23 and revised the same day for weightless contents. Published with
+1.0.0.7 on 2026-09-24, mod.io ID `6401418`. `modio-description.html` holds the full description as HTML, ready
 to paste into mod.io's description field; regenerate it when this file changes.
 
 ## Short summary
@@ -12,7 +12,7 @@ One bag. Nineteen bags inside it. Everything you drop in files itself away and w
 from `meta.lsx` instead, which reads: "One bag per party member, with nineteen bags inside
 it. Items put into Bagception are filed into the right bag automatically, and everything
 inside weighs nothing. Alchemy ingredients, camp supplies, keys and gold are collected on
-pickup. No Script Extender required." Keep the two in step when features change.
+pickup." Keep the two in step when features change.
 
 ## Full description
 

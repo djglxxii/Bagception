@@ -879,3 +879,11 @@ Verified 2026-09-24: with the carry boost gone, capacity is back to normal and t
 contents still weigh 0. The user tried to make weightlessness stick outside Bagception,
 including sending items from a bag straight to the camp chest, and found no way; every
 item got its weight back.
+
+## 2026-09-24: Published as 1.0.0.7
+
+The user published Bagception on mod.io (ID `6401418`) with weightless contents. The
+Toolkit's Publish Local stamps its own build number, so the module version went from
+the repository's 1.0.0.5 to 1.0.0.7; `PublishVersion` stayed 1.0.0.5. The repository
+takes the Toolkit's `meta.lsx` as the record of what shipped. `v1.0.0.4` stays as the
+tag of the build before weightlessness, which was never published.
