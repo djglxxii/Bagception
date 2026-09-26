@@ -27,6 +27,23 @@ if (Test-Path -LiteralPath $moduleStage) {
 
 New-Item -ItemType Directory -Path $moduleStage -Force | Out-Null
 
+# The strings exist twice: Localization/English/Bagception.xml, which this packager
+# compiles, and Mods/<Module>/Localization/English/english.xml, the only copy the
+# Toolkit's Publish Local packs. 1.0.0.7 shipped without text because the second did
+# not exist. Refuse to build while they differ.
+$authoredStrings = Join-Path $sourceRoot "Localization\English\$moduleName.xml"
+$toolkitStrings = Join-Path $sourceRoot "Mods\$moduleName\Localization\English\english.xml"
+if (Test-Path -LiteralPath $authoredStrings) {
+  if (-not (Test-Path -LiteralPath $toolkitStrings)) {
+    throw "Missing $toolkitStrings. Copy $authoredStrings there; the Toolkit packs only that copy."
+  }
+  $a = (Get-Content -LiteralPath $authoredStrings -Raw) -replace "`r`n", "`n"
+  $b = (Get-Content -LiteralPath $toolkitStrings -Raw) -replace "`r`n", "`n"
+  if ($a -ne $b) {
+    throw "$toolkitStrings differs from $authoredStrings. Copy the authored file over it."
+  }
+}
+
 foreach ($folder in @("Mods", "Public", "Localization")) {
   $source = Join-Path $sourceRoot $folder
   if (Test-Path -LiteralPath $source) {

@@ -5,6 +5,22 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ## [Unreleased]
 
+## [1.0.0.10] - 2026-09-25
+
+The Toolkit's Publish Local stamped the build number; 1.0.0.8 and 1.0.0.9 were local
+test builds.
+
+### Fixed
+
+- **"Not Found" in tooltips.** 1.0.0.7 was published without its text, so every
+  bag's name and description read "Not Found". The text is back.
+
+### Changed
+
+- **Bagception looks like a backpack** in the inspection view, rather than a small
+  pouch. The bags inside it stay pouches.
+- **New promo image** for the mod.io page and the in-game Mod Manager.
+
 ## [1.0.0.7] - 2026-09-24
 
 First public release, on mod.io. It is 1.0.0.4 plus the changes below; the Toolkit's

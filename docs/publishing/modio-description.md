@@ -113,7 +113,10 @@ other mods required.**
 
 - Suggested tags to confirm in the mod.io editor: Items, Quality of Life, English. Add
   Patch 8 Tested only after the Toolkit release build has been tested on Patch 8.
-- Thumbnail: the Bagception icon from `art/icons/Bagception.png`. Gallery ideas: Bagception
+- Thumbnail: `art/modio/Bagception-Promo-1920x1080.png`, updated 2026-09-25. The
+  Toolkit's copies, `src/Mods/Bagception/mod_publish_logo.png` and
+  `src/Projects/Bagception/thumbnail.png`, must match it; the mod.io page image is
+  uploaded separately on the website. Gallery ideas: Bagception
   open showing all nineteen bags; a heavy item's tooltip reading 0 inside the bag; the Coin
   Purse at a trader.
 - The uninstall bullet under "Good to know" says items *may* stay weightless: untested,

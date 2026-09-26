@@ -3,7 +3,10 @@
   Bagception and the nineteen containers inside it. Every one inherits CONT_Bag_A
   (3e6aac21-333b-4812-a554-376c2d157ba9, Gustav.pak), the generic bag container:
   InventoryType 11, working container behaviour, visual, physics and bounds. Each
-  sets its own Icon, written by tools/Build-Icons.py from art/icons/.
+  sets its own Icon, written by tools/Build-Icons.py from art/icons/. Bagception itself
+  also takes the visual and physics of vanilla's LOOT_GEN_Backpack_A_Posed_A
+  (47805d79-88f1-4933-86eb-f78f67cbc33f, Shared.pak), so it inspects as a backpack; the
+  inner bags keep CONT_Bag_A's pouch.
 
   Internal containers carry ContainerContentFilterCondition where their category can
   be written as one; it gates what a player can place into them by hand. Sorting
@@ -33,7 +36,9 @@
 					<attribute id="Name" type="LSString" value="BAGCEPTION_CONT_Master" />
 					<attribute id="ParentTemplateId" type="FixedString" value="3e6aac21-333b-4812-a554-376c2d157ba9" />
 					<attribute id="Stats" type="FixedString" value="OBJ_Bagception_Master" />
+					<attribute id="PhysicsTemplate" type="FixedString" value="de76c98f-f1af-fbb2-fdc0-ff122f04c99a" />
 					<attribute id="Type" type="FixedString" value="item" />
+					<attribute id="VisualTemplate" type="FixedString" value="3b6138df-435d-bd58-34b4-61e82d75a3aa" />
 					<children>
 						<node id="InventoryList">
 							<children>

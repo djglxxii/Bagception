@@ -24,7 +24,7 @@
                     <attribute id="FileSize" type="uint64" value="25259368"/>
                     <attribute id="Folder" type="LSString" value="Bagception"/>
                     <attribute id="LobbyLevelName" type="FixedString" value=""/>
-                    <attribute id="MD5" type="LSString" value="0aa9d7cac2421f62c3de2844f0be00fa"/>
+                    <attribute id="MD5" type="LSString" value="ebde52cb8a577c4a54c891a5463849f1"/>
                     <attribute id="MenuLevelName" type="FixedString" value=""/>
                     <attribute id="Name" type="LSString" value="Bagception"/>
                     <attribute id="NumPlayers" type="uint8" value="4"/>
@@ -32,7 +32,7 @@
                     <attribute id="PublishHandle" type="uint64" value="6401418"/>
                     <attribute id="StartupLevelName" type="FixedString" value=""/>
                     <attribute id="UUID" type="FixedString" value="bc5967cf-55d7-382b-8618-3420a83c8b03"/>
-                    <attribute id="Version64" type="int64" value="36028797018963975"/>
+                    <attribute id="Version64" type="int64" value="36028797018963978"/>
                     <children>
                         <node id="PublishVersion">
                             <attribute id="Version64" type="int64" value="36028797018963973"/>

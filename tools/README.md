@@ -14,6 +14,9 @@ publishes to mod.io. These scripts support that workflow; they do not replace it
 - `Package-Mod.ps1` stages `src/Mods`, `src/Public`, and `src/Localization` under
   `dist/unpacked/Bagception/` and compiles each staged localization `.xml` to `.loca`.
 - `Build-Pak.ps1` stages the mod and uses Divine to create `dist/Bagception.pak`.
+- `Test-Package.ps1 -PakPath <pak>` lists a package and fails if the strings, story,
+  templates, stats or icon sheet is missing. Run it on the Toolkit's Publish Local
+  output before every upload.
 - `Deploy-Pak.ps1 -PakPath .\dist\Bagception.pak` copies a `.pak` to the BG3 Mods folder.
 - `Build-Icons.py` builds every icon file from `art/icons/*.png` and sets each bag's
   template `Icon`. Run `python tools/Build-Icons.py` after changing the art.

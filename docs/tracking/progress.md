@@ -140,6 +140,10 @@
 - [x] 1.0.0.7 published on mod.io 2026-09-24 (ID `6401418`) through the Toolkit's
       Publish Local, which stamped the build number. Tagged `v1.0.0.7`.
 
+- [x] 1.0.0.10 built 2026-09-25: text restored ("Not Found" fixed), Bagception
+      inspects as a backpack, new promo image. Package checked with
+      `tools/Test-Package.ps1`; verified in game with keyboard, mouse and controller.
+
 ## Release prep
 
 - [x] Remove the Phase 1 probe: six root templates, eight stats entries, two

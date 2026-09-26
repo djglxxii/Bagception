@@ -50,6 +50,8 @@ through the offline packager. When the user asks for a version bump:
 
 1. Update `Version64` in both `ModuleInfo` and `PublishVersion` in `meta.lsx`
    (`major << 55 | minor << 47 | revision << 31 | build`).
-2. Build and verify a local `.pak` through the Toolkit.
+2. Build a local `.pak` through the Toolkit, and verify it with
+   `.\tools\Test-Package.ps1 -PakPath <pak>` before uploading. Test in game with no
+   other Bagception package in the Mods folder.
 3. Update `CHANGELOG.md`.
 4. Commit, then move the annotated tag to the new commit.

@@ -578,8 +578,27 @@ on, checked against vanilla's `Shared.pak` and `Game.pak`:
 - **Resize premultiplied, then refill transparent pixels' colour** from the object.
   Otherwise the soft edge fades through black, or, where near-zero alpha is divided
   back out, through saturated noise that block compression smears into the visible edge.
-- **Not yet confirmed:** whether the Toolkit's Publish packs a mod's `Public/Game`
-  folder. The offline package includes it. `Sync-ToolkitProject.ps1` does not copy it.
+- **The loose `Public/Game` icons turned out to be unnecessary.** The Toolkit never
+  packs them, even when they are in its workspace, and 1.0.0.8 to 1.0.0.10 shipped
+  without them. The user checked tooltips with keyboard and mouse and the whole
+  controller UI, which they use almost exclusively: every bag shows its own art. The
+  sheet alone is enough. The offline package still carries them; they do no harm.
+
+## Localization and the Toolkit
+
+**Publish Local packs only `Mods/<Module>/Localization/<Language>/*.xml`.** It ignores
+the top-level `Localization/` folder that the offline packager compiles, so 1.0.0.7
+went to mod.io with no strings: every name and description read "Not Found". It went
+unnoticed because the offline `Bagception.pak` sat beside the published one in the
+Mods folder and supplied the text. MoreHirelings, the precedent, keeps both copies.
+
+- Edit `src/Localization/English/Bagception.xml`, then copy it over
+  `src/Mods/Bagception/Localization/English/english.xml`. `Package-Mod.ps1` refuses to
+  build while the two differ.
+- **Never test a release with a second Bagception package in the Mods folder.** Both
+  load, and one can hide what the other lacks.
+- **Run `tools/Test-Package.ps1 -PakPath <pak>` on the Publish Local output before
+  uploading.** It checks for strings, story, templates, stats and the icon sheet.
 
 ## LSLib and Divine
 
