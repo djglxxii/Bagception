@@ -11,7 +11,7 @@ Written each run:
   - the inventory icon sheet (one 64 x 64 cell per bag) and its UV index;
   - the TextureBank entry that registers the sheet with the game;
   - the tooltip (380, 192) and controller (144, 72) icons, which the game looks up
-    by icon name under Public/Game;
+    by icon name under Mods/Bagception/GUI, where the Toolkit packs them;
   - the Icon attribute on each bag's root template.
 """
 
@@ -48,10 +48,10 @@ ATLAS_SIZE = (512, 256)
 DXT5 = ["-f", "BC3_UNORM", "-dx9"]
 BC7 = ["-f", "BC7_UNORM"]
 LOOSE_ICONS = [
-    ("src/Public/Game/GUI/Assets/Tooltips/ItemIcons", 380, DXT5),
-    ("src/Public/Game/GUI/AssetsLowRes/Tooltips/ItemIcons", 192, DXT5),
-    ("src/Public/Game/GUI/Assets/ControllerUIIcons/items_png", 144, BC7),
-    ("src/Public/Game/GUI/AssetsLowRes/ControllerUIIcons/items_png", 72, BC7),
+    ("src/Mods/Bagception/GUI/Assets/Tooltips/ItemIcons", 380, DXT5),
+    ("src/Mods/Bagception/GUI/AssetsLowRes/Tooltips/ItemIcons", 192, DXT5),
+    ("src/Mods/Bagception/GUI/Assets/ControllerUIIcons/items_png", 144, BC7),
+    ("src/Mods/Bagception/GUI/AssetsLowRes/ControllerUIIcons/items_png", 72, BC7),
 ]
 TEXCONV_GLOB = "tools/external/texconv-*/texconv.exe"
 

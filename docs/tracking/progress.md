@@ -120,7 +120,8 @@
 - [x] `tools/Build-Icons.py` generates the inventory sheet, its index and texture
       registration, the tooltip and controller icons, and each template's `Icon`.
 - [x] Verified in game 2026-09-23: all eighteen icons show.
-- [ ] Confirm the Toolkit's Publish packs `Public/Game` (tooltip and controller icons).
+- [x] Tooltip and controller icons moved to `Mods/Bagception/GUI` (2026-09-26); the
+      Toolkit never packs `Public/Game`.
 - [x] `CoinPurse.png` for the Coin Purse, added and built 2026-09-23.
 - [x] Coin Purse icon verified in game 2026-09-23.
 
@@ -143,6 +144,8 @@
 - [x] 1.0.0.10 built 2026-09-25: text restored ("Not Found" fixed), Bagception
       inspects as a backpack, new promo image. Package checked with
       `tools/Test-Package.ps1`; verified in game with keyboard, mouse and controller.
+- [x] 1.0.0.14 published 2026-09-26: tooltip and controller icons now in the package
+      (80 files under `Mods/Bagception/GUI`). Passed `tools/Test-Package.ps1`.
 
 ## Release prep
 
@@ -155,8 +158,8 @@
 - [x] Write the changelog's first-release entry.
 - [x] Cleaned build tested in game 2026-09-23.
 - [ ] Test with the Script Extender absent or disabled.
-- [ ] Build through the Toolkit's Publish Local, and confirm the package includes
-      `Public/Game` (tooltip and controller icons).
+- [x] Build through the Toolkit's Publish Local. Its package never included
+      `Public/Game`; the icons moved to `Mods/Bagception/GUI` (2026-09-26).
 - [x] Release version 1.0.0.4 (`36028797018963972`), bumped, committed and tagged.
 - [ ] mod.io page: description, known limitations, screenshots.
 

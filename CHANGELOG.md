@@ -5,6 +5,17 @@ All notable changes to Bagception are recorded here. Versions follow the
 
 ## [Unreleased]
 
+## [1.0.0.14] - 2026-09-26
+
+1.0.0.11 and 1.0.0.12 were local builds carrying gold rules that were withdrawn, and
+1.0.0.13 a local build of this release; none was published. The Toolkit stamped 1.0.0.14
+when publishing.
+
+### Fixed
+
+- **Bag art in tooltips and the controller UI.** Every published version so far
+  shipped without these icons, so tooltips showed no bag art.
+
 ## [1.0.0.10] - 2026-09-25
 
 The Toolkit's Publish Local stamped the build number; 1.0.0.8 and 1.0.0.9 were local

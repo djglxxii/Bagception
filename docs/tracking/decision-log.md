@@ -887,3 +887,15 @@ Toolkit's Publish Local stamps its own build number, so the module version went 
 the repository's 1.0.0.5 to 1.0.0.7; `PublishVersion` stayed 1.0.0.5. The repository
 takes the Toolkit's `meta.lsx` as the record of what shipped. `v1.0.0.4` stays as the
 tag of the build before weightlessness, which was never published.
+
+## 2026-09-26: Gold from traders and looting stays where the game puts it, for now
+
+The user saw gold from traders, quest rewards and looting land in a character's own
+inventory rather than the Coin Purse; `ContainerAutoAddOnPickup` covers only world
+pickups. Rules to move it (on arrival, plus a sweep on load) were written and built,
+but never ran in game: the Osiris log showed no trace of them after gold reached a
+character, and the cause was not found before the user set the feature aside to ship
+the icon fix. The rules were removed rather than shipped untested. Picking it up again
+means starting from that log: confirm which compiled story the game actually loaded.
+Moving gold out of a character's inventory is also an exception to "never sort
+anything outside Bagception's own hierarchy" and needs the user's go-ahead again.

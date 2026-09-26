@@ -113,33 +113,14 @@ if (Test-Path -LiteralPath $stagedPublic) {
 #
 # The check is deliberately identifier-based rather than a timestamp comparison: a
 # rebuild always refreshes the timestamp, including the rebuild that compiled the
-# wrong file. Every DB_ and PROC_ name declared in the authored goals must appear in
-# the compiled story. Names shared with vanilla are useless for this, which is why
-# only the module's own prefixed identifiers are used.
+# wrong file. Every identifier of the module's own that the authored goals declare must
+# appear in the compiled story; see Get-MissingStoryIdentifiers in BG3Tools.psm1.
 $stagedStory = Join-Path $moduleStage "Mods\$moduleName\Story\goals.raw"
 $authoredGoals = Join-Path $sourceRoot "Mods\$moduleName\Story\RawFiles\Goals"
 
 if ((Test-Path -LiteralPath $authoredGoals) -and (Test-Path -LiteralPath $stagedStory)) {
   $compiled = Get-Content -LiteralPath $stagedStory -Raw
-  $declared = [System.Collections.Generic.HashSet[string]]::new()
-
-  foreach ($goal in Get-ChildItem -LiteralPath $authoredGoals -Recurse -File -Filter "*.txt") {
-    # Strip // comments first. Prose in a comment routinely names an identifier that
-    # was deliberately removed, and harvesting those would demand the compiled story
-    # contain something no rule declares.
-    $goalText = [regex]::Replace((Get-Content -LiteralPath $goal.FullName -Raw), '(?m)//.*$', '')
-    foreach ($match in [regex]::Matches($goalText, '\b(?:DB|PROC|QRY)_\w+')) {
-      [void]$declared.Add($match.Value)
-    }
-    # The module's own templates and tags too, as the full name_GUID the story uses. A
-    # change that only adds facts and rules for a new container, reusing existing DB
-    # and PROC names, introduces no new identifier above; the container is what it adds.
-    foreach ($match in [regex]::Matches($goalText, '\bBAGCEPTION_\w+?_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b')) {
-      [void]$declared.Add($match.Value)
-    }
-  }
-
-  $missing = @($declared | Where-Object { $compiled -notmatch "\b$([regex]::Escape($_))\b" } | Sort-Object)
+  $missing = @(Get-MissingStoryIdentifiers -GoalsDirectory $authoredGoals -CompiledStory $compiled)
 
   if ($missing.Count -gt 0) {
     throw @"
@@ -177,7 +158,7 @@ editor, or move its rules into a goal that is already registered, then rebuild.
 "@
   }
 
-  Write-Host "Story freshness verified: $($declared.Count) module identifier(s) present in the compiled story"
+  Write-Host "Story freshness verified: every module identifier is present in the compiled story"
 }
 
 Write-Host "Prepared unpacked package stage at $moduleStage"

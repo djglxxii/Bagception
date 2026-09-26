@@ -70,4 +70,42 @@ function Get-DivinePath {
   throw "Divine.exe not found at $local. Run tools\Install-ExportTool.ps1 first."
 }
 
-Export-ModuleMember -Function Get-BG3Paths, Get-DivinePath
+function Get-MissingStoryIdentifiers {
+  # Returns what the authored goals declare but the compiled story lacks. Empty means
+  # the story was built from the current goals.
+  #
+  # Identifier-based rather than a timestamp comparison: a rebuild always refreshes the
+  # timestamp, including one that compiled the wrong file. Only the module's own names
+  # count; names shared with vanilla prove nothing.
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory = $true)][string]$GoalsDirectory,
+    [Parameter(Mandatory = $true)][string]$CompiledStory
+  )
+
+  $declared = [System.Collections.Generic.HashSet[string]]::new()
+  foreach ($goal in Get-ChildItem -LiteralPath $GoalsDirectory -Recurse -File -Filter "*.txt") {
+    # Strip // comments first. Prose in a comment routinely names an identifier that
+    # was deliberately removed.
+    $goalText = [regex]::Replace((Get-Content -LiteralPath $goal.FullName -Raw), '(?m)//.*$', '')
+    foreach ($match in [regex]::Matches($goalText, '\b(?:DB|PROC|QRY)_\w+')) {
+      [void]$declared.Add($match.Value)
+    }
+    # The module's own templates and tags, as the full name_GUID the story uses. A
+    # change that only adds facts and rules for a new container introduces no new
+    # DB or PROC name; the container is what it adds.
+    foreach ($match in [regex]::Matches($goalText, '\bBAGCEPTION_\w+?_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b')) {
+      [void]$declared.Add($match.Value)
+    }
+    # The module's own timer and event names. A change that only adds rules, reusing
+    # every existing DB, PROC and template, still adds these: 1.0.0.11's gold rules
+    # added nothing else, and a stale story passed without them.
+    foreach ($match in [regex]::Matches($goalText, '"(Bagception_\w+)"')) {
+      [void]$declared.Add($match.Groups[1].Value)
+    }
+  }
+
+  return @($declared | Where-Object { $CompiledStory -notmatch "\b$([regex]::Escape($_))\b" } | Sort-Object)
+}
+
+Export-ModuleMember -Function Get-BG3Paths, Get-DivinePath, Get-MissingStoryIdentifiers

@@ -86,8 +86,9 @@ the game unless there was a reason for a purse, and allowed one as a later addit
   at the user's request (2026-09-23), as the Reagent Pouch, Larder Pack and Key Ring do
   with their items. Gold dropped onto Bagception is filed into it too. Gold already in
   the character's own inventory is never gathered.
-- **Not yet known:** whether gold that arrives some other way than a world pickup
-  (a trader's change, a quest reward, looting a body) counts as a pickup.
+- **Gold from traders, quest rewards and looting** lands in the character's own
+  inventory, not the purse. Moving it there was tried on 2026-09-26 and set aside; see
+  the decision log.
 - **Never in the Odds Sack.** The catch-all refuses gold. If a bag lacks its purse, as an
   older bag can until the repair adds one, gold stays loose at Bagception's top level.
 - **Older saves.** Bags created before the purse existed get one from the repair that
@@ -219,16 +220,14 @@ channel, and stops naming the file if one is not. It is safe to run repeatedly.
 | `src/Public/Bagception/Assets/Textures/Icons/Bagception_Icons.dds` | the inventory icon sheet: every bag's 64 × 64 cell |
 | `src/Public/Bagception/GUI/Bagception_Icons.lsx` | where each bag's cell sits in the sheet, by icon name |
 | `src/Public/Bagception/Content/UI/[PAK]_UI/_merged.lsx` | registers the sheet as a texture, under the UUID the index names |
-| `src/Public/Game/GUI/Assets/Tooltips/ItemIcons/Bagception_<Name>.DDS` | tooltip icon, 380 × 380 |
-| `src/Public/Game/GUI/AssetsLowRes/Tooltips/ItemIcons/Bagception_<Name>.DDS` | tooltip icon, 192 × 192 |
-| `src/Public/Game/GUI/Assets/ControllerUIIcons/items_png/Bagception_<Name>.DDS` | controller icon, 144 × 144 |
-| `src/Public/Game/GUI/AssetsLowRes/ControllerUIIcons/items_png/Bagception_<Name>.DDS` | controller icon, 72 × 72 |
+| `src/Mods/Bagception/GUI/Assets/Tooltips/ItemIcons/Bagception_<Name>.DDS` | tooltip icon, 380 × 380 |
+| `src/Mods/Bagception/GUI/AssetsLowRes/Tooltips/ItemIcons/Bagception_<Name>.DDS` | tooltip icon, 192 × 192 |
+| `src/Mods/Bagception/GUI/Assets/ControllerUIIcons/items_png/Bagception_<Name>.DDS` | controller icon, 144 × 144 |
+| `src/Mods/Bagception/GUI/AssetsLowRes/ControllerUIIcons/items_png/Bagception_<Name>.DDS` | controller icon, 72 × 72 |
 
-The last four paths sit in the game's shared `Public/Game` folder, where the game looks
-up tooltip and controller icons by name. The `Bagception_` prefix keeps them from
-colliding with vanilla or another mod. Whether the Toolkit's Publish step packs a
-mod-supplied `Public/Game` folder is not yet confirmed. If it does not, those four sizes
-need another route, and only the inventory sheet is certain to ship.
+The last four paths sit under the mod's own `Mods/Bagception/GUI`, where tooltips and
+the controller UI look them up by icon name and where the Toolkit packs them. They
+lived under `Public/Game` until 1.0.0.11, which the Toolkit never packs.
 
 Each bag's root template then gets an `Icon` attribute naming its icon, in
 `src/Public/Bagception/RootTemplates/_merged.lsx`.

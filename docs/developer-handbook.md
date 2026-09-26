@@ -561,7 +561,8 @@ on, checked against vanilla's `Shared.pak` and `Game.pak`:
 - **An item icon is found by name in two places.** The inventory grid looks the name up
   in an icon sheet index (`Public/<Mod>/GUI/*.lsx`: `IconUVList` of MapKey and UVs,
   plus `TextureAtlasInfo` naming the sheet's path and UUID). Tooltips and the controller
-  UI look for a loose file of that name under `Public/Game/GUI/...`, one per size.
+  UI look for a loose file of that name under `Mods/<Mod>/GUI/Assets/...` and
+  `.../AssetsLowRes/...`, one per size. Without them, tooltips show no art.
 - **The sheet must also be registered as a texture.** Its UUID has to match a
   `TextureBank` resource in `Public/<Mod>/Content/UI/[PAK]_UI/_merged.lsx`, shaped as
   vanilla's entry for `Icons_Items`. The index alone points at nothing.
@@ -578,11 +579,17 @@ on, checked against vanilla's `Shared.pak` and `Game.pak`:
 - **Resize premultiplied, then refill transparent pixels' colour** from the object.
   Otherwise the soft edge fades through black, or, where near-zero alpha is divided
   back out, through saturated noise that block compression smears into the visible edge.
-- **The loose `Public/Game` icons turned out to be unnecessary.** The Toolkit never
-  packs them, even when they are in its workspace, and 1.0.0.8 to 1.0.0.10 shipped
-  without them. The user checked tooltips with keyboard and mouse and the whole
-  controller UI, which they use almost exclusively: every bag shows its own art. The
-  sheet alone is enough. The offline package still carries them; they do no harm.
+- **Loose icons go under `Mods/<Mod>/GUI`, not `Public/Game/GUI`.** Every published
+  Toolkit mod with custom item icons in the user's Mods folder ships them as
+  `Mods/<Mod>/GUI/Assets/Tooltips/ItemIcons/<Icon>.DDS` and the matching
+  `ControllerUIIcons/items_png` and `AssetsLowRes` folders. The Toolkit packs
+  `Mods/<Mod>` whole, so they ship; it never packs `Public/Game`. 1.0.0.7 to
+  1.0.0.10 went out without them.
+- **Loose files in the game's `Data` folder are loaded by the game.** The Toolkit
+  workspace lives there. When `Sync-ToolkitProject.ps1` copied `Public/Game/GUI` into
+  it, the game read the icons from that folder, so 1.0.0.10 tested fine although its
+  package lacked them. They vanished once the workspace copy was deleted. Judge a
+  package by `tools/Test-Package.ps1`, never by how the game looks on this machine.
 
 ## Localization and the Toolkit
 
@@ -597,8 +604,14 @@ Mods folder and supplied the text. MoreHirelings, the precedent, keeps both copi
   build while the two differ.
 - **Never test a release with a second Bagception package in the Mods folder.** Both
   load, and one can hide what the other lacks.
+- **Publish Local packs whatever story the Story Editor last wrote.** On 2026-09-26 a
+  "rebuilt" story was still the 2026-09-23 build, and the package shipped it without
+  complaint. The freshness check now also harvests the goals' own `"Bagception_*"`
+  timer and event names, since a change that adds only rules adds nothing else, and
+  `Test-Package.ps1` runs it against the package's `goals.raw`.
 - **Run `tools/Test-Package.ps1 -PakPath <pak>` on the Publish Local output before
-  uploading.** It checks for strings, story, templates, stats and the icon sheet.
+  uploading.** It checks for strings, story, templates, stats, the icon sheet and every
+  tooltip and controller icon.
 
 ## LSLib and Divine
 
